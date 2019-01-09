@@ -1,0 +1,62 @@
+:host {
+    align-items: center;
+    display: flex;
+    flex: 1;
+}
+
+:host ::ng-deep .ql-editor {
+    font-size: 1.5rem;
+}
+
+.jumbotron {
+    background-color: white;
+    padding-top: 2rem;
+    margin-bottom: 0;
+    padding-bottom: 2rem;
+}
+
+.quiz {
+    padding: 2rem;
+    margin: 1rem;
+    background-color: white;
+    border: 1px solid #eeeeee;
+}
+
+.header-hr {
+    margin: 0.5rem 0 0 0;
+}
+
+.question {
+    font-size: 1.5rem;
+}
+
+.choices {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.choice {
+    padding: 1rem 0;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.choice.text-success, .choice.text-danger {
+    font-weight: bold;
+}
+
+.choice .fa {
+    font-size: 1.5rem;
+    color: #bbb;
+}
+
+.choice.checked .fa {
+    color: #007bff;
+}
+
+.choice.checked, .choices:not(.choices--answered) .choice:hover {
+    background-color: #eee;
+    transition: background-color 1s;
+}

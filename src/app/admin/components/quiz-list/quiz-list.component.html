@@ -1,0 +1,20 @@
+<div class="container" *ngIf="quizList | async">
+    <div class="d-flex flex-row bg-white my-2 p-3 justify-content-between align-items-center">
+        <span>There are totally {{(quizList | async)?.length}} quizes in database</span>
+        <a class="btn btn-success" routerLink="/admin/quiz/new">Add New Quiz</a>
+    </div>
+
+    <div class="card-columns">
+        <div *ngFor="let quiz of quizList | async; let i = index" class="card">
+            <div class="card-header">
+                {{quiz.name}}
+                <a class="btn btn-sm btn-outline-dark float-right" routerLink="/admin/quiz/{{quiz.id}}">Edit</a>
+            </div>
+            <div class="card-body">
+                <div><b>Short name:</b> {{quiz.shortName}}</div>
+                <div><b>Description:</b> {{quiz.description}}</div>
+                <div><b>Full description:</b> {{quiz.descriptionFull}}</div>
+            </div>
+        </div>
+    </div>
+</div>

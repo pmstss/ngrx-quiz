@@ -1,0 +1,13 @@
+<div class="container" *ngIf="quizList | async">
+    <div class="my-3 text-center">There are {{(quizList | async)?.length}} quizes available</div>
+
+    <div *ngFor="let quiz of quizList | async; let i = index" class="card my-3">
+        <div class="card-header">
+            {{quiz.name}}
+        </div>
+        <div class="card-body">
+            <div>{{quiz.descriptionFull}}</div>
+            <a class="btn btn-outline-primary float-right" [routerLink]="'/quiz/' + quiz.shortName">View details</a>
+        </div>
+    </div>
+</div>

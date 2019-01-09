@@ -1,0 +1,17 @@
+<nb-layout>
+  <nb-layout-header fixed>
+      <router-outlet name="header"></router-outlet>
+  </nb-layout-header>
+
+  <nb-layout-column>
+    <router-outlet></router-outlet>
+    <!--div style="position: fixed; right: 20px; top: 20px; width: 300px; height: 400px; opacity: 0.5">
+         {{quizState$ | async | json}}
+    </div-->
+  </nb-layout-column>
+
+  <nb-layout-footer fixed>
+    (C) 2019 Viachaslau Tyshkavets
+  </nb-layout-footer>
+
+</nb-layout>

@@ -1,0 +1,71 @@
+<div class="container">
+    <div class="row bg-light p-3">
+        <form *ngIf="item" #form="ngForm" class="w-100">
+
+            <div class="d-flex align-items-center justify-content-between">
+                <a routerLink="/admin/items" class="align-self-start">Back to list</a>
+                <h4 *ngIf="isNew()">New quiz item</h4>
+                <h4 *ngIf="!isNew()">Edit quiz item</h4>
+                <button class="btn btn-outline-success btn-lg" (click)="addItem(form)"
+                        [disabled]="form.pristine || form.invalid">Save</button>
+            </div>
+
+            <div class="form-group mt-3">
+                <h5>Question</h5>
+
+                <quill-editor name="question" autofocus theme="bubble" [(ngModel)]="item.question"
+                      [modules]="quillToolbarConfig" [required]="true"></quill-editor>
+
+
+
+                <!--textarea #question autofocus required name="question" class="form-control" [(ngModel)]="item.question"></textarea-->
+            </div>
+
+            <div class="d-flex mt-4">
+                <h5>Choices</h5>
+                <label class="ml-auto">
+                    <input type="checkbox" name="randomize" [(ngModel)]="item.randomizeChoices"/>
+                    Randomize choices order
+                </label>
+                <label class="ml-3">
+                    <input type="checkbox" name="randomize" [(ngModel)]="item.singleChoice" (change)="onSingleChoiceChange()"/>
+                    Single choice
+                </label>
+            </div>
+
+            <div class="d-flex my-2" *ngFor="let choice of item.choices; let i = index">
+                <div [ngClass]="{'choice-correct' : choice.correct}" style="width: 10px"></div>
+                <div class="px-2">
+                    <label class="ml-auto">
+                        <input [attr.type]="item.singleChoice ? 'radio' : 'checkbox'" [checked]="choice.correct"
+                               name="correct" value="{{i}}"
+                               (change)="toggleCorrect(i, $event)" title="Mark as correct"/>
+                        <b class="ml-2">{{i + 1}}.</b>
+                    </label>
+                </div>
+                <div style="flex: 1">
+                    <div class="form-group">
+                        <input required name="choiceText{{i}}" type="text" class="form-control" [(ngModel)]="choice.text" />
+                    </div>
+                    <div class="d-flex">
+                        <label class="mx-2" (click)="toggleExplanation(i)">
+                            <i class="fa" [ngClass]="{
+                                    'fa-plus-square-o': !isExplanationExpanded(i),
+                                    'fa-minus-square-o': isExplanationExpanded(i)
+                                }"></i>
+                            Explanation
+                        </label>
+                        <textarea *ngIf="isExplanationExpanded(i)" name="choiceExplanation{{i}}" class="form-control"
+                                  [(ngModel)]="choice.explanation" style="flex: 1"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="item.choices.length < 7" class="text-right mt-2">
+                <a [routerLink]="" class="ml-auto" (click)="addChoice()">Add another choice</a>
+            </div>
+
+            <!-- TODO validation: at least one must be checked, max choices length -->
+        </form>
+    </div>
+</div>

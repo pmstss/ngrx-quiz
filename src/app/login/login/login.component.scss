@@ -1,0 +1,22 @@
+:host {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+/** ng validation **/
+
+.ng-invalid:not(form) {
+    border: 2px solid red;
+    color: red;
+}
+
+.ng-dirty:not(form) {
+    background-color: #ffa;
+}
+
+.custom-error {
+    background-color: rgba(220, 53, 69, 0.9);
+    color: #fff;
+    margin: 0 2px;
+}
