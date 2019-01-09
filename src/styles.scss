@@ -12,8 +12,18 @@
     cursor: pointer !important;
 }
 
-.my-bg, .card-body {
+.jumbotron {
+    background-color: nb-theme(card-bg) !important;
+}
+
+.card-body {
     background: nb-theme(card-bg);
+}
+
+/*** Quill Editor ***/
+
+.ql-editor {
+    font-size: 1.25rem !important;
 }
 
 .ql-snow .ql-stroke {

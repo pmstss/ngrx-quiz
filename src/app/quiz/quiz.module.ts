@@ -9,6 +9,7 @@ import { QuizNameGuard } from './guards/quiz-name.guard';
 import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
 import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
 import { QuizResultGuard } from './guards/quiz-result.guard';
+import { NbCardModule } from '@nebular/theme';
 
 @NgModule({
     declarations: [QuizComponent, QuizIntroComponent, QuizResultComponent],
@@ -31,7 +32,8 @@ import { QuizResultGuard } from './guards/quiz-result.guard';
                 canActivate: [QuizGuard]
             }]
         }]),
-        QuillModule
+        QuillModule,
+        NbCardModule
     ],
     providers: [QuizGuard, QuizNameGuard, QuizResultGuard]
 })

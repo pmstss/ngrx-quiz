@@ -1,62 +1,52 @@
-:host {
+@import '../../../themes';
+
+@include nb-install-component() {
     align-items: center;
     display: flex;
     flex: 1;
-}
 
-:host ::ng-deep .ql-editor {
-    font-size: 1.5rem;
-}
+    .choices {
+        list-style-type: none;
+        margin-left: 0;
+        padding-left: 0;
+    }
 
-.jumbotron {
-    background-color: white;
-    padding-top: 2rem;
-    margin-bottom: 0;
-    padding-bottom: 2rem;
-}
+    nb-card-header {
+        opacity: 0.6;
+    }
 
-.quiz {
-    padding: 2rem;
-    margin: 1rem;
-    background-color: white;
-    border: 1px solid #eeeeee;
-}
+    .fa {
+        font-size: 1.25rem;
+        color: nb-theme(color-bg-active);
+    }
 
-.header-hr {
-    margin: 0.5rem 0 0 0;
-}
+    .choice.checked, .choices:not(.choices--answered) .choice:hover {
+        border-color: nb-theme(color-info);
+        opacity: 1;
+        transition: border-color 1s, opacity 0.5s;
+    }
 
-.question {
-    font-size: 1.5rem;
-}
+    .choice {
+        cursor: pointer;
+        border: 2px solid nb-theme(color-bg-active);
+        border-radius: nb-theme(radius);
+        opacity: 0.8;
 
-.choices {
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
-}
 
-.choice {
-    padding: 1rem 0;
-    border: 1px solid #ccc;
-    margin-top: 20px;
-    cursor: pointer;
-}
+        &.text-success, &.text-danger {
+            font-weight: bold;
+        }
 
-.choice.text-success, .choice.text-danger {
-    font-weight: bold;
-}
+        &.text-success {
+            border-color: nb-theme(color-success);
+        }
 
-.choice .fa {
-    font-size: 1.5rem;
-    color: #bbb;
-}
+        &.text-danger {
+            border-color: nb-theme(color-danger);
+        }
 
-.choice.checked .fa {
-    color: #007bff;
-}
-
-.choice.checked, .choices:not(.choices--answered) .choice:hover {
-    background-color: #eee;
-    transition: background-color 1s;
+        &.choice.checked .fa {
+            color: nb-theme(color-info);
+        }
+    }
 }

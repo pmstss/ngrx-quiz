@@ -10,6 +10,7 @@ import { StatsComponent } from './components/stats/stats.component';
 import { AdminWelcomeComponent } from './components/admin-welcome/admin-welcome.component';
 import { QuizAdminService } from './services/quiz-admin.service';
 import { QuizListComponent } from './components/quiz-list/quiz-list.component';
+import { NbCardModule } from '@nebular/theme';
 
 @NgModule({
     imports: [
@@ -41,7 +42,8 @@ import { QuizListComponent } from './components/quiz-list/quiz-list.component';
             path: '**',
             redirectTo: ''
         }]),
-        QuillModule
+        QuillModule,
+        NbCardModule
     ],
     declarations: [
         AdminComponent,

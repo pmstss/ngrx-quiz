@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { flatMap, tap } from 'rxjs/operators';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizMetaAdmin } from '../../types/quiz-meta-admin';
 
@@ -11,6 +11,7 @@ import { QuizMetaAdmin } from '../../types/quiz-meta-admin';
     styleUrls: ['./quiz-details.component.css']
 })
 export class QuizDetailsComponent implements OnInit {
+    quizId: string;
     quizMeta$: Observable<QuizMetaAdmin>;
 
     constructor(private route: ActivatedRoute, private quizAdminService: QuizAdminService) {
@@ -18,6 +19,7 @@ export class QuizDetailsComponent implements OnInit {
 
     ngOnInit() {
         this.quizMeta$ = this.route.params.pipe(
+            tap(params => this.quizId = params.quizId),
             flatMap(params => this.quizAdminService.loadQuiz(params.quizId))
         );
     }

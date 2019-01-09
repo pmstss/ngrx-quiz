@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { QuizListComponent } from './components/quiz-list/quiz-list.component';
 import { CoreModule } from '../core';
+import { NbCardModule } from '@nebular/theme';
 
 @NgModule({
     declarations: [QuizListComponent],
@@ -15,6 +16,7 @@ import { CoreModule } from '../core';
                 component: QuizListComponent
             }
         ]),
+        NbCardModule
     ],
     providers: []
 })
