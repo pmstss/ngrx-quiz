@@ -10,8 +10,8 @@ MEAN-based quiz platform
 * [Angular 7](https://github.com/angular/angular)
 * [Typescript](https://github.com/Microsoft/TypeScript)
 * [RxJS 6](https://github.com/ReactiveX/rxjs)
-* [nrgx] (https://github.com/ngrx/platform)
-* [Akveo Nebular] https://github.com/akveo/nebular
+* [nrgx](https://github.com/ngrx/platform)
+* [Akveo Nebular](https://github.com/akveo/nebular)
 * [Bootstrap 4](https://github.com/twbs/bootstrap), [ngx-bootstrap](https://github.com/valor-software/ngx-bootstrap)
 * [TSLint](https://github.com/palantir/tslint)
 
