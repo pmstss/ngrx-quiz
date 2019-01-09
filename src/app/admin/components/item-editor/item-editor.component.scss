@@ -1,0 +1,20 @@
+@import '../../../../themes.scss';
+
+@include nb-install-component() {
+    .ng-invalid {
+        border-color: #dc3545;
+    }
+
+    .choice-icon-remove {
+        font-size: 1.75rem;
+        cursor: pointer;
+
+        &:hover {
+            color: nb-theme(color-danger);
+        }
+    }
+
+    .choice-correct {
+        background-color: nb-theme(color-success);
+    }
+}

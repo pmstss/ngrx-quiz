@@ -8,6 +8,22 @@
   @include nb-bootstrap-global();
 };
 
-.my-bg {
-  background: nb-theme(card-bg);
+.btn {
+    cursor: pointer !important;
+}
+
+.my-bg, .card-body {
+    background: nb-theme(card-bg);
+}
+
+.ql-snow .ql-stroke {
+    stroke: nb-theme(color-fg) !important;
+}
+
+.ql-snow .ql-picker {
+    color: nb-theme(color-fg) !important;
+}
+
+.ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill {
+    fill: nb-theme(color-fg) !important;
 }

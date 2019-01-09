@@ -1,27 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../core';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizItemAdmin } from '../../types/quiz-item-admin';
 import { QuizItemChoiceAdmin } from '../../types/quiz-item-choice-admin';
+import { quillToolbarConfig } from './quill-config';
+import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'app-item-editor',
     templateUrl: './item-editor.component.html',
-    styleUrls: ['./item-editor.component.css']
+    styleUrls: ['./item-editor.component.scss']
 })
 export class ItemEditorComponent implements OnInit {
+    @AutoUnsubscribe routeSubscription: Subscription;
+    @ViewChild('form') public form: NgForm;
+
     quizId: string;
     item: QuizItemAdmin;
-    @AutoUnsubscribe sub: Subscription;
-    explanationState: boolean[] = [];   // TODO separate component?
+    explanationState: boolean[] = [];
+    quillToolbarConfig = quillToolbarConfig;
 
     constructor(private router: Router, private route: ActivatedRoute, private quizAdminService: QuizAdminService) {
     }
 
     ngOnInit() {
-        this.sub = this.route.params.subscribe((params) => {
+        this.routeSubscription = this.route.params.subscribe((params) => {
             console.log('### ItemEditorComponent onInit - params: %o', params);
 
             this.quizId = params.quizId;
@@ -37,8 +43,8 @@ export class ItemEditorComponent implements OnInit {
         return this.item && !this.item.id;
     }
 
-    addItem(arg: any) {
-        console.log('### addItem - arg: %o, item: %o', arg, this.item);
+    save(arg: any) {
+        console.log('### save - arg: %o, item: %o', arg, this.item);
         if (this.isNew()) {
             this.quizAdminService.createItem(this.quizId, this.item).subscribe(() => {
                 this.router.navigate([`/admin/quiz/${this.quizId}`]);
@@ -50,22 +56,23 @@ export class ItemEditorComponent implements OnInit {
         }
     }
 
-    addChoice(arg: any): void {
+    addChoice(): void {
         this.item.choices.push(new QuizItemChoiceAdmin());
     }
 
-    toggleCorrect(index: number, e: Event) {
-        // TODO ### mark form as dirty
-        console.log('### toggleCorrect - index: %o, event: %o', index, event);
-        const value = this.item.choices[index].correct;
-        this.item.choices[index].correct = !value;
-        if (!value && this.item.singleChoice) {
-            this.item.choices.forEach((item, idx) => {
-                if (idx !== index) {
-                    item.correct = false;
-                }
-            });
+    removeChoice(choice): void {
+        const idx = this.item.choices.indexOf(choice);
+        this.item.choices.splice(idx, 1);
+    }
+
+    toggleCorrect(choice: QuizItemChoiceAdmin) {
+        choice.correct = !choice.correct;
+        if (choice.correct && this.item.singleChoice) {
+            this.item.choices
+                .filter(ch => ch !== choice)
+                .forEach(ch => ch.correct = false);
         }
+        this.form.controls['choiceText0'].markAsDirty();
     }
 
     onSingleChoiceChange() {
