@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^7.1.4",
     "@angular/router": "^7.1.4",
     "@nebular/auth": "^3.1.0",
+    "@nebular/bootstrap": "^3.1.0",
     "@nebular/theme": "^3.1.0",
     "@ngrx/effects": "^7.0.0",
     "@ngrx/router-store": "^7.0.0",

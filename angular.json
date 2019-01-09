@@ -27,8 +27,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
               "node_modules/bootstrap/scss/bootstrap.scss",
+              "src/styles.scss",
               "node_modules/font-awesome/scss/font-awesome.scss",
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.bubble.css",
