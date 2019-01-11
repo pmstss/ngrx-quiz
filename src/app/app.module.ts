@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { NbThemeService, NbThemeModule, NbLayoutModule } from '@nebular/theme';
+import { NbThemeService, NbThemeModule, NbLayoutModule, NbToastrModule, NbGlobalLogicalPosition } from '@nebular/theme';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login/login.component';
 import { CoreModule } from './core';
@@ -25,7 +25,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         AppStoreModule,
         BrowserAnimationsModule,
         NbThemeModule.forRoot({ name: 'cosmic' }),
-        NbLayoutModule
+        NbLayoutModule,
+        NbToastrModule.forRoot({ position: NbGlobalLogicalPosition.BOTTOM_END })
     ],
     providers: [NbThemeService],
     bootstrap: [AppComponent]
