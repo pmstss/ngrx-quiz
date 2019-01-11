@@ -1,10 +1,61 @@
-<div class="container" *ngIf="quizMeta$ | async">
+<div class="container" *ngIf="quizMeta">
+    <form #form="ngForm" class="w-100">
+        <div class="d-flex align-items-center justify-content-between">
+            <a routerLink="/admin/quizes">Back to list</a>
+            <button class="btn btn-outline-primary"
+                    [disabled]="form.pristine || form.invalid" (click)="save()">Save</button>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="shortName">
+                SEO Name
+                <i class="nb-help" nbTooltip="Used in quiz URL" nbTooltipStatus="default"></i>
+            </label>
+            <input type="text" name="shortName" #shortName="ngModel" nbInput fullWidth placeholder="Quiz short name"
+                    [status]="shortName.invalid  ? 'danger' : (shortName.dirty ? 'warning' : '')"
+                    required [(ngModel)]="quizMeta.shortName"/>
+        </div>
+
+        <div class="form-group mt-3">
+            <label>Quiz Name</label>
+            <i class="nb-help" nbTooltip="Shown everywhere" nbTooltipStatus="default"></i>
+            <input type="text" name="name" #name="ngModel" nbInput fullWidth status="success" placeholder="Quiz name"
+                    [status]="name.invalid  ? 'danger' : (name.dirty ? 'warning' : '')"
+                    required [(ngModel)]="quizMeta.name"/>
+        </div>
+
+        <div class="form-group mt-3">
+            <label>
+                Quiz Description
+                <i class="nb-help" nbTooltip="Shown in quiz list" nbTooltipStatus="default"></i>
+            </label>
+            <quill-editor name="description" autofocus theme="snow" [(ngModel)]="quizMeta.description"
+                    [modules]="quillToolbarConfig" [required]="true"></quill-editor>
+        </div>
+
+        <div class="form-group mt-3">
+            <label>
+                Quiz detailed description
+                <i class="nb-help" nbTooltip="Shown at quiz intro page" nbTooltipStatus="default"></i>
+            </label>
+            <quill-editor name="descriptionFull" autofocus theme="snow" [(ngModel)]="quizMeta.descriptionFull"
+                    [modules]="quillToolbarConfig" [required]="true"></quill-editor>
+        </div>
+
+        <div class="form-group mt-3">
+            <label class="ml-auto">
+                <input type="checkbox" name="randomizeQuestions" [(ngModel)]="quizMeta.randomizeQuestions" [value]="true"/>
+                Randomize questions
+            </label>
+        </div>
+    </form>
+
     <div class="d-flex flex-row mb-4 justify-content-between align-items-center">
-        <span>There are totally {{(quizMeta$ | async)?.items.length}} questions in quiz</span>
-        <a class="btn btn-success" routerLink="/admin/quiz/{{quizId}}/items/new">Add New Item</a>
+        <span>There are totally {{quizMeta.totalQuestions || 0}} questions in quiz</span>
+        <a class="btn btn-outline-primary" routerLink="/admin/quiz/{{quizId}}/items/new">Add New Item</a>
     </div>
 
-    <nb-card *ngFor="let item of (quizMeta$ | async)?.items; let i = index" class="card">
+    <nb-card *ngFor="let item of quizMeta.items; let i = index" class="card">
         <nb-card-header>
             Question {{i + 1}}
             <a class="btn btn-sm btn-outline-dark float-right"
@@ -12,7 +63,9 @@
         </nb-card-header>
         <nb-card-body>
             <quill-editor theme="bubble" [readOnly]="true" [ngModel]="item.question"></quill-editor>
-            {{item.choices.length}} choices available; {{item.singleChoice ? 'single' : 'multi'}} choice
+            <div class="text-right">
+                {{item.choices.length}} choices available; {{item.singleChoice ? 'single' : 'multi'}} choice
+            </div>
         </nb-card-body>
     </nb-card>
 </div>

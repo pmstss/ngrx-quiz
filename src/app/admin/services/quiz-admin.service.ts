@@ -28,4 +28,16 @@ export class QuizAdminService {
     deleteItem(itemId: ItemId): Observable<{}> {
         return this.quizDataSource.delete<{}>(`/admin/items/${itemId}`);
     }
+
+    createQuiz(quizMeta: QuizMetaAdmin) {
+        return this.quizDataSource.post<{}>('/admin/quizes', quizMeta);
+    }
+
+    updateQuiz(quizMeta: QuizMetaAdmin) {
+        return this.quizDataSource.put<{}>(`/admin/quizes/${quizMeta.id}`, quizMeta);
+    }
+
+    deleteQuiz(quizId: QuizId): Observable<{}> {
+        return this.quizDataSource.delete<{}>(`/admin/quizes/${quizId}`);
+    }
 }

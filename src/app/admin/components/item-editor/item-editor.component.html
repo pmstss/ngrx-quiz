@@ -1,9 +1,8 @@
 <div class="container">
     <div class="row my-bg p-3">
         <form *ngIf="item" #form="ngForm" class="w-100">
-
             <div class="d-flex align-items-center justify-content-between">
-                <a routerLink="/admin/quiz/{{quizId}}">Back to list</a>
+                <a routerLink="/admin/quiz/{{quizId}}">Back to quiz details</a>
                 <button class="btn btn-lg" [ngClass]="form.pristine || form.invalid ? 'btn-outline-primary' : 'btn-primary'"
                         [disabled]="form.pristine || form.invalid" (click)="save()">Save</button>
             </div>

@@ -5,8 +5,7 @@ import { AutoUnsubscribe } from '../../../core';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizItemAdmin } from '../../types/quiz-item-admin';
 import { QuizItemChoiceAdmin } from '../../types/quiz-item-choice-admin';
-import { quillToolbarConfig } from './quill-config';
-import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { quillToolbarConfig } from '../quill-config';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -72,7 +71,7 @@ export class ItemEditorComponent implements OnInit {
                 .filter(ch => ch !== choice)
                 .forEach(ch => ch.correct = false);
         }
-        this.form.controls['choiceText0'].markAsDirty();
+        this.form.controls['choiceText0'].markAsDirty(); // hack :(
     }
 
     onSingleChoiceChange() {

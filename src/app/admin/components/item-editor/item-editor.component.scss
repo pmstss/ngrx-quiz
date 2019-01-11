@@ -2,7 +2,7 @@
 
 @include nb-install-component() {
     .ng-invalid {
-        border-color: #dc3545;
+        border-color: nb-theme(color-danger);
     }
 
     .choice-icon-remove {

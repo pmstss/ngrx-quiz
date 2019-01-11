@@ -1,0 +1,8 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+    .nb-help {
+        color: nb-theme(color-fg);
+        font-size: 1.5rem;
+    }
+}
