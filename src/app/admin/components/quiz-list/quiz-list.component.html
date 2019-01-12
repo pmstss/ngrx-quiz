@@ -6,14 +6,15 @@
 
     <nb-card *ngFor="let quiz of quizList | async; let i = index" accent="info">
         <nb-card-header class="d-flex align-items-center px-4 py-2">
-            <span>{{quiz.name}}</span>
+            <span>{{quiz.name}} ({{quiz.shortName}})</span>
             <a class="btn btn-xs btn-outline-primary ml-auto" routerLink="/admin/quiz/{{quiz.id}}">Edit Meta</a>
             <a class="btn btn-xs btn-outline-primary ml-2" routerLink="/admin/quiz/{{quiz.id}}/items">Edit Items</a>
         </nb-card-header>
         <nb-card-body>
-            <div><b>Short name:</b> {{quiz.shortName}}</div>
-            <div><b>Description:</b> {{quiz.description}}</div>
-            <div><b>Full description:</b> {{quiz.descriptionFull}}</div>
+            <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quiz.descriptionFull"></quill-editor>
+            <div class="text-right">
+                Number of questions: {{quiz.totalQuestions}}, time limit: {{quiz.timeLimit}} mins
+            </div>
         </nb-card-body>
     </nb-card>
 </div>
