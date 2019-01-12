@@ -16,18 +16,16 @@
 
             <div class="d-flex mt-4">
                 <h5>Choices</h5>
-                <label class="ml-auto">
-                    <input type="checkbox" name="randomizeChoices" [(ngModel)]="item.randomizeChoices"/>
+                <nb-checkbox class="ml-auto" name="randomizeChoices" [(ngModel)]="item.randomizeChoices">
                     Randomize choices order
-                </label>
-                <label class="ml-3">
-                    <input type="checkbox" name="singleChoice" [(ngModel)]="item.singleChoice" (change)="onSingleChoiceChange()"/>
+                </nb-checkbox>
+                <nb-checkbox class="ml-3" name="singleChoice" [(ngModel)]="item.singleChoice" (change)="onSingleChoiceChange()">
                     Single choice
-                </label>
+                </nb-checkbox>
             </div>
 
             <div class="d-flex my-2" *ngFor="let choice of item.choices; let i = index">
-                <div [ngClass]="{'choice-correct' : choice.correct}" style="width: 10px"></div>
+                <div class="choice-correct-bar" [ngClass]="{'choice-correct' : choice.correct}"></div>
                 <div class="px-2">
                     <label class="ml-auto">
                         <input *ngIf="!item.singleChoice" type="checkbox" name="correct{{i}}" title="Mark as correct"
@@ -49,7 +47,7 @@
                         <span class="fa fa-trash align-self-center ml-3 choice-icon-remove"
                             title="Remove choice" (click)="removeChoice(choice)"></span>
                     </div>
-                    <div class="d-flex">
+                    <div class="d-flex explanation">
                         <label class="mx-2" (click)="toggleExplanation(i)">
                             <i class="fa" [ngClass]="{
                                     'fa-plus-square-o': !isExplanationExpanded(i),
@@ -57,8 +55,10 @@
                                 }"></i>
                             Explanation
                         </label>
-                        <textarea *ngIf="isExplanationExpanded(i)" name="choiceExplanation{{i}}" class="form-control"
-                                  [(ngModel)]="choice.explanation" style="flex: 1"></textarea>
+
+                        <quill-editor *ngIf="isExplanationExpanded(i)" name="choiceExplanation{{i}}" theme="snow"
+                            [(ngModel)]="choice.explanation" [modules]="quillToolbarConfig">
+                        </quill-editor>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,12 @@
 @import '../../../../themes';
 
 @include nb-install-component() {
-    .ng-invalid {
-        border-color: nb-theme(color-danger);
+    .explanation quill-editor {
+        height: 100%;
+    }
+
+    .choice-correct-bar {
+        width: 10px;
     }
 
     .choice-icon-remove {

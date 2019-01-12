@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NbCardModule, NbInputModule, NbTooltipModule } from '@nebular/theme';
+import { NbCardModule, NbInputModule, NbTooltipModule, NbCheckboxModule } from '@nebular/theme';
 import { QuillModule } from 'ngx-quill';
 import { AdminComponent } from './components/admin.component';
 import { ItemEditorComponent } from './components/item-editor/item-editor.component';
@@ -21,7 +21,8 @@ import { QuizItemsListComponent } from './components/quiz-items-list/quiz-items-
         QuillModule,
         NbCardModule,
         NbInputModule,
-        NbTooltipModule
+        NbTooltipModule,
+        NbCheckboxModule
     ],
     declarations: [
         AdminComponent,
