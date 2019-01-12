@@ -5,9 +5,10 @@
     </div>
 
     <nb-card *ngFor="let quiz of quizList | async; let i = index" accent="info">
-        <nb-card-header>
-            {{quiz.name}}
-            <a class="btn btn-sm btn-outline-primary float-right" routerLink="/admin/quiz/{{quiz.id}}">Edit</a>
+        <nb-card-header class="d-flex align-items-center px-4 py-2">
+            <span>{{quiz.name}}</span>
+            <a class="btn btn-xs btn-outline-primary ml-auto" routerLink="/admin/quiz/{{quiz.id}}">Edit Meta</a>
+            <a class="btn btn-xs btn-outline-primary ml-2" routerLink="/admin/quiz/{{quiz.id}}/items">Edit Items</a>
         </nb-card-header>
         <nb-card-body>
             <div><b>Short name:</b> {{quiz.shortName}}</div>

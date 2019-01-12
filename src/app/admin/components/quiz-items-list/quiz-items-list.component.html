@@ -1,0 +1,22 @@
+<div class="container" *ngIf="quizMeta">
+    <div class="d-flex flex-row mb-4 justify-content-between align-items-center">
+        <a routerLink="/admin/quizes">Back to quiz list</a>
+        <span>There are totally {{quizMeta.items?.length || 0}} questions in quiz</span>
+        <a class="btn btn-outline-primary" routerLink="/admin/quiz/{{quizId}}/items/new">Add New Item</a>
+    </div>
+
+    <nb-card *ngFor="let item of quizMeta.items; let i = index" class="card">
+        <nb-card-header class="d-flex align-items-center px-4 py-2">
+            <span>Question {{i + 1}}</span>
+            <a class="btn btn-sm btn-outline-dark float-right ml-auto"
+                routerLink="/admin/quiz/{{quizId}}/items/{{item.id}}">Edit</a>
+        </nb-card-header>
+        <nb-card-body>
+            <quill-editor theme="bubble" [readOnly]="true" [ngModel]="item.question"></quill-editor>
+            <div class="text-right">
+                {{item.choices.length}} choices available; {{item.singleChoice ? 'single' : 'multi'}} choice
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>
+

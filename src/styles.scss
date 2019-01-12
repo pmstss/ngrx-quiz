@@ -36,6 +36,12 @@
     color: nb-theme(color-fg-heading);
 }
 
+.quiz-admin .ql-editor.ql-blank::before {
+    font-size: 1rem !important;
+    color: nb-theme(color-fg-heading);
+    opacity: 0.8;
+}
+
 .ql-snow .ql-stroke {
     stroke: nb-theme(color-fg) !important;
 }

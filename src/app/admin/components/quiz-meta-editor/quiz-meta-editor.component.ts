@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Observable, Subscription, empty, from } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription, from } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
+import { NbToastrService } from '@nebular/theme';
 import { AutoUnsubscribe } from '../../../core';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizMetaAdmin } from '../../types/quiz-meta-admin';
 import { quillToolbarConfig } from '../quill-config';
-import { NbToastrService } from '@nebular/theme';
 
 @Component({
-    selector: 'app-quiz-details',
-    templateUrl: './quiz-details.component.html',
-    styleUrls: ['./quiz-details.component.scss']
+    selector: 'app-quiz-meta-editor',
+    templateUrl: './quiz-meta-editor.component.html',
+    styleUrls: ['./quiz-meta-editor.component.scss']
 })
-export class QuizDetailsComponent implements OnInit {
-    quizId: string;
+export class QuizMetaEditorComponent implements OnInit {
     quizMeta: QuizMetaAdmin;
     @AutoUnsubscribe quizMetaSubscription: Subscription;
     quillToolbarConfig = quillToolbarConfig;
@@ -26,26 +25,19 @@ export class QuizDetailsComponent implements OnInit {
 
     ngOnInit() {
         this.quizMetaSubscription = this.route.params.pipe(
-            flatMap(
-                (params: Params): Observable<QuizMetaAdmin> => {
-                    return params.quizId === 'new' ? from([<QuizMetaAdmin><any>{
-                        randomizeQuestions: false,
-                        timeLimit: 1800
-                    }]) : this.quizAdminService.loadQuiz(params.quizId);
-                },
-                (params, quizMeta): [Params, QuizMetaAdmin] => ([params, quizMeta])
+            flatMap(params => (params.quizId === 'new' ? from([<QuizMetaAdmin><any>{
+                    randomizeQuestions: false,
+                    timeLimit: 1800
+                }]) : this.quizAdminService.loadQuiz(params.quizId))
             )
-        ).subscribe(([params, quizMeta]: [Params, QuizMetaAdmin]) => {
-            this.quizId = params.quizId;
-            this.quizMeta = quizMeta || <QuizMetaAdmin>{};
-        });
+        ).subscribe(quizMeta =>  this.quizMeta = quizMeta);
     }
 
     isNew() {
-        return this.quizId === 'new';
+        return this.quizMeta && !this.quizMeta.id;
     }
 
-    save(arg: any) {
+    save() {
         if (this.isNew()) {
             this.quizAdminService.createQuiz(this.quizMeta).subscribe((quizMeta: QuizMetaAdmin) => {
                 this.toastrService.show(`Quiz "${quizMeta.shortName}", id: ${quizMeta.id}`, 'Quiz created!');
@@ -55,6 +47,18 @@ export class QuizDetailsComponent implements OnInit {
             this.quizAdminService.updateQuiz(this.quizMeta).subscribe((quizMeta: QuizMetaAdmin) => {
                 this.quizMeta = quizMeta;
                 this.toastrService.show(`Quiz "${quizMeta.shortName}", id: ${quizMeta.id}`, 'Quiz updated!');
+            });
+        }
+    }
+
+    remove() {
+        if (this.isNew()) {
+            this.toastrService.show('Unsaved quiz removed', 'Quiz removed');
+            this.router.navigate(['/admin/quizes']);
+        } else {
+            this.quizAdminService.deleteQuiz(this.quizMeta.id).subscribe((quizMeta: QuizMetaAdmin) => {
+                this.toastrService.show(`Quiz "${quizMeta.shortName}", id: ${quizMeta.id}`, 'Quiz removed');
+                this.router.navigate(['/admin/quizes']);
             });
         }
     }

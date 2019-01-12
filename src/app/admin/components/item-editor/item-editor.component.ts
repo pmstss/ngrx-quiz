@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from '../../../core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
+import { NgForm } from '@angular/forms';
+import { Subscription, from, Observable } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+import { NbToastrService } from '@nebular/theme';
+import { AutoUnsubscribe, QuizId } from '../../../core';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizItemAdmin } from '../../types/quiz-item-admin';
 import { QuizItemChoiceAdmin } from '../../types/quiz-item-choice-admin';
 import { quillToolbarConfig } from '../quill-config';
-import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'app-item-editor',
@@ -14,27 +16,35 @@ import { NgForm } from '@angular/forms';
     styleUrls: ['./item-editor.component.scss']
 })
 export class ItemEditorComponent implements OnInit {
-    @AutoUnsubscribe routeSubscription: Subscription;
+    @AutoUnsubscribe quizMetaSubscription: Subscription;
     @ViewChild('form') public form: NgForm;
 
-    quizId: string;
+    quizId: QuizId;
     item: QuizItemAdmin;
     explanationState: boolean[] = [];
     quillToolbarConfig = quillToolbarConfig;
+    radioIdx: number;
 
-    constructor(private router: Router, private route: ActivatedRoute, private quizAdminService: QuizAdminService) {
+    constructor(private router: Router, private route: ActivatedRoute,
+                private toastrService: NbToastrService, private quizAdminService: QuizAdminService) {
     }
 
     ngOnInit() {
-        this.routeSubscription = this.route.params.subscribe((params) => {
-            console.log('### ItemEditorComponent onInit - params: %o', params);
-
-            this.quizId = params.quizId;
-            if (params.itemId === 'new') {
-                this.item = new QuizItemAdmin();
-            } else {
-                this.quizAdminService.loadItem(params.itemId).subscribe(item => this.item = item);
-            }
+        this.quizMetaSubscription = this.route.params.pipe(
+            flatMap(
+                (params: Params): Observable<QuizItemAdmin> => {
+                    return params.itemId === 'new' ? from([<QuizItemAdmin><any>{
+                        singleChoice: true,
+                        randomizeChoices: false,
+                        choices: []
+                    }]) : this.quizAdminService.loadItem(params.itemId);
+                },
+                (params, quizItem): [Params, QuizItemAdmin] => ([params.quizId, quizItem])
+            )
+        ).subscribe(([quizId, quizItem]: any[]) => {
+            this.quizId = quizId;
+            this.item = quizItem;
+            this.radioIdx = (this.item.choices || []).findIndex(ch => ch.correct);
         });
     }
 
@@ -42,21 +52,39 @@ export class ItemEditorComponent implements OnInit {
         return this.item && !this.item.id;
     }
 
-    save(arg: any) {
-        console.log('### save - arg: %o, item: %o', arg, this.item);
+    save() {
         if (this.isNew()) {
-            this.quizAdminService.createItem(this.quizId, this.item).subscribe(() => {
-                this.router.navigate([`/admin/quiz/${this.quizId}`]);
+            this.quizAdminService.createItem(this.quizId, this.item).subscribe((quizItem) => {
+                this.toastrService.show(`Item id: ${quizItem.id}`, 'Item created!');
+                this.router.navigate([`/admin/quiz/${this.quizId}/items/${quizItem.id}`]);
+                this.form.form.markAsPristine();
             });
         } else {
-            this.quizAdminService.updateItem(this.item).subscribe(() => {
-                this.router.navigate([`/admin/quiz/${this.quizId}`]);
+            this.quizAdminService.updateItem(this.item).subscribe((quizItem) => {
+                this.toastrService.show(`Item id: ${quizItem.id}`, 'Item updated!');
+                this.item = quizItem;
+                this.form.form.markAsPristine();
+            });
+        }
+    }
+
+    remove() {
+        if (this.isNew()) {
+            this.toastrService.show('Unsaved item removed', 'Item removed');
+            this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
+        } else {
+            this.quizAdminService.deleteItem(this.item.id).subscribe((quizItem: QuizItemAdmin) => {
+                this.toastrService.show(`Item id: ${quizItem.id}`, 'Item removed');
+                this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
             });
         }
     }
 
     addChoice(): void {
-        this.item.choices.push(new QuizItemChoiceAdmin());
+        this.item.choices.push(<QuizItemChoiceAdmin>{
+            text: '',
+            correct: false
+        });
     }
 
     removeChoice(choice): void {
@@ -64,14 +92,9 @@ export class ItemEditorComponent implements OnInit {
         this.item.choices.splice(idx, 1);
     }
 
-    toggleCorrect(choice: QuizItemChoiceAdmin) {
-        choice.correct = !choice.correct;
-        if (choice.correct && this.item.singleChoice) {
-            this.item.choices
-                .filter(ch => ch !== choice)
-                .forEach(ch => ch.correct = false);
-        }
-        this.form.controls['choiceText0'].markAsDirty(); // hack :(
+    onRadioChoiceSelect(idx: number) {
+        this.item.choices.forEach(ch => ch.correct = false);
+        this.item.choices[idx].correct = true;
     }
 
     onSingleChoiceChange() {
@@ -80,6 +103,7 @@ export class ItemEditorComponent implements OnInit {
                 item.correct = false;
             });
         }
+        this.radioIdx = -1;
     }
 
     toggleExplanation(index: number): void {

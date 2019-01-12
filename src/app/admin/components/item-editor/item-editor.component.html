@@ -2,8 +2,9 @@
     <div class="row my-bg p-3">
         <form *ngIf="item" #form="ngForm" class="w-100">
             <div class="d-flex align-items-center justify-content-between">
-                <a routerLink="/admin/quiz/{{quizId}}">Back to quiz details</a>
-                <button class="btn btn-lg" [ngClass]="form.pristine || form.invalid ? 'btn-outline-primary' : 'btn-primary'"
+                <a routerLink="/admin/quiz/{{quizId}}/items">Back to items list</a>
+                <button class="btn btn-sm btn-outline-danger ml-auto" (click)="remove()">Delete Item</button>
+                <button class="btn btn-outline-primary ml-2"
                         [disabled]="form.pristine || form.invalid" (click)="save()">Save</button>
             </div>
 
@@ -16,11 +17,11 @@
             <div class="d-flex mt-4">
                 <h5>Choices</h5>
                 <label class="ml-auto">
-                    <input type="checkbox" name="randomize" [(ngModel)]="item.randomizeChoices"/>
+                    <input type="checkbox" name="randomizeChoices" [(ngModel)]="item.randomizeChoices"/>
                     Randomize choices order
                 </label>
                 <label class="ml-3">
-                    <input type="checkbox" name="randomize" [(ngModel)]="item.singleChoice" (change)="onSingleChoiceChange()"/>
+                    <input type="checkbox" name="singleChoice" [(ngModel)]="item.singleChoice" (change)="onSingleChoiceChange()"/>
                     Single choice
                 </label>
             </div>
@@ -29,15 +30,22 @@
                 <div [ngClass]="{'choice-correct' : choice.correct}" style="width: 10px"></div>
                 <div class="px-2">
                     <label class="ml-auto">
-                        <input [attr.type]="item.singleChoice ? 'radio' : 'checkbox'" name="correct"
-                                title="Mark as correct" [checked]="choice.correct" [value]="true"
-                                (change)="toggleCorrect(choice)"/>
+                        <input *ngIf="!item.singleChoice" type="checkbox" name="correct{{i}}" title="Mark as correct"
+                            [(ngModel)]="choice.correct"/>
+
+                        <input *ngIf="item.singleChoice" type="radio" name="correct" title="Mark as correct"
+                            [(ngModel)]="radioIdx" [value]="i" (change)="onRadioChoiceSelect(i)"/>
+
                         <b class="ml-2">{{i + 1}}.</b>
                     </label>
                 </div>
                 <div style="flex: 1">
                     <div class="form-group d-flex">
-                        <input required name="choiceText{{i}}" type="text" class="form-control" [(ngModel)]="choice.text" />
+                        <input type="text" name="choiceText{{i}}" #choiceText="ngModel" nbInput fullWidth
+                            placeholder="Enter choice" required
+                            [status]="choiceText.invalid  ? 'danger' : (choiceText.dirty ? 'warning' : '')"
+                            [(ngModel)]="choice.text"/>
+
                         <span class="fa fa-trash align-self-center ml-3 choice-icon-remove"
                             title="Remove choice" (click)="removeChoice(choice)"></span>
                     </div>
@@ -55,7 +63,7 @@
                 </div>
             </div>
 
-            <div *ngIf="item.choices.length < 7" class="text-right mt-2">
+            <div class="text-right mt-2">
                 <a [routerLink]="'./'" class="ml-auto" (click)="addChoice()">Add another choice</a>
             </div>
 

@@ -5,7 +5,7 @@ import { QuizService } from './services/quiz.service';
 import { AuthService } from './services/auth.service';
 import { BASE_URL } from './tokens';
 import { MessageService } from './services/message.service';
-import { CustomErrorHandler } from './services/message-error-handler';
+import { CustomErrorHandler } from './services/custom-error-handler';
 
 @NgModule({
     declarations: [],
