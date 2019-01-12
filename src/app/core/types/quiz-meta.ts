@@ -8,5 +8,5 @@ export interface QuizMeta {
     descriptionFull: string;
     totalQuestions: number;
     timeLimit: number;
-    randomizeQuestions: true;
+    randomizeItems: true;
 }

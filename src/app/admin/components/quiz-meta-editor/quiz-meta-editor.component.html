@@ -20,9 +20,17 @@
         <div class="form-group mt-3">
             <label>Quiz Name</label>
             <i class="nb-help" nbTooltip="Shown everywhere" nbTooltipStatus="default"></i>
-            <input type="text" name="name" #name="ngModel" nbInput fullWidth status="success" placeholder="Quiz name"
+            <input type="text" name="name" #name="ngModel" nbInput fullWidth placeholder="Quiz name"
                     [status]="name.invalid  ? 'danger' : (name.dirty ? 'warning' : '')"
                     required [(ngModel)]="quizMeta.name"/>
+        </div>
+
+        <div class="form-group mt-3">
+            <label>Time limit (mins)</label>
+            <i class="nb-help" nbTooltip="Time limit (in minutes) for passing quiz" nbTooltipStatus="default"></i>
+            <input type="number" name="timeLimit" #timeLimit nbInput fullWidth
+                    [status]="timeLimit.invalid  ? 'danger' : (name.dirty ? 'warning' : '')"
+                    required [(ngModel)]="quizMeta.timeLimit"/>
         </div>
 
         <div class="form-group mt-3">
@@ -45,8 +53,9 @@
 
         <div class="form-group mt-3">
             <label class="ml-auto">
-                <input type="checkbox" name="randomizeQuestions" [(ngModel)]="quizMeta.randomizeQuestions" [value]="true"/>
-                Randomize questions
+                <nb-checkbox name="randomizeItems" [(ngModel)]="quizMeta.randomizeItems">
+                    Randomize questions
+                </nb-checkbox>
             </label>
         </div>
     </form>

@@ -26,8 +26,8 @@ export class QuizMetaEditorComponent implements OnInit {
     ngOnInit() {
         this.quizMetaSubscription = this.route.params.pipe(
             flatMap(params => (params.quizId === 'new' ? from([<QuizMetaAdmin><any>{
-                    randomizeQuestions: false,
-                    timeLimit: 1800
+                    randomizeItems: false,
+                    timeLimit: 30
                 }]) : this.quizAdminService.loadQuiz(params.quizId))
             )
         ).subscribe(quizMeta =>  this.quizMeta = quizMeta);
