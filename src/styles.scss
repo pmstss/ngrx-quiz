@@ -25,21 +25,39 @@
     opacity: 0.4;
 }
 
+.ng-invalid {
+    border-color: nb-theme(color-danger);
+}
+
+/*** Nebular ***/
+
+.customised-control-description {
+    color: inherit !important;
+}
+
 /*** Quill Editor ***/
+
+quill-editor.ng-invalid {
+    border-width: 2px;
+    border-style: solid;
+    display: block;
+}
 
 .ql-editor {
     font-size: 1.25rem !important;
+    max-height: 30vh;
 }
 
 .quiz-admin .ql-editor {
     font-size: 1rem !important;
     color: nb-theme(color-fg-heading);
+    /*min-height: 100px;*/
 }
 
 .quiz-admin .ql-editor.ql-blank::before {
     font-size: 1rem !important;
     color: nb-theme(color-fg-heading);
-    opacity: 0.8;
+    opacity: 0.6;
 }
 
 .ql-snow .ql-stroke {
@@ -56,5 +74,5 @@
 
 .ql-toolbar.ql-snow,
 .ql-container.ql-snow {
-    border: 1px solid nb-theme(color-bg) !important;
+    border-color: nb-theme(color-bg) !important;
 }

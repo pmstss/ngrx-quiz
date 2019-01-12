@@ -5,10 +5,10 @@
         <a class="btn btn-outline-primary" routerLink="/admin/quiz/{{quizId}}/items/new">Add New Item</a>
     </div>
 
-    <nb-card *ngFor="let item of quizMeta.items; let i = index" class="card">
+    <nb-card *ngFor="let item of quizMeta.items; let i = index" class="card" accent="primary">
         <nb-card-header class="d-flex align-items-center px-4 py-2">
             <span>Question {{i + 1}}</span>
-            <a class="btn btn-sm btn-outline-dark float-right ml-auto"
+            <a class="btn btn-xs btn-outline-primary float-right ml-auto"
                 routerLink="/admin/quiz/{{quizId}}/items/{{item.id}}">Edit</a>
         </nb-card-header>
         <nb-card-body>
