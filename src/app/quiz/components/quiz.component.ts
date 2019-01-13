@@ -56,7 +56,6 @@ export class QuizComponent implements OnInit {
                 }
                 const total = state.quizMeta.totalQuestions;
                 for (let step = state.step, idx = step; idx < step + total; ++idx) {
-                    console.log(step, idx);
                     if (!state.isAnswered(idx % total + 1)) {
                         return idx % total + 1;
                     }
