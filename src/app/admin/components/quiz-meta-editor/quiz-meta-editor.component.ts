@@ -7,6 +7,7 @@ import { AutoUnsubscribe } from '../../../core';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizMetaAdmin } from '../../types/quiz-meta-admin';
 import { quillToolbarConfig } from '../quill-config';
+import { DialogService } from 'src/app/dialog/services/dialog.service';
 
 @Component({
     selector: 'app-quiz-meta-editor',
@@ -20,7 +21,7 @@ export class QuizMetaEditorComponent implements OnInit {
 
     constructor(private route: ActivatedRoute, private router: Router,
                 private toastrService: NbToastrService,
-                private quizAdminService: QuizAdminService) {
+                private quizAdminService: QuizAdminService, private dialogService: DialogService) {
     }
 
     ngOnInit() {
@@ -52,14 +53,21 @@ export class QuizMetaEditorComponent implements OnInit {
     }
 
     remove() {
-        if (this.isNew()) {
-            this.toastrService.show('Unsaved quiz removed', 'Quiz removed');
-            this.router.navigate(['/admin/quizes']);
-        } else {
-            this.quizAdminService.deleteQuiz(this.quizMeta.id).subscribe((quizMeta: QuizMetaAdmin) => {
-                this.toastrService.show(`Quiz "${quizMeta.shortName}", id: ${quizMeta.id}`, 'Quiz removed');
-                this.router.navigate(['/admin/quizes']);
+        this.dialogService.confirm('Do you really want to remove whole quiz? Action can\'t be undone')
+            .subscribe((comfirmed) => {
+                if (!comfirmed) {
+                    return;
+                }
+
+                if (this.isNew()) {
+                    this.toastrService.show('Unsaved quiz removed', 'Quiz removed');
+                    this.router.navigate(['/admin/quizes']);
+                } else {
+                    this.quizAdminService.deleteQuiz(this.quizMeta.id).subscribe((quizMeta: QuizMetaAdmin) => {
+                        this.toastrService.show(`Quiz "${quizMeta.shortName}", id: ${quizMeta.id}`, 'Quiz removed');
+                        this.router.navigate(['/admin/quizes']);
+                    });
+                }
             });
-        }
     }
 }

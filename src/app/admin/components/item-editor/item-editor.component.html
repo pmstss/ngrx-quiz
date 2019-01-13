@@ -2,8 +2,12 @@
     <div class="row my-bg p-3">
         <form *ngIf="item" #form="ngForm" class="w-100">
             <div class="d-flex align-items-center justify-content-between">
-                <a routerLink="/admin/quiz/{{quizId}}/items">Back to items list</a>
-                <button class="btn btn-sm btn-outline-danger ml-auto" (click)="remove()">Delete Item</button>
+                <a routerLink="/admin/quiz/{{quizId}}/items">
+                    <i class="icon nb-arrow-thin-left"></i>
+                    Back to items list
+                </a>
+                <!--button class="btn btn-sm btn-outline-danger ml-auto" (click)="remove()">Delete Item</button-->
+                <button class="btn btn-sm btn-outline-info ml-auto" (click)="remove()">Add New Item</button>
                 <button class="btn btn-outline-primary ml-2"
                         [disabled]="form.pristine || form.invalid" (click)="save()">Save</button>
             </div>
@@ -63,8 +67,10 @@
                 </div>
             </div>
 
-            <div class="text-right mt-2">
-                <a [routerLink]="'./'" class="ml-auto" (click)="addChoice()">Add another choice</a>
+            <div class="d-flex">
+                <a [routerLink]="'./'" class="text-danger" (click)="remove()">Delete Item</a>
+                <a routerLink="./" class="ml-auto" (click)="shuffle()">Shuffle choices</a>
+                <a [routerLink]="'./'" class="ml-3" (click)="addChoice()">Add another choice</a>
             </div>
 
             <!-- TODO validation: at least one must be checked, max choices length -->

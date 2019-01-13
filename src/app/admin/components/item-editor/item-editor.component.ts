@@ -9,6 +9,7 @@ import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizItemAdmin } from '../../types/quiz-item-admin';
 import { QuizItemChoiceAdmin } from '../../types/quiz-item-choice-admin';
 import { quillToolbarConfig } from '../quill-config';
+import { DialogService } from 'src/app/dialog/services/dialog.service';
 
 @Component({
     selector: 'app-item-editor',
@@ -26,7 +27,8 @@ export class ItemEditorComponent implements OnInit {
     radioIdx: number;
 
     constructor(private router: Router, private route: ActivatedRoute,
-                private toastrService: NbToastrService, private quizAdminService: QuizAdminService) {
+                private toastrService: NbToastrService, private quizAdminService: QuizAdminService,
+                private dialogService: DialogService) {
     }
 
     ngOnInit() {
@@ -36,7 +38,7 @@ export class ItemEditorComponent implements OnInit {
                     return params.itemId === 'new' ? from([<QuizItemAdmin><any>{
                         singleChoice: true,
                         randomizeChoices: false,
-                        choices: []
+                        choices: [{ text: '', correct: true }, { text: '', correct: false }]
                     }]) : this.quizAdminService.loadItem(params.itemId);
                 },
                 (params, quizItem): [Params, QuizItemAdmin] => ([params.quizId, quizItem])
@@ -69,15 +71,22 @@ export class ItemEditorComponent implements OnInit {
     }
 
     remove() {
-        if (this.isNew()) {
-            this.toastrService.show('Unsaved item removed', 'Item removed');
-            this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
-        } else {
-            this.quizAdminService.deleteItem(this.item.id).subscribe((quizItem: QuizItemAdmin) => {
-                this.toastrService.show(`Item id: ${quizItem.id}`, 'Item removed');
-                this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
+        this.dialogService.confirm('Do you really want to remove this item from quiz?')
+            .subscribe((comfirmed) => {
+                if (!comfirmed) {
+                    return;
+                }
+
+                if (this.isNew()) {
+                    this.toastrService.show('Unsaved item removed', 'Item removed');
+                    this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
+                } else {
+                    this.quizAdminService.deleteItem(this.item.id).subscribe((quizItem: QuizItemAdmin) => {
+                        this.toastrService.show(`Item id: ${quizItem.id}`, 'Item removed');
+                        this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
+                    });
+                }
             });
-        }
     }
 
     addChoice(): void {
@@ -88,8 +97,16 @@ export class ItemEditorComponent implements OnInit {
     }
 
     removeChoice(choice): void {
-        const idx = this.item.choices.indexOf(choice);
-        this.item.choices.splice(idx, 1);
+        this.dialogService.confirm('Do you really want to remove choice?')
+            .subscribe((comfirmed) => {
+                if (!comfirmed) {
+                    return;
+                }
+
+                const idx = this.item.choices.indexOf(choice);
+                this.item.choices.splice(idx, 1);
+                this.form.form.markAsDirty();
+            });
     }
 
     onRadioChoiceSelect(idx: number) {
@@ -104,6 +121,11 @@ export class ItemEditorComponent implements OnInit {
             });
         }
         this.radioIdx = -1;
+    }
+
+    shuffle() {
+        this.item.choices.sort(() => Math.random() - 0.5);
+        this.form.form.markAsDirty();
     }
 
     toggleExplanation(index: number): void {

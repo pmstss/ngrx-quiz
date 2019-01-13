@@ -29,6 +29,10 @@
     border-color: nb-theme(color-danger);
 }
 
+.ng-dirty {
+    border-color: nb-theme(color-warning);
+}
+
 /*** Nebular ***/
 
 .customised-control-description {
@@ -38,9 +42,14 @@
 /*** Quill Editor ***/
 
 quill-editor.ng-invalid {
+    display: block;
     border-width: 2px;
     border-style: solid;
-    display: block;
+}
+
+quill-editor.ng-dirty {
+    border-width: 2px;
+    border-style: solid;
 }
 
 .ql-editor {
