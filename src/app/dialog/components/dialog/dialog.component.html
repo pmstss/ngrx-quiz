@@ -1,0 +1,17 @@
+<nb-card>
+    <nb-card-header>
+        {{title}}
+        <i class="icon nb-close pull-right" (click)="close()"></i>
+    </nb-card-header>
+
+    <nb-card-body>
+        {{message}}
+    </nb-card-body>
+
+    <nb-card-footer>
+        <button *ngFor="let button of buttons" class="btn ml-3" [ngClass]="button.clazz"
+                (click)="buttonClick(button)">
+            {{button.label}}
+        </button>
+    </nb-card-footer>
+</nb-card>
