@@ -1,13 +1,17 @@
-<div class="container" *ngIf="quizList | async">
-    <div class="my-3 text-center">There are {{(quizList | async)?.length}} quizes available</div>
+<div class="container" *ngIf="quizList$ | async as quizList else loading">
+    <div class="my-3 text-center">There are {{quizList.length}} quizes available</div>
 
-    <nb-card *ngFor="let quiz of quizList | async; let i = index" class="card my-3">
+    <nb-card *ngFor="let quiz of quizList" class="my-3">
         <nb-card-header>
             {{quiz.name}}
         </nb-card-header>
         <nb-card-body>
-            <div>{{quiz.descriptionFull}}</div>
-            <a class="btn btn-outline-primary float-right" [routerLink]="'/quiz/' + quiz.shortName">View details</a>
+            <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quiz.description"></quill-editor>
+            <a class="btn btn-outline-primary float-right" routerLink="/quiz/{{quiz.shortName}}">View details</a>
         </nb-card-body>
     </nb-card>
 </div>
+
+<ng-template #loading>
+    <app-loader></app-loader>
+</ng-template>

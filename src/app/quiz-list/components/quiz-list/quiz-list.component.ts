@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { QuizMeta, AutoUnsubscribe, QuizService } from '../../../core';
+import { QuizMeta, QuizService } from '../../../core';
 
 @Component({
     selector: 'app-quiz-list',
     templateUrl: './quiz-list.component.html',
-    styleUrls: ['./quiz-list.component.scss']
+    styleUrls: ['./quiz-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizListComponent implements OnInit {
-    @AutoUnsubscribe quizList: Observable<QuizMeta[]>;
+    quizList$: Observable<QuizMeta[]>;
 
     constructor(private quizService: QuizService) {
     }
 
     ngOnInit() {
-        console.log('### QuizListComponent onInit');
-        this.quizList = this.quizService.loadQuizList();
+        this.quizList$ = this.quizService.loadQuizList();
     }
 }
