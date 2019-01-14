@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
@@ -9,7 +9,8 @@ import { AppState, selectQuizMeta, ActionLoadQuiz } from '../../../store';
 @Component({
     selector: 'app-quiz-intro',
     templateUrl: './quiz-intro.component.html',
-    styleUrls: ['./quiz-intro.component.scss']
+    styleUrls: ['./quiz-intro.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizIntroComponent implements OnInit {
     quizMeta$: Observable<QuizMeta>;
@@ -19,13 +20,13 @@ export class QuizIntroComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.quizMeta$ = this.appStore.select(selectQuizMeta);
-
         this.routeSubscription = this.route.params.pipe(
             map(params => params.name),
             distinctUntilChanged()
         ).subscribe(
             (quizName: string) => this.appStore.dispatch(new ActionLoadQuiz({ quizName }))
         );
+
+        this.quizMeta$ = this.appStore.select(selectQuizMeta);
     }
 }

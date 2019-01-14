@@ -1,14 +1,21 @@
-<div class="container">
-    <div class="my-3">
-        <a routerLink="/quizes">Back to quiz list</a>
-    </div>
+<div class="container" *ngIf="quizMeta$ | async as quizMeta else loading">
+    <app-back-link routerLink="/quizes">Back to quiz list</app-back-link>
+
     <div class="jumbotron my-3">
-        <h1>Welcome to {{(quizMeta$ | async)?.name}}!</h1>
-        <p class="lead">{{(quizMeta$ | async)?.descriptionShort}}</p>
+        <h1>Welcome to {{quizMeta.name}}!</h1>
+        <p class="lead">
+            <!--quill-editor theme="bubble" [readOnly]="true" [ngModel]="quizMeta.description"></quill-editor-->
+        </p>
         <hr class="my-4"/>
-        <p>{{(quizMeta$ | async)?.descriptionFull}}</p>
+        <p>
+            <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quizMeta.descriptionFull"></quill-editor>
+        </p>
         <div class="text-center mt-4">
-            <a class="btn btn-lg btn-outline-primary" routerLink="/quiz/{{(quizMeta$ | async)?.shortName}}/1">Start quiz!</a>
+            <a class="btn btn-lg btn-outline-primary" routerLink="/quiz/{{quizMeta.shortName}}/1">Start quiz!</a>
         </div>
     </div>
 </div>
+
+<ng-template #loading>
+    <app-loader></app-loader>
+</ng-template>

@@ -10,6 +10,7 @@ import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component
 import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
 import { QuizResultGuard } from './guards/quiz-result.guard';
 import { NbCardModule } from '@nebular/theme';
+import { SharedModule } from '../shared';
 
 @NgModule({
     declarations: [QuizComponent, QuizIntroComponent, QuizResultComponent],
@@ -33,7 +34,8 @@ import { NbCardModule } from '@nebular/theme';
             }]
         }]),
         QuillModule,
-        NbCardModule
+        NbCardModule,
+        SharedModule
     ],
     providers: [QuizGuard, QuizNameGuard, QuizResultGuard]
 })
