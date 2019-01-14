@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
-import { QuizComponent } from './components/quiz.component';
+import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
 import { QuizGuard } from './guards/quiz.guard';
 import { QuizNameGuard } from './guards/quiz-name.guard';
 import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
@@ -13,7 +13,7 @@ import { NbCardModule } from '@nebular/theme';
 import { SharedModule } from '../shared';
 
 @NgModule({
-    declarations: [QuizComponent, QuizIntroComponent, QuizResultComponent],
+    declarations: [QuizStepComponent, QuizIntroComponent, QuizResultComponent],
     imports: [
         CommonModule,
         FormsModule,
@@ -29,7 +29,7 @@ import { SharedModule } from '../shared';
                 canActivate: [QuizResultGuard, QuizGuard]
             }, {
                 path: ':name/:step',
-                component: QuizComponent,
+                component: QuizStepComponent,
                 canActivate: [QuizGuard]
             }]
         }]),

@@ -1,0 +1,60 @@
+<div class="container" *ngIf="quizState$ | async as quizState">
+    <nb-card *ngIf="itemState$ | async as itemState else loading">
+        <nb-card-header>
+            <div class="lead float-right">Score: {{quizState.score}}</div>
+            <div class="lead">
+                Question {{quizState.step}} from {{quizState.itemIds.length}}
+                (left: {{quizState.quizMeta.totalQuestions - quizState.answers.size}})
+            </div>
+        </nb-card-header>
+
+        <nb-card-body>
+            <quill-editor theme="bubble" [readOnly]="true" [ngModel]="itemState.question"></quill-editor>
+
+            <div class="mt-4 choices" [ngClass]="{'choices--answered': itemState?.answered}">
+                <div *ngFor="let choice of itemState?.choicesStatus">
+                    <div class="choice d-flex align-items-center mt-3 py-3" [ngClass]="{
+                            'checked': choice.checked,
+                            'text-danger': choice.wrong,
+                            'text-success': choice.correct
+                        }" (click)="toggleChoice(choice.id)">
+                        <i class="fa mx-3" [ngClass]="{
+                            'fa-check': choice.correct || choice.checked || !choice.answered,
+                            'fa-times': choice.wrong,
+                            'text-danger': choice.wrong,
+                            'text-success': choice.correct
+                        }"></i>
+                        <span>{{choice.text}}</span>
+                    </div>
+                    <div *ngIf="itemState.answered && choice.checked && choice.explanation" class="alert"
+                            [ngClass]="{'text-success': choice.correct, 'text-danger': choice.wrong}">
+                        {{choice.explanation}}
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+
+        <nb-card-footer class="d-flex">
+            <a *ngIf="!itemState?.answered" class="btn btn-outline-secondary btn-lg"
+                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{getNextStep() | async}}">
+                Skip
+            </a>
+            <button *ngIf="!itemState?.answered" class="btn btn-outline-primary btn-lg ml-auto"
+                    (click)="submit()">
+                Submit
+            </button>
+            <a *ngIf="itemState?.answered && !quizState.finished" class="btn btn-outline-primary btn-lg ml-auto"
+                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{getNextStep() | async}}">
+                Next
+            </a>
+            <a *ngIf="quizState.finished" class="btn btn-outline-primary btn-lg ml-auto"
+                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/result">
+                Results
+            </a>
+        </nb-card-footer>
+    </nb-card>
+</div>
+
+<ng-template #loading>
+    <app-loader></app-loader>
+</ng-template>
