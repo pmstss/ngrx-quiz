@@ -37,6 +37,10 @@ export class QuizAdminService {
         return this.quizDataSource.put<{}>(`/admin/quizes/${quizMeta.id}`, quizMeta);
     }
 
+    updateQuizItemsOrder(quizId: QuizId, itemIds: ItemId[]) {
+        return this.quizDataSource.put<{}>(`/admin/quizes/${quizId}/items`, { itemIds });
+    }
+
     deleteQuiz(quizId: QuizId): Observable<{}> {
         return this.quizDataSource.delete<{}>(`/admin/quizes/${quizId}`);
     }

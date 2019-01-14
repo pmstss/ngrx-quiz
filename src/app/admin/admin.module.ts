@@ -12,12 +12,14 @@ import { QuizAdminService } from './services/quiz-admin.service';
 import { QuizListComponent } from './components/quiz-list/quiz-list.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { QuizItemsListComponent } from './components/quiz-items-list/quiz-items-list.component';
+import { SharedModule } from '../shared';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         AdminRoutingModule,
+        SharedModule,
         QuillModule,
         NbCardModule,
         NbInputModule,
