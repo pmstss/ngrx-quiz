@@ -6,6 +6,24 @@ export const environment = {
     production: false
 };
 
+// TODO ### temp workaround for @ngrx/store-devtools
+(Map.prototype as any).toJSON = function () {
+    return [...this.entries()].reduce(
+        (res, [key, value]) => {
+            if (typeof key === 'string' || typeof key === 'number') {
+                res[key] = value;
+            } else {
+                res['SERIALIZE_ERROR'] = 'Not all keys are string or numbers!';
+            }
+            return res;
+        },
+        {}
+    );
+};
+(Set.prototype as any).toJSON = function () {
+    return [...this];
+};
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
