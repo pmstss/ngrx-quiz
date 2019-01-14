@@ -19,8 +19,9 @@ export class AppComponent {
         this.quizState$ = appStore.select(selectQuizState);
 
         messageService.messages$.subscribe((msg) => {
-            this.toastrService.show(msg.message, msg.status, {
-                status: msg.status
+            this.toastrService.show(msg.message, msg.title, {
+                status: msg.status,
+                duration: msg.duration
             });
         });
     }

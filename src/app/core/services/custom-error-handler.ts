@@ -13,8 +13,8 @@ export class CustomErrorHandler extends ErrorHandler {
         // trigger change detection
         this.ngZone.run(
             () => this.messageService.publish({
-                message: error,
-                title: 'Global Error',
+                message: error.message ? error.message.split('\n')[0] : error,
+                title: error.title || 'Error',
                 status: NbToastStatus.DANGER,
                 duration: 0
             }),
