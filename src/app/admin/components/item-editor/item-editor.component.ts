@@ -100,16 +100,16 @@ export class ItemEditorComponent implements OnInit {
         const idx = this.item.choices.indexOf(choice);
         if (idx > 0) {
             this.item.choices.splice(idx - 1, 2, choice, this.item.choices[idx - 1]);
+            this.form.form.markAsDirty();
         }
-        this.form.form.markAsDirty();
     }
 
     moveChoiceDown(choice: QuizItemChoiceAdmin): void {
         const idx = this.item.choices.indexOf(choice);
         if (idx < this.item.choices.length - 1) {
             this.item.choices.splice(idx, 2, this.item.choices[idx + 1], choice);
+            this.form.form.markAsDirty();
         }
-        this.form.form.markAsDirty();
     }
 
     removeChoice(choice: QuizItemChoiceAdmin): void {
