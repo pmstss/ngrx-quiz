@@ -1,4 +1,4 @@
-import { NgModule, InjectionToken, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { QuizDataSource } from './datasource/quiz-data-source.service';
 import { AuthDataSource } from './datasource/auth-data-source.service';
 import { QuizService } from './services/quiz.service';
