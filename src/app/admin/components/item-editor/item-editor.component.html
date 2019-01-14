@@ -41,15 +41,20 @@
                         <b class="ml-2">{{i + 1}}.</b>
                     </label>
                 </div>
-                <div style="flex: 1">
-                    <div class="form-group d-flex">
+                {{f}}
+                <div class="choice-content">
+                    <div class="form-group d-flex align-items-center">
                         <input type="text" name="choiceText{{i}}" #choiceText="ngModel" nbInput fullWidth
                             placeholder="Enter choice" required
                             [status]="choiceText.invalid  ? 'danger' : (choiceText.dirty ? 'warning' : '')"
                             [(ngModel)]="choice.text"/>
 
-                        <span class="fa fa-trash align-self-center ml-3 choice-icon-remove"
-                            title="Remove choice" (click)="removeChoice(choice)"></span>
+                        <i class="icon nb-arrow-up ml-1"
+                            title="Move up" (click)="moveChoiceUp(choice)"></i>
+                        <i class="icon nb-arrow-down ml-1"
+                            title="Move down" (click)="moveChoiceDown(choice)"></i>
+                        <i class="icon nb-trash ml-2 choice-icon-remove"
+                            title="Remove choice" (click)="removeChoice(choice)"></i>
                     </div>
                     <div class="d-flex explanation">
                         <label class="mx-2" (click)="toggleExplanation(i)">
@@ -68,7 +73,7 @@
             </div>
 
             <div class="d-flex">
-                <a [routerLink]="'./'" class="text-danger" (click)="remove()">Delete Item</a>
+                <a [routerLink]="'./'" class="ml-4 text-danger" (click)="remove()">Delete Item</a>
                 <a routerLink="./" class="ml-auto" (click)="shuffle()">Shuffle choices</a>
                 <a [routerLink]="'./'" class="ml-3" (click)="addChoice()">Add another choice</a>
             </div>

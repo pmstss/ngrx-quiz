@@ -1,6 +1,10 @@
 @import '../../../../themes';
 
 @include nb-install-component() {
+    .explanation {
+        cursor: pointer;
+    }
+
     .explanation quill-editor {
         flex: 1;
         height: 100%;
@@ -10,11 +14,19 @@
         width: 10px;
     }
 
-    .choice-icon-remove {
+    .choice-content {
+        flex: 1;
+    }
+
+    .choice-content .icon {
         font-size: 1.75rem;
         cursor: pointer;
 
         &:hover {
+            color: nb-theme(color-success);
+        }
+
+        &.nb-trash:hover {
             color: nb-theme(color-danger);
         }
     }
