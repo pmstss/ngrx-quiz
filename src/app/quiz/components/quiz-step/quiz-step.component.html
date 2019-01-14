@@ -25,6 +25,9 @@
                             'text-success': choice.correct
                         }"></i>
                         <span>{{choice.text}}</span>
+                        <span *ngIf="itemState.answered" class="ml-auto mr-3 text-info">
+                            {{choice.popularity | percent : '1.0-2'}}
+                        </span>
                     </div>
                     <div *ngIf="itemState.answered && choice.checked && choice.explanation" class="alert"
                             [ngClass]="{'text-success': choice.correct, 'text-danger': choice.wrong}">
