@@ -1,10 +1,7 @@
 <div class="container" *ngIf="quizMeta$ | async as quizMeta else loading">
     <form #form="ngForm" class="w-100">
         <div class="d-flex align-items-center">
-            <span class="d-flex align-items-center">
-                <i class="icon nb-arrow-thin-left icon-back"></i>
-                <a routerLink="/admin/quizes">Back to quiz list</a>
-            </span>
+            <app-back-link url="/admin/quizes">Back to quiz list</app-back-link>
             <button class="btn btn-outline-primary ml-auto"
                     [disabled]="form.pristine || form.invalid" (click)="save(quizMeta)">Save</button>
         </div>
