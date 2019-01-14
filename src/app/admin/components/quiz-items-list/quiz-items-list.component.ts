@@ -11,7 +11,7 @@ import { QuizItemAdmin } from '../../types/quiz-item-admin';
     selector: 'app-quiz-items-list',
     templateUrl: './quiz-items-list.component.html',
     styleUrls: ['./quiz-items-list.component.scss'],
-    // changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizItemsListComponent implements OnInit {
     quizMeta$: Observable<QuizMetaAdmin>;
@@ -31,16 +31,16 @@ export class QuizItemsListComponent implements OnInit {
         const idx = quizMeta.items.indexOf(item);
         if (idx > 0) {
             quizMeta.items.splice(idx - 1, 2, item, quizMeta.items[idx - 1]);
+            this.saveItemsOrder(quizMeta);
         }
-        this.saveItemsOrder(quizMeta);
     }
 
     moveItemDown(quizMeta: QuizMetaAdmin, item: QuizItemAdmin): void {
         const idx = quizMeta.items.indexOf(item);
         if (idx < quizMeta.items.length - 1) {
             quizMeta.items.splice(idx, 2, quizMeta.items[idx + 1], item);
+            this.saveItemsOrder(quizMeta);
         }
-        this.saveItemsOrder(quizMeta);
     }
 
     private saveItemsOrder(quizMeta: QuizMetaAdmin): void {
