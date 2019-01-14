@@ -11,9 +11,6 @@
     "experimentalDecorators": true,
     "downlevelIteration": true,
     "target": "es5",
-    "include": [
-      "src/**/*"
-    ],
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -21,5 +18,8 @@
       "es2018",
       "dom"
     ]
-  }
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
