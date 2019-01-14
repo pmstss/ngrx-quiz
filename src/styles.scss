@@ -48,6 +48,7 @@ quill-editor.ng-invalid {
 }
 
 quill-editor.ng-dirty {
+    display: block;
     border-width: 2px;
     border-style: solid;
 }
