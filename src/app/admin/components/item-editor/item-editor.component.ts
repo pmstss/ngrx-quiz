@@ -5,11 +5,11 @@ import { Subscription, from, Observable } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
 import { AutoUnsubscribe, QuizId } from '../../../core';
+import { DialogService } from '../../../dialog';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizItemAdmin } from '../../types/quiz-item-admin';
 import { QuizItemChoiceAdmin } from '../../types/quiz-item-choice-admin';
 import { quillToolbarConfig } from '../quill-config';
-import { DialogService } from 'src/app/dialog/services/dialog.service';
 
 @Component({
     selector: 'app-item-editor',
