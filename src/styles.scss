@@ -39,6 +39,23 @@
     color: inherit !important;
 }
 
+.nb-arrow-up, .nb-arrow-down {
+    cursor: pointer;
+}
+
+.icon-back {
+    font-size: 2rem;
+    color: nb-theme(color-success);
+}
+
+.btn.btn-outline-danger.btn-remove {
+    border-width: 0;
+}
+
+.btn-remove .nb-trash {
+    font-size: 2em;
+}
+
 /*** Quill Editor ***/
 
 quill-editor.ng-invalid {

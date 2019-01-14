@@ -2,13 +2,14 @@
     <div class="row my-bg p-3">
         <form *ngIf="item" #form="ngForm" class="w-100">
             <div class="d-flex align-items-center justify-content-between">
-                <a routerLink="/admin/quiz/{{quizId}}/items">
-                    <i class="icon nb-arrow-thin-left"></i>
-                    Back to items list
-                </a>
-                <!--button class="btn btn-sm btn-outline-danger ml-auto" (click)="remove()">Delete Item</button-->
-                <a class="btn btn-sm btn-outline-info ml-auto" routerLink="/admin/quiz/{{quizId}}/items/new">Add New Item</a>
-                <button class="btn btn-outline-primary ml-2"
+                <span class="d-flex align-items-center">
+                    <i class="icon nb-arrow-thin-left icon-back"></i>
+                    <a routerLink="/admin/quiz/{{quizId}}/items">
+                        Back to items list
+                    </a>
+                </span>
+                <a class="btn btn-xs btn-outline-info ml-auto btn-new" routerLink="/admin/quiz/{{quizId}}/items/new">Add New Item</a>
+                <button class="btn btn-outline-primary ml-3"
                         [disabled]="form.pristine || form.invalid" (click)="save()">Save</button>
             </div>
 
@@ -18,14 +19,22 @@
                       [modules]="quillToolbarConfig" [required]="true"></quill-editor>
             </div>
 
-            <div class="d-flex mt-4">
-                <h5>Choices</h5>
-                <nb-checkbox class="ml-auto" name="randomizeChoices" [(ngModel)]="item.randomizeChoices">
+            <div class="form-group mt-3 d-flex align-items-center">
+                <nb-checkbox name="randomizeChoices" [(ngModel)]="item.randomizeChoices">
                     Randomize choices order
                 </nb-checkbox>
-                <nb-checkbox class="ml-3" name="singleChoice" [(ngModel)]="item.singleChoice" (change)="onSingleChoiceChange()">
+                <a routerLink="./" class="ml-auto text-info" (click)="shuffle()">Shuffle choices now</a>
+            </div>
+
+            <div class="form-group mt-3 d-flex align-items-center">
+                <nb-checkbox name="singleChoice" [(ngModel)]="item.singleChoice" (change)="onSingleChoiceChange()">
                     Single choice
                 </nb-checkbox>
+                <a routerLink="./" class="ml-auto" (click)="addChoice()">Add another choice</a>
+            </div>
+
+            <div class="d-flex align-items-center mt-3">
+                <h5>Choices</h5>
             </div>
 
             <div class="d-flex my-2" *ngFor="let choice of item.choices; let i = index">
@@ -41,7 +50,6 @@
                         <b class="ml-2">{{i + 1}}.</b>
                     </label>
                 </div>
-                {{f}}
                 <div class="choice-content">
                     <div class="form-group d-flex align-items-center">
                         <input type="text" name="choiceText{{i}}" #choiceText="ngModel" nbInput fullWidth
@@ -73,9 +81,12 @@
             </div>
 
             <div class="d-flex">
-                <a [routerLink]="'./'" class="ml-4 text-danger" (click)="remove()">Delete Item</a>
-                <a routerLink="./" class="ml-auto" (click)="shuffle()">Shuffle choices</a>
-                <a [routerLink]="'./'" class="ml-3" (click)="addChoice()">Add another choice</a>
+                <button class="btn btn-xs btn-outline-danger btn-remove ml-auto" (click)="remove()">
+                    <span class="d-flex align-items-center">
+                        <i class="icon nb-trash"></i>
+                        Delete Item
+                    </span>
+                </button>
             </div>
 
             <!-- TODO validation: at least one must be checked, max choices length -->

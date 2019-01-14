@@ -1,6 +1,10 @@
 @import '../../../../themes';
 
 @include nb-install-component() {
+    .btn-new {
+        border-width: 0;
+    }
+
     .explanation {
         cursor: pointer;
     }
