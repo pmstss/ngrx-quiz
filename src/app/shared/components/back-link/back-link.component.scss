@@ -1,0 +1,8 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+    .icon.nb-arrow-thin-left {
+        font-size: 2rem;
+        color: nb-theme(color-success);
+    }
+}

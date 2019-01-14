@@ -4,14 +4,15 @@ import { RouterModule } from '@angular/router';
 import { NbSpinnerModule } from '@nebular/theme';
 import { HeaderComponent } from './components/header/header.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { BackLinkComponent } from './components/back-link/back-link.component';
 
 @NgModule({
-    declarations: [HeaderComponent, LoaderComponent],
+    declarations: [HeaderComponent, LoaderComponent, BackLinkComponent],
     imports: [
         CommonModule,
         RouterModule,
         NbSpinnerModule
     ],
-    exports: [HeaderComponent, LoaderComponent]
+    exports: [HeaderComponent, LoaderComponent, BackLinkComponent]
 })
 export class SharedModule { }
