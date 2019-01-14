@@ -7,7 +7,7 @@
                     Back to items list
                 </a>
                 <!--button class="btn btn-sm btn-outline-danger ml-auto" (click)="remove()">Delete Item</button-->
-                <button class="btn btn-sm btn-outline-info ml-auto" (click)="remove()">Add New Item</button>
+                <a class="btn btn-sm btn-outline-info ml-auto" routerLink="/admin/quiz/{{quizId}}/items/new">Add New Item</a>
                 <button class="btn btn-outline-primary ml-2"
                         [disabled]="form.pristine || form.invalid" (click)="save()">Save</button>
             </div>
