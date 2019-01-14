@@ -6,7 +6,6 @@ import { QuillModule } from 'ngx-quill';
 import { AdminComponent } from './components/admin.component';
 import { ItemEditorComponent } from './components/item-editor/item-editor.component';
 import { QuizMetaEditorComponent } from './components/quiz-meta-editor/quiz-meta-editor.component';
-import { StatsComponent } from './components/stats/stats.component';
 import { AdminWelcomeComponent } from './components/admin-welcome/admin-welcome.component';
 import { QuizAdminService } from './services/quiz-admin.service';
 import { QuizListComponent } from './components/quiz-list/quiz-list.component';
@@ -32,7 +31,6 @@ import { SharedModule } from '../shared';
         QuizListComponent,
         QuizMetaEditorComponent,
         QuizItemsListComponent,
-        StatsComponent,
         AdminWelcomeComponent
     ],
     providers: [QuizAdminService]

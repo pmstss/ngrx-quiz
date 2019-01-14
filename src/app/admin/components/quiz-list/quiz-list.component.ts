@@ -5,7 +5,7 @@ import { QuizMeta, QuizService } from '../../../core';
 @Component({
     selector: 'app-quiz-list',
     templateUrl: './quiz-list.component.html',
-    styleUrls: ['./quiz-list.component.css'],
+    styleUrls: ['./quiz-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizListComponent implements OnInit {

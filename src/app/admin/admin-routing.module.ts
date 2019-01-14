@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { StatsComponent } from './components/stats/stats.component';
 import { ItemEditorComponent } from './components/item-editor/item-editor.component';
 import { QuizMetaEditorComponent } from './components/quiz-meta-editor/quiz-meta-editor.component';
 import { QuizListComponent } from './components/quiz-list/quiz-list.component';
@@ -27,9 +26,6 @@ const routes = [
         }, {
             path: 'quiz/:quizId/items/:itemId',
             component: ItemEditorComponent
-        }, {
-            path: 'stats',
-            component: StatsComponent
         }]
     },
     {
