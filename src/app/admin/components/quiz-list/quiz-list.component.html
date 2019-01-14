@@ -1,10 +1,10 @@
-<div class="container" *ngIf="quizList | async">
+<div class="container" *ngIf="quizList$ | async as quizList else loading">
     <div class="d-flex flex-row mb-4 justify-content-between align-items-center">
-        <span>There are totally {{(quizList | async)?.length}} quizes in database</span>
+        <span>There are totally {{quizList.length}} quizes in database</span>
         <a class="btn btn-outline-primary" routerLink="/admin/quiz/new">Add New Quiz</a>
     </div>
 
-    <nb-card *ngFor="let quiz of quizList | async; let i = index" accent="info">
+    <nb-card *ngFor="let quiz of quizList; let i = index" accent="info">
         <nb-card-header class="d-flex align-items-center px-4 py-2">
             <span>{{quiz.name}} ({{quiz.shortName}})</span>
             <a class="btn btn-xs btn-outline-primary ml-auto" routerLink="/admin/quiz/{{quiz.id}}">Edit Meta</a>
@@ -18,3 +18,7 @@
         </nb-card-body>
     </nb-card>
 </div>
+
+<ng-template #loading>
+    <app-loader></app-loader>
+</ng-template>
