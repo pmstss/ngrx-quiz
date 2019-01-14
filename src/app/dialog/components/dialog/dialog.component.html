@@ -1,14 +1,14 @@
 <nb-card>
-    <nb-card-header>
+    <nb-card-header class="d-flex align-items-center">
         {{title}}
-        <i class="icon nb-close pull-right" (click)="close()"></i>
+        <i class="icon nb-close ml-auto" (click)="close()"></i>
     </nb-card-header>
 
     <nb-card-body>
         {{message}}
     </nb-card-body>
 
-    <nb-card-footer>
+    <nb-card-footer class="d-flex justify-content-end">
         <button *ngFor="let button of buttons" class="btn ml-3" [ngClass]="button.clazz"
                 (click)="buttonClick(button)">
             {{button.label}}
