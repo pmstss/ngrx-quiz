@@ -5,6 +5,10 @@
     display: flex;
     flex: 1;
 
+    .btn-outline-secondary {
+        border-width: 0;
+    }
+
     .choices {
         list-style-type: none;
         margin-left: 0;

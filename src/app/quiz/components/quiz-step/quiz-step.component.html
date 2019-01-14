@@ -11,8 +11,8 @@
         <nb-card-body>
             <quill-editor theme="bubble" [readOnly]="true" [ngModel]="itemState.question"></quill-editor>
 
-            <div class="mt-4 choices" [ngClass]="{'choices--answered': itemState?.answered}">
-                <div *ngFor="let choice of itemState?.choicesStatus">
+            <div class="mt-4 choices" [ngClass]="{'choices--answered': itemState.answered}">
+                <div *ngFor="let choice of itemState.choicesStatus">
                     <div class="choice d-flex align-items-center mt-3 py-3" [ngClass]="{
                             'checked': choice.checked,
                             'text-danger': choice.wrong,
@@ -35,15 +35,15 @@
         </nb-card-body>
 
         <nb-card-footer class="d-flex">
-            <a *ngIf="!itemState?.answered" class="btn btn-outline-secondary btn-lg"
+            <a *ngIf="!itemState.answered" class="btn btn-outline-secondary btn-lg ml-auto"
                     routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{getNextStep() | async}}">
                 Skip
             </a>
-            <button *ngIf="!itemState?.answered" class="btn btn-outline-primary btn-lg ml-auto"
+            <button *ngIf="!itemState.answered" class="btn btn-outline-primary btn-lg ml-4"
                     (click)="submit()">
                 Submit
             </button>
-            <a *ngIf="itemState?.answered && !quizState.finished" class="btn btn-outline-primary btn-lg ml-auto"
+            <a *ngIf="itemState.answered && !quizState.finished" class="btn btn-outline-primary btn-lg ml-auto"
                     routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{getNextStep() | async}}">
                 Next
             </a>
