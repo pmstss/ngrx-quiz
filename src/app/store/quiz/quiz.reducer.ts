@@ -10,7 +10,8 @@ import { ItemId, ChoiceId, QuizItem, QuizItemChoice } from '../../core';
 function getRootState(quizState) {
     return {
         quiz: quizState,
-        auth: null
+        auth: null,
+        token: null
     };
 }
 

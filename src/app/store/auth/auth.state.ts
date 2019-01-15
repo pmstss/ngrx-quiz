@@ -1,11 +1,9 @@
-import { User } from '../../core';
+import { User } from '../../auth';
 
 export interface AuthState {
     user: User;
-    errorMessage: string;
 }
 
 export const initialAuthState: AuthState = {
-    user: null,
-    errorMessage: null
+    user: null
 };

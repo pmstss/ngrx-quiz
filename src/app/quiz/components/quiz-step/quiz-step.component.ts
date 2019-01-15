@@ -10,7 +10,7 @@ import {
 import { AutoUnsubscribe } from '../../../core';
 
 @Component({
-    selector: 'app-quiz',
+    selector: 'app-quiz-step',
     templateUrl: './quiz-step.component.html',
     styleUrls: ['./quiz-step.component.scss']
 })

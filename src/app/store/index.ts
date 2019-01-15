@@ -6,7 +6,10 @@ export { AuthState } from './auth/auth.state';
 export * from './auth/auth.actions';
 export * from './auth/auth.selectors';
 
-export { AppState, selectQuizState, selectAuthState } from './app.state';
+export { TokenState } from './token/token.state';
+export * from './token/token.actions';
+
+export { AppState, selectQuizState, selectAuthState, selectTokenState } from './app.state';
 export { reducers, metaReducers } from './app.reducers';
 
 export { AppStoreModule } from './app-store.module';

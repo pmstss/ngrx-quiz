@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../shared/components/header/header.component';
-import { LoginComponent } from '../login/login/login.component';
 
 @NgModule({
     declarations: [],

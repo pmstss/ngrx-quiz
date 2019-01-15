@@ -4,15 +4,16 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { environment } from '../../environments/environment';
 import { metaReducers, reducers } from './app.reducers';
+import { QuizEffects } from './quiz/quiz.effects';
+import { TokenEffects } from './token/token.effects';
 import { AuthEffects } from './auth/auth.effects';
-import { AppEffects } from './quiz/quiz.effects';
 
 @NgModule({
     declarations: [],
     imports: [
         StoreModule.forRoot(reducers, { metaReducers }),
         !environment.production ? StoreDevtoolsModule.instrument() : [],
-        EffectsModule.forRoot([AppEffects, AuthEffects])
+        EffectsModule.forRoot([QuizEffects, TokenEffects, AuthEffects])
     ],
     providers: [],
     bootstrap: []

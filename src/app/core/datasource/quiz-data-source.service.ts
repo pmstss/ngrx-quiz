@@ -7,14 +7,14 @@ import { QuizMeta } from '../types/quiz-meta';
 import { ChoiceId, ItemId } from '../types/id';
 import { QuizItemChoice } from '../types/quiz-item-choice';
 import { QuizItemAnswer } from '../types/quiz-item-answer';
-import { BASE_URL } from '../tokens';
+import { BASE_URL_TOKEN } from '../tokens';
 import { QuizItemAnswerResponse, ResponseWrapper, QuizItemResponse, QuizMetaResponse } from './data-source.types';
 
 @Injectable()
 export class QuizDataSource {
     private apiUrl: string;
 
-    constructor(private http: HttpClient, @Inject(BASE_URL) baseUrl) {
+    constructor(private http: HttpClient, @Inject(BASE_URL_TOKEN) baseUrl) {
         this.apiUrl = `${baseUrl}/api`;
     }
 

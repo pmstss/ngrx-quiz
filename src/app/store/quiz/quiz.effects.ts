@@ -16,7 +16,7 @@ import { AppState } from '../app.state';
 import { selectActiveItemId, selectActiveItemChoices } from './quiz.selectors';
 
 @Injectable()
-export class AppEffects {
+export class QuizEffects {
     constructor(private appStore: Store<AppState>, private actions$: Actions, private quizService: QuizService) { }
 
     @Effect()

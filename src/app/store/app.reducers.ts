@@ -3,10 +3,12 @@ import { environment } from '../../environments/environment';
 import { AppState } from './app.state';
 import { quizReducer } from './quiz/quiz.reducer';
 import { authReducer } from './auth/auth.reducer';
+import { tokenReducer } from './token/token.reducer';
 
 export const reducers: ActionReducerMap<AppState> = {
     quiz: quizReducer,
-    auth: authReducer
+    auth: authReducer,
+    token: tokenReducer
 };
 
 export function logger(reducer: ActionReducer<AppState>):

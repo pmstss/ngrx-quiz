@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { selectQuizState, AppState, QuizState } from './store';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { MessageService } from './core/services/message.service';
 import { NbToastrService } from '@nebular/theme';
-import { NbToastStatus } from '@nebular/theme/components/toastr/model';
+import { NbTokenService, NbAuthToken } from '@nebular/auth';
+import { MessageService } from './core/services/message.service';
+import { AppState, ActionTokenChanged } from './store';
 
 @Component({
     selector: 'app-root',
@@ -12,17 +11,21 @@ import { NbToastStatus } from '@nebular/theme/components/toastr/model';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-    quizState$: Observable<QuizState>;
-
-    constructor(private appStore: Store<AppState>, private messageService: MessageService,
-                private toastrService: NbToastrService) {
-        this.quizState$ = appStore.select(selectQuizState);
-
+    constructor(appStore: Store<AppState>, tokenService: NbTokenService,
+                messageService: MessageService, toastrService: NbToastrService) {
         messageService.messages$.subscribe((msg) => {
-            this.toastrService.show(msg.message, msg.title, {
+            toastrService.show(msg.message, msg.title, {
                 status: msg.status,
                 duration: msg.duration
             });
+        });
+
+        tokenService.tokenChange().subscribe((nbAuthToken: NbAuthToken) => {
+            console.log('### token changed: %o', nbAuthToken);
+            appStore.dispatch(new ActionTokenChanged({
+                token: nbAuthToken.getValue(),
+                tokenPayload: nbAuthToken.getPayload()
+            }));
         });
     }
 }
