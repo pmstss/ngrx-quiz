@@ -14,18 +14,13 @@
             <div class="mt-4 choices" [ngClass]="{'choices--answered': itemState.answered}">
                 <div *ngFor="let choice of itemState.choicesStatus">
                     <div class="choice d-flex align-items-center mt-3 py-3" [ngClass]="{
-                            'checked': choice.checked,
+                            'checked': !itemState.answered && choice.checked,
                             'text-danger': choice.wrong,
                             'text-success': choice.correct
                         }" (click)="toggleChoice(choice.id)">
-                        <i class="fa mx-3" [ngClass]="{
-                            'fa-check': choice.correct || choice.checked || !choice.answered,
-                            'fa-times': choice.wrong,
-                            'text-danger': choice.wrong,
-                            'text-success': choice.correct
-                        }"></i>
+                        <i class="fa mx-3" [ngClass]="{'fa-check': !choice.wrong, 'fa-times': choice.wrong}"></i>
                         <span>{{choice.text}}</span>
-                        <span *ngIf="itemState.answered" class="ml-auto mr-3 text-info">
+                        <span *ngIf="itemState.answered" class="ml-auto mr-3">
                             {{choice.popularity | percent : '1.0-2'}}
                         </span>
                     </div>

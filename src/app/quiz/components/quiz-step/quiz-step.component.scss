@@ -24,7 +24,8 @@
         color: nb-theme(color-bg-active);
     }
 
-    .choice.checked, .choices:not(.choices--answered) .choice:hover {
+    .choice.checked,
+    .choices:not(.choices--answered) .choice:hover {
         border-color: nb-theme(color-info);
         opacity: 1;
         transition: border-color 1s, opacity 0.5s;
@@ -49,8 +50,13 @@
             border-color: nb-theme(color-danger);
         }
 
-        &.choice.checked .fa {
+        &.checked .fa {
             color: nb-theme(color-info);
         }
+    }
+
+    .choices--answered .choice.text-success .fa,
+    .choices--answered .choice.text-danger .fa {
+        color: inherit;
     }
 }
