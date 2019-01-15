@@ -19,6 +19,7 @@ export class QuizDataSource {
     }
 
     handleError(error: HttpErrorResponse) {
+        console.error(error);
         if (error.error instanceof ErrorEvent) {
             return throwError({
                 title: 'Client side network error',
@@ -71,7 +72,7 @@ export class QuizDataSource {
     }
 
     getQuizList(): Observable<QuizMeta[]> {
-        return this.get<QuizMeta[]>('/quizes');
+        return this.get<QuizMeta[]>('/quizes').pipe(catchError(this.handleError));
     }
 
     getQuizByShortName(shortName: string): Observable<{quizMeta: QuizMeta, itemIds: ItemId[]}> {
@@ -83,7 +84,8 @@ export class QuizDataSource {
                     quizMeta,
                     itemIds: res.items.map(x => x.id)
                 };
-            })
+            }),
+            catchError(this.handleError)
         );
     }
 
@@ -99,7 +101,8 @@ export class QuizDataSource {
                         new Map<ChoiceId, QuizItemChoice>()
                     )
                 };
-            })
+            }),
+            catchError(this.handleError)
         );
     }
 
@@ -110,7 +113,8 @@ export class QuizDataSource {
             map(res => ({
                 choiceAnswers: res.choices.reduce((map, ch) => map.set(ch.id, ch), new Map()),
                 correct: res.correct
-            }))
+            })),
+            catchError(this.handleError)
         );
     }
 }
