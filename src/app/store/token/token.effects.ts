@@ -13,7 +13,7 @@ export class TokenEffects {
         ofType(TokenActionTypes.TOKEN_CHANGED),
         map((action: ActionTokenChanged) => {
             return action.payload.token ?
-                new ActionLogin((action.payload as any).tokenPayload.user) : new ActionLogout();
+                new ActionLogin({ user: (action.payload as any).tokenPayload.user }) : new ActionLogout();
         })
     );
 }
