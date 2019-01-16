@@ -10,8 +10,8 @@ import { SharedModule } from './shared';
 import { AppRoutingModule } from './app-routing';
 import { AppStoreModule } from './store';
 import { DialogModule } from './dialog';
-import { AuthModule } from './auth';
 import { AppComponent } from './app.component';
+import { AuthModule } from './auth';
 
 @NgModule({
     declarations: [
@@ -29,8 +29,8 @@ import { AppComponent } from './app.component';
         CoreModule,
         SharedModule,
         AppStoreModule,
-        AuthModule,
-        DialogModule
+        DialogModule,
+        AuthModule
     ],
     providers: [NbThemeService],
     bootstrap: [AppComponent]

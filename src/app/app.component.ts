@@ -11,8 +11,8 @@ import { AppState, ActionTokenChanged } from './store';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-    constructor(appStore: Store<AppState>, tokenService: NbTokenService,
-                messageService: MessageService, toastrService: NbToastrService) {
+    constructor(appStore: Store<AppState>, messageService: MessageService,
+                toastrService: NbToastrService, nbTokenService: NbTokenService) {
         messageService.messages$.subscribe((msg) => {
             toastrService.show(msg.message, msg.title, {
                 status: msg.status,
@@ -20,8 +20,7 @@ export class AppComponent {
             });
         });
 
-        tokenService.tokenChange().subscribe((nbAuthToken: NbAuthToken) => {
-            console.log('### token changed: %o', nbAuthToken);
+        nbTokenService.tokenChange().subscribe((nbAuthToken: NbAuthToken) => {
             appStore.dispatch(new ActionTokenChanged({
                 token: nbAuthToken.getValue(),
                 tokenPayload: nbAuthToken.getPayload()

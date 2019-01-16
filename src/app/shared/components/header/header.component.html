@@ -10,13 +10,19 @@
         <li class="nav-item">
             <a class="nav-link" routerLink="/contact">Contact</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="(user$ | async)?.admin">
             <a class="nav-link" routerLink="/admin">Admin</a>
         </li>
 
-        <li class="nav-item ml-auto">
-            <a *ngIf="!(userFullName$ | async)" class="nav-link" routerLink="/auth/login">Login</a>
-            <span class="nav-link" *ngIf="(userFullName$ | async)">Hello, {{(userFullName$ | async)}}!</span>
+        <li class="nav-item ml-auto" *ngIf="user$ | async as user else login">
+            <span class="nav-link">Hello, {{user.fullName}}!</span>
+            <a  class="nav-link" routerLink="/auth/logout">Logout</a>
         </li>
+
+        <ng-template #login>
+            <li class="nav-item ml-auto">
+                <a class="nav-link" routerLink="/auth/login">Login</a>
+            </li>
+        </ng-template>
   </ul>
 </header>
