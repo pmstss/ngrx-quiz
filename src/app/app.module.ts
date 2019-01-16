@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeService, NbThemeModule, NbLayoutModule, NbToastrModule,
-        NbGlobalLogicalPosition } from '@nebular/theme';
+        NbGlobalLogicalPosition, NbMenuModule, NbContextMenuModule, NbDialogModule } from '@nebular/theme';
 import { CoreModule } from './core';
 import { SharedModule } from './shared';
 import { AppRoutingModule } from './app-routing';
@@ -25,6 +25,9 @@ import { AuthModule } from './auth';
         NbThemeModule.forRoot({ name: 'cosmic' }),
         NbLayoutModule,
         NbToastrModule.forRoot({ position: NbGlobalLogicalPosition.BOTTOM_END }),
+        NbMenuModule.forRoot(),
+        NbDialogModule.forRoot(),
+        NbContextMenuModule,
         AppRoutingModule,
         CoreModule,
         SharedModule,

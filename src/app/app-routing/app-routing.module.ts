@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../shared';
-import { AdminAuthGuard, authRouteConfig } from '../auth';
+import { AdminAuthGuard } from '../auth';
 
 @NgModule({
     declarations: [],
@@ -11,7 +11,7 @@ import { AdminAuthGuard, authRouteConfig } from '../auth';
                 path: '',
                 component: HeaderComponent,
                 outlet: 'header'
-            }, authRouteConfig,
+            },
             {
                 path: 'quizes',
                 loadChildren: '../quiz-list/quiz-list.module#QuizListModule'
@@ -23,16 +23,16 @@ import { AdminAuthGuard, authRouteConfig } from '../auth';
                 path: 'admin',
                 loadChildren: '../admin/admin.module#AdminModule',
                 canActivate: [AdminAuthGuard]
-            },
+            }/*,
             {
                 path: '**',
                 redirectTo: '/quizes'
-            }],
+            }*/],
             {
-                // enableTracing: true // TODO ### for debug
+                enableTracing: true // TODO ### for debug
             }
         )
     ],
-    exports: [RouterModule]
+    exports: []
 })
 export class AppRoutingModule { }

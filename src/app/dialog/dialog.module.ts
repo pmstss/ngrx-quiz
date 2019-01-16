@@ -8,7 +8,7 @@ import { DialogService } from '../dialog/services/dialog.service';
     declarations: [DialogComponent],
     imports: [
         CommonModule,
-        NbDialogModule.forRoot(),
+        NbDialogModule,
         NbCardModule
     ],
     entryComponents: [DialogComponent],
