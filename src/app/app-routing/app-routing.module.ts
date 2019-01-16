@@ -13,9 +13,14 @@ import { AdminAuthGuard } from '../auth';
                 outlet: 'header'
             },
             {
+                path: 'auth',
+                loadChildren: '../auth-ui/auth-ui.module#AuthUIModule'
+            },
+            {
                 path: 'quizes',
                 loadChildren: '../quiz-list/quiz-list.module#QuizListModule'
-            }, {
+            },
+            {
                 path: 'quiz',
                 loadChildren: '../quiz/quiz.module#QuizModule'
             },
@@ -23,16 +28,16 @@ import { AdminAuthGuard } from '../auth';
                 path: 'admin',
                 loadChildren: '../admin/admin.module#AdminModule',
                 canActivate: [AdminAuthGuard]
-            }/*,
+            },
             {
                 path: '**',
                 redirectTo: '/quizes'
-            }*/],
+            }],
             {
-                enableTracing: true // TODO ### for debug
+                // enableTracing: true // TODO ### for debug
             }
         )
     ],
-    exports: []
+    exports: [RouterModule]
 })
 export class AppRoutingModule { }

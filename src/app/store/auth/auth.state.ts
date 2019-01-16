@@ -1,4 +1,4 @@
-import { User } from '../../auth';
+import { User } from '../../core';
 
 export interface AuthState {
     user: User;

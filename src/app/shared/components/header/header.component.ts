@@ -4,7 +4,7 @@ import { tap, filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { NbMenuService, NbMenuItem } from '@nebular/theme';
 import { AppState, selectUser } from '../../../store';
-import { User } from '../../../auth';
+import { User } from '../../../core';
 
 @Component({
     selector: 'app-header',
