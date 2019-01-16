@@ -15,8 +15,8 @@
         </li>
 
         <li class="nav-item ml-auto" *ngIf="user$ | async as user else login">
-            <span class="nav-link">Hello, {{user.fullName}}!</span>
-            <a  class="nav-link" routerLink="/auth/logout">Logout</a>
+            <nb-user name="{{user.fullName}}" [title]="user.admin ? 'Admin' : ''"
+                [nbContextMenu]="items" nbContextMenuTag="user-context-menu">></nb-user>
         </li>
 
         <ng-template #login>
