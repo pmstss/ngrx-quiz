@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../shared';
-import { AdminAuthGuard } from '../auth';
+import { AdminAuthGuard, AuthGuard } from '../auth';
 
 @NgModule({
     declarations: [],
@@ -14,25 +14,27 @@ import { AdminAuthGuard } from '../auth';
             },
             {
                 path: 'auth',
-                loadChildren: '../auth-ui/auth-ui.module#AuthUIModule'
+                loadChildren: '../auth-ui/auth-ui.module#AuthUIModule',
             },
             {
                 path: 'quizes',
-                loadChildren: '../quiz-list/quiz-list.module#QuizListModule'
+                loadChildren: '../quiz-list/quiz-list.module#QuizListModule',
+                canActivate: [AuthGuard]
             },
             {
                 path: 'quiz',
-                loadChildren: '../quiz/quiz.module#QuizModule'
+                loadChildren: '../quiz/quiz.module#QuizModule',
+                canActivate: [AuthGuard]
             },
             {
                 path: 'admin',
                 loadChildren: '../admin/admin.module#AdminModule',
                 canActivate: [AdminAuthGuard]
-            },
+            }/*,
             {
                 path: '**',
                 redirectTo: '/quizes'
-            }],
+            }*/],
             {
                 // enableTracing: true // TODO ### for debug
             }
