@@ -6,7 +6,7 @@ import {
     HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { BASE_URL_TOKEN } from '../../consts';
 import { AppState, selectToken } from '../../store';
@@ -17,6 +17,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return this.appStore.select(selectToken).pipe(
+            take(1),
             switchMap((token) => {
                 if (!token || !request.url.startsWith(this.baseUrl)) {
                     return next.handle(request);
