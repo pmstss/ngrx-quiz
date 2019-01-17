@@ -1,6 +1,107 @@
-:host {
+@import '../themes';
+
+@include nb-install-component() {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     background-color: #f4f3ef;
+
+    /deep/  {
+        .btn {
+            cursor: pointer !important;
+        }
+
+        .jumbotron {
+            background-color: nb-theme(card-bg) !important;
+        }
+
+        .card-body {
+            background: nb-theme(card-bg);
+        }
+
+        .btn[disabled] {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .ng-invalid {
+            border-color: nb-theme(color-danger);
+        }
+
+        .ng-dirty {
+            border-color: nb-theme(color-warning);
+        }
+
+        /*** Nebular ***/
+
+        .customised-control-description {
+            color: inherit !important;
+        }
+
+        .nb-arrow-up, .nb-arrow-down {
+            cursor: pointer;
+        }
+
+        .btn.btn-outline-danger.btn-remove {
+            border-width: 0;
+        }
+
+        .btn-remove .nb-trash {
+            font-size: 2em;
+        }
+
+        /*** Nebular overrides for Bootstrap ***/
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: nb-theme(color-fg-heading);
+        }
+
+        /*** Quill Editor ***/
+
+        quill-editor.ng-invalid {
+            display: block;
+            border-width: 2px;
+            border-style: solid;
+        }
+
+        quill-editor.ng-dirty {
+            display: block;
+            border-width: 2px;
+            border-style: solid;
+        }
+
+        .ql-editor {
+            font-size: 1.25rem !important;
+            max-height: 30vh;
+        }
+
+        .quiz-admin .ql-editor {
+            font-size: 1rem !important;
+            color: nb-theme(color-fg-heading);
+            /*min-height: 100px;*/
+        }
+
+        .quiz-admin .ql-editor.ql-blank::before {
+            font-size: 1rem !important;
+            color: nb-theme(color-fg-heading);
+            opacity: 0.6;
+        }
+
+        .ql-snow .ql-stroke {
+            stroke: nb-theme(color-fg) !important;
+        }
+
+        .ql-snow .ql-picker {
+            color: nb-theme(color-fg) !important;
+        }
+
+        .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill {
+            fill: nb-theme(color-fg) !important;
+        }
+
+        .ql-toolbar.ql-snow,
+        .ql-container.ql-snow {
+            border-color: nb-theme(color-bg) !important;
+        }
+    }
 }
