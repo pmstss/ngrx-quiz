@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { NbToastrService } from '@nebular/theme';
 import { NbTokenService, NbAuthToken } from '@nebular/auth';
@@ -10,18 +10,21 @@ import { AppState, ActionTokenChanged } from './store';
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss']
 })
-export class AppComponent {
-    constructor(appStore: Store<AppState>, messageService: MessageService,
-                toastrService: NbToastrService, nbTokenService: NbTokenService) {
-        messageService.messages$.subscribe((msg) => {
-            toastrService.show(msg.message, msg.title, {
+export class AppComponent implements OnInit {
+    constructor(private appStore: Store<AppState>, private messageService: MessageService,
+                private toastrService: NbToastrService, private nbTokenService: NbTokenService) {
+    }
+
+    ngOnInit() {
+        this.messageService.messages$.subscribe((msg) => {
+            this.toastrService.show(msg.message, msg.title, {
                 status: msg.status,
                 duration: msg.duration
             });
         });
 
-        nbTokenService.tokenChange().subscribe((nbAuthToken: NbAuthToken) => {
-            appStore.dispatch(new ActionTokenChanged({
+        this.nbTokenService.tokenChange().subscribe((nbAuthToken: NbAuthToken) => {
+            this.appStore.dispatch(new ActionTokenChanged({
                 token: nbAuthToken.getValue(),
                 tokenPayload: nbAuthToken.getPayload()
             }));
