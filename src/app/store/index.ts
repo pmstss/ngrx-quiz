@@ -8,6 +8,7 @@ export * from './auth/auth.selectors';
 
 export { TokenState } from './token/token.state';
 export * from './token/token.actions';
+export * from './token/token.selectors';
 
 export { AppState, selectQuizState, selectAuthState, selectTokenState } from './app.state';
 export { reducers, metaReducers } from './app.reducers';

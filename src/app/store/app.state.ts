@@ -11,4 +11,4 @@ export interface AppState {
 
 export const selectQuizState = createFeatureSelector<QuizState>('quiz');
 export const selectAuthState = createFeatureSelector<AuthState>('auth');
-export const selectTokenState = createFeatureSelector<AuthState>('token');
+export const selectTokenState = createFeatureSelector<TokenState>('token');
