@@ -1,0 +1,6 @@
+<ul class="themes-switcher-list my-2 pl-1 pr-3">
+    <li class="themes-switcher-item" *ngFor="let theme of themes" (click)="onToggleTheme(theme.key)">
+        <i class="nb-drop" [ngClass]="'drop-icon-' + theme.key"></i>
+        <span>{{ theme.title }}</span>
+    </li>
+</ul>

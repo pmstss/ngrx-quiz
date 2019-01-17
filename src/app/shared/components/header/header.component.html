@@ -14,13 +14,17 @@
             <a class="nav-link" routerLink="/admin">Admin</a>
         </li>
 
-        <li class="nav-item ml-auto" *ngIf="user$ | async as user else login">
+        <li class="nav-item ml-auto">
+            <app-theme-switcher class="nav-link"></app-theme-switcher>
+        </li>
+
+        <li class="nav-item ml-4" *ngIf="user$ | async as user else login">
             <nb-user name="{{user.fullName}}" [title]="user.admin ? 'Admin' : ''"
                 [nbContextMenu]="items" nbContextMenuTag="user-context-menu">></nb-user>
         </li>
 
         <ng-template #login>
-            <li class="nav-item ml-auto">
+            <li class="nav-item ml-4">
                 <a class="nav-link" routerLink="/auth/login">Login</a>
             </li>
         </ng-template>

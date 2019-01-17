@@ -1,0 +1,11 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+  .themes-switcher {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+}
+
+

@@ -1,0 +1,46 @@
+@import '../../../../themes';
+
+$icon-color-default: #0bbb79;
+$icon-color-cosmic: #7958fa;
+$icon-color-corporate: #a7a2be;
+
+@include nb-install-component() {
+    .themes-switcher-item {
+        list-style: none;
+        cursor: pointer;
+
+        &:hover span {
+            opacity: 1;
+        }
+
+        span {
+            opacity: 0.6;
+            font-weight: 300;
+            vertical-align: super;
+            padding-left: 1rem;
+            color: nb-theme(color-fg-heading);
+        }
+
+        i {
+            font-size: 2rem;
+        }
+    }
+
+    .drop-icon-default {
+        color: $icon-color-default;
+    }
+
+    .drop-icon-cosmic {
+        color: $icon-color-cosmic;
+    }
+
+    .drop-icon-corporate {
+        color: $icon-color-corporate;
+    }
+
+    @include media-breakpoint-down(is) {
+      /deep/ .themes-switcher-list {
+        display: none;
+      }
+    }
+}
