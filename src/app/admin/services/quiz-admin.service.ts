@@ -1,47 +1,47 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { QuizDataSource, QuizId, QuizItem, ItemId } from '../../core';
+import { QuizId, QuizItem, ItemId, ApiService } from '../../core';
 import { QuizMetaAdmin } from '../types/quiz-meta-admin';
 import { QuizItemAdmin } from '../types/quiz-item-admin';
 
 @Injectable()
 export class QuizAdminService {
-    constructor(private quizDataSource: QuizDataSource) {
+    constructor(private apiService: ApiService) {
     }
 
     loadQuiz(quizId: QuizId): Observable<QuizMetaAdmin> {
-        return this.quizDataSource.get<QuizMetaAdmin>(`/admin/quizes/${quizId}`);
+        return this.apiService.get<QuizMetaAdmin>(`/admin/quizes/${quizId}`);
     }
 
     loadItem(itemId: ItemId): Observable<QuizItemAdmin> {
-        return this.quizDataSource.get<QuizItemAdmin>(`/admin/items/${itemId}`);
+        return this.apiService.get<QuizItemAdmin>(`/admin/items/${itemId}`);
     }
 
     createItem(quizId: QuizId, item: QuizItemAdmin): Observable<QuizItem> {
-        return this.quizDataSource.post<QuizItemAdmin>(`/admin/items?quizId=${encodeURIComponent(quizId)}`, item);
+        return this.apiService.post<QuizItemAdmin>(`/admin/items?quizId=${encodeURIComponent(quizId)}`, item);
     }
 
     updateItem(item: QuizItemAdmin): Observable<QuizItemAdmin> {
-        return this.quizDataSource.put<QuizItemAdmin>(`/admin/items/${item.id}`, item);
+        return this.apiService.put<QuizItemAdmin>(`/admin/items/${item.id}`, item);
     }
 
     deleteItem(itemId: ItemId): Observable<{}> {
-        return this.quizDataSource.delete<{}>(`/admin/items/${itemId}`);
+        return this.apiService.delete<{}>(`/admin/items/${itemId}`);
     }
 
     createQuiz(quizMeta: QuizMetaAdmin) {
-        return this.quizDataSource.post<{}>('/admin/quizes', quizMeta);
+        return this.apiService.post<{}>('/admin/quizes', quizMeta);
     }
 
     updateQuiz(quizMeta: QuizMetaAdmin) {
-        return this.quizDataSource.put<{}>(`/admin/quizes/${quizMeta.id}`, quizMeta);
+        return this.apiService.put<{}>(`/admin/quizes/${quizMeta.id}`, quizMeta);
     }
 
     updateQuizItemsOrder(quizId: QuizId, itemIds: ItemId[]) {
-        return this.quizDataSource.put<{}>(`/admin/quizes/${quizId}/items`, { itemIds });
+        return this.apiService.put<{}>(`/admin/quizes/${quizId}/items`, { itemIds });
     }
 
     deleteQuiz(quizId: QuizId): Observable<{}> {
-        return this.quizDataSource.delete<{}>(`/admin/quizes/${quizId}`);
+        return this.apiService.delete<{}>(`/admin/quizes/${quizId}`);
     }
 }
