@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeService, NbThemeModule, NbLayoutModule, NbToastrModule,
         NbGlobalLogicalPosition, NbMenuModule, NbContextMenuModule, NbDialogModule } from '@nebular/theme';
+import { BASE_URL_TOKEN, BASE_URL } from './consts';
 import { CoreModule } from './core';
 import { SharedModule } from './shared';
 import { AppRoutingModule } from './app-routing';
@@ -35,7 +36,13 @@ import { AuthModule } from './auth';
         DialogModule,
         AuthModule
     ],
-    providers: [NbThemeService],
+    providers: [
+        NbThemeService,
+        {
+            provide: BASE_URL_TOKEN,
+            useValue: BASE_URL
+        }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

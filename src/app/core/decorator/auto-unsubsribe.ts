@@ -1,6 +1,7 @@
 import { OnDestroy } from '@angular/core';
 
-export function autoUnsubscribe(target: any, key: string) {
+// tslint:disable-next-line function-name
+export function AutoUnsubscribe(target: any, key: string) {
     const cmp = target as OnDestroy;
     const ngOnDestroyOrig = cmp.ngOnDestroy;
 

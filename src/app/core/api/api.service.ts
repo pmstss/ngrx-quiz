@@ -2,8 +2,8 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { BASE_URL_TOKEN } from '../tokens';
 import { ResponseWrapper } from './api.types';
+import { BASE_URL_TOKEN } from '../../consts';
 
 @Injectable()
 export class ApiService {
