@@ -11,6 +11,8 @@ import { Store } from '@ngrx/store';
 import { BASE_URL_TOKEN } from '../../consts';
 import { AppState, selectToken } from '../../store';
 
+/*** Not used now - existing NbAuthJWTInterceptor is utilized; exists for possible future needs */
+
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
     constructor(private appStore: Store<AppState>, @Inject(BASE_URL_TOKEN) private baseUrl) {}
