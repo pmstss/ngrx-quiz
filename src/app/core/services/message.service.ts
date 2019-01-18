@@ -16,6 +16,14 @@ export class MessageService {
         this.subject.next(msg);
     }
 
+    publishError(msg: Message) {
+        this.subject.next({
+            ...msg,
+            status: NbToastStatus.DANGER,
+            duration: 0
+        });
+    }
+
     get messages$(): Observable<Message> {
         return this.subject;
     }

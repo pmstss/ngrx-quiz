@@ -1,9 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
-import { ResponseWrapper } from './api.types';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { BASE_URL_TOKEN } from '../../consts';
+import { ResponseWrapper } from './api.types';
+import { CustomError } from '../types/custom-error';
 
 @Injectable()
 export class ApiService {
@@ -13,57 +14,38 @@ export class ApiService {
         this.apiUrl = `${baseUrl}/api`;
     }
 
-    handleError(error: HttpErrorResponse) {
-        console.error(error);
-        if (error.error instanceof ErrorEvent) {
-            return throwError({
-                title: 'Client side network error',
-                message: error.error.message
-            });
-        }
-
-        return typeof error === 'string' ? throwError({
-            message: error,
-            title: 'Network error'
-        }) : throwError({
-            ...error,
-            title: error.hasOwnProperty('tokenError') ? 'Token Error' : 'Network error'
-        });
-    }
-
     throwIfNotSuccess<T>(res: ResponseWrapper<T>): Observable<ResponseWrapper<T>> {
-        return !res.success ? throwError(res) : of(res);
+        if (!res.success) {
+            throw new CustomError(res.message, 'API Error');
+        }
+        return of(res);
     }
 
     get<T>(url: string): Observable<T> {
         return this.http.get<ResponseWrapper<T>>(`${this.apiUrl}${url}`).pipe(
             switchMap(this.throwIfNotSuccess),
-            map(res => res.data),
-            catchError(this.handleError)
+            map(res => res.data)
         );
     }
 
     post<T>(url: string, data: any): Observable<T> {
         return this.http.post<ResponseWrapper<T>>(`${this.apiUrl}${url}`, data).pipe(
             switchMap(this.throwIfNotSuccess),
-            map(res => res.data),
-            catchError(this.handleError)
+            map(res => res.data)
         );
     }
 
     put<T>(url: string, data: any): Observable<T> {
         return this.http.put<ResponseWrapper<T>>(`${this.apiUrl}${url}`, data).pipe(
             switchMap(this.throwIfNotSuccess),
-            map(res => res.data),
-            catchError(this.handleError)
+            map(res => res.data)
         );
     }
 
     delete<T>(url: string): Observable<T> {
         return this.http.delete<ResponseWrapper<T>>(`${this.apiUrl}${url}`).pipe(
             switchMap(this.throwIfNotSuccess),
-            map(res => res.data),
-            catchError(this.handleError)
+            map(res => res.data)
         );
     }
 }

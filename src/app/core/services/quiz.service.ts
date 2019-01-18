@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { QuizItem } from '../types/quiz-item';
 import { QuizMeta } from '../types/quiz-meta';
 import { ChoiceId, ItemId } from '../types/id';
@@ -15,7 +15,7 @@ export class QuizService {
     }
 
     loadQuizList(): Observable<QuizMeta[]> {
-        return this.apiService.get<QuizMeta[]>('/quizes').pipe(catchError(this.apiService.handleError));
+        return this.apiService.get<QuizMeta[]>('/quizes');
     }
 
     loadQuizMeta(shortName: string): Observable<{quizMeta: QuizMeta, itemIds: ItemId[]}> {
@@ -27,8 +27,7 @@ export class QuizService {
                     quizMeta,
                     itemIds: res.items.map(x => x.id)
                 };
-            }),
-            catchError(this.apiService.handleError)
+            })
         );
     }
 
@@ -44,8 +43,7 @@ export class QuizService {
                         new Map<ChoiceId, QuizItemChoice>()
                     )
                 };
-            }),
-            catchError(this.apiService.handleError)
+            })
         );
     }
 
@@ -56,8 +54,7 @@ export class QuizService {
             map(res => ({
                 choiceAnswers: res.choices.reduce((map, ch) => map.set(ch.id, ch), new Map()),
                 correct: res.correct
-            })),
-            catchError(this.apiService.handleError)
+            }))
         );
     }
 }
