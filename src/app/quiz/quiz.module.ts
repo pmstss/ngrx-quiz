@@ -35,7 +35,7 @@ import { SharedModule } from '../shared';
         NbCardModule,
         SharedModule
     ],
-    providers: [QuizGuard, QuizNameGuard, QuizResultGuard]
+    providers: [QuizGuard, QuizResultGuard]
 })
 export class QuizModule {
     constructor() {
