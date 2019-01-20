@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { QuizItem } from '../types/quiz-item';
 import { QuizMeta } from '../types/quiz-meta';
 import { ChoiceId, ItemId } from '../types/id';
 import { QuizItemChoice } from '../types/quiz-item-choice';
 import { QuizItemAnswer } from '../types/quiz-item-answer';
-import { QuizItemAnswerResponse, ResponseWrapper, QuizItemResponse, QuizMetaResponse } from '../api/api.types';
+import { QuizItemAnswerResponse, QuizItemResponse, QuizMetaResponse } from '../api/api.types';
 import { ApiService } from '../api/api.service';
 
 @Injectable()
 export class QuizService {
-    constructor(private apiService: ApiService) {
+    constructor(private router: Router, private apiService: ApiService) {
     }
 
     loadQuizList(): Observable<QuizMeta[]> {
@@ -27,6 +28,13 @@ export class QuizService {
                     quizMeta,
                     itemIds: res.items.map(x => x.id)
                 };
+            }),
+            catchError((err) => {
+                if (err.status === 404) {
+                    this.router.navigateByUrl('/quizes');
+                } else {
+                    return throwError(err);
+                }
             })
         );
     }
