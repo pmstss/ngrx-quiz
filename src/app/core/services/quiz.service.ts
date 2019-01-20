@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { QuizItem } from '../types/quiz-item';
 import { QuizMeta } from '../types/quiz-meta';
-import { ChoiceId, ItemId } from '../types/id';
+import { ChoiceId, ItemId, QuizId } from '../types/id';
 import { QuizItemChoice } from '../types/quiz-item-choice';
 import { QuizItemAnswer } from '../types/quiz-item-answer';
 import { QuizItemAnswerResponse, QuizItemResponse, QuizMetaResponse } from '../api/api.types';
@@ -19,7 +19,7 @@ export class QuizService {
         return this.apiService.get<QuizMeta[]>('/quizes');
     }
 
-    loadQuizMeta(shortName: string): Observable<QuizMeta> {
+    loadQuizMeta(shortName: string): Observable<QuizMetaResponse> {
         return this.apiService.get<QuizMetaResponse>(`/quizes/${encodeURIComponent(shortName)}`).pipe(
             catchError((err) => {
                 if (err.status === 404) {
@@ -47,8 +47,9 @@ export class QuizService {
         );
     }
 
-    submitAnswer(itemId: ItemId, choiceIds: Set<ChoiceId>): Observable<QuizItemAnswer> {
+    submitAnswer(quizId: QuizId, itemId: ItemId, choiceIds: Set<ChoiceId>): Observable<QuizItemAnswer> {
         return this.apiService.post<QuizItemAnswerResponse>(`/answers/${itemId}`, {
+            quizId,
             choiceIds: [...choiceIds]
         }).pipe(
             map(res => ({

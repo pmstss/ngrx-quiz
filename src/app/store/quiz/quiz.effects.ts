@@ -13,7 +13,7 @@ import {
     ActionSubmitAnswerError
 } from './quiz.actions';
 import { AppState } from '../app.state';
-import { selectActiveItemId, selectActiveItemChoices } from './quiz.selectors';
+import { selectActiveItemId, selectActiveItemChoices, selectQuizMeta } from './quiz.selectors';
 
 @Injectable()
 export class QuizEffects {
@@ -24,7 +24,7 @@ export class QuizEffects {
         ofType(QuizActionTypes.LOAD_QUIZ),
         switchMap((action: Action) => {
             return this.quizService.loadQuizMeta((<ActionLoadQuiz>action).payload.quizName).pipe(
-                map(res => new ActionLoadQuizSuccess({ quizMeta: res })),
+                map(res => new ActionLoadQuizSuccess({ quizMeta: res.quizMeta, quizState: res.quizState })),
                 catchError(error => of(new ActionLoadQuizError(error)))
             );
         })
@@ -54,6 +54,7 @@ export class QuizEffects {
         withLatestFrom(this.appStore),
         switchMap(([action, appState]: [Action, AppState]) => {
             return this.quizService.submitAnswer(
+                selectQuizMeta(appState).id,
                 selectActiveItemId(appState),
                 new Set<ChoiceId>([...selectActiveItemChoices(appState).values()].filter(c => c.checked).map(c => c.id))
             ).pipe(
@@ -62,5 +63,4 @@ export class QuizEffects {
             );
         })
     );
-
 }

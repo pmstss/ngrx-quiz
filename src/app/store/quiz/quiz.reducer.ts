@@ -15,14 +15,13 @@ function getRootState(quizState) {
     };
 }
 
-function getNextStep(quizState: QuizState, quizMeta: QuizMeta) {
-    if (!quizState || !quizMeta || quizState.finished) {
+function getNextStep(quizState: QuizState, step: number) {
+    if (!quizState || !quizState.quizMeta || quizState.finished) {
         return 0;
     }
-    const total = quizMeta.totalQuestions;
-    const step = Math.max(quizState.step, 1);
-    for (let idx = step; idx < step + total; ++idx) {
-        if (quizState.answers.has(quizMeta.itemIds[idx % total])) {
+    const total = quizState.quizMeta.totalQuestions;
+    for (let idx = Math.max(step, 1); idx < Math.max(step, 1) + total; ++idx) {
+        if (quizState.answers.has(quizState.quizMeta.itemIds[idx % total])) {
             return idx % total + 1;
         }
     }
@@ -60,11 +59,30 @@ const reducers = {
 
     [QuizActionTypes.LOAD_QUIZ_SUCCESS]: (quizState: QuizState, action: Action): QuizState => {
         const quizMeta = (<ActionLoadQuizSuccess>action).payload.quizMeta;
-        return {
+        const serverState = (<ActionLoadQuizSuccess>action).payload.quizState;
+
+        const answers = Object.keys(serverState.answers).reduce(
+            (answers, itemId) => answers.set(
+                itemId,
+                serverState.answers[itemId].choices.reduce((map, ch) => map.set(ch.id, ch), new Map())
+            ),
+            new Map(quizState.answers)
+        );
+
+        const state = {
             ...quizState,
             quizMeta,
-            step: 0,
-            nextStep: getNextStep(quizState, quizMeta)
+            answers,
+            score: serverState.score,
+            finished: answers.size === quizMeta.totalQuestions
+        };
+
+        // TODO ### fix
+        const step = getNextStep(state, 0);
+        return {
+            ...state,
+            step,
+            nextStep: step
         };
     },
 
@@ -73,7 +91,7 @@ const reducers = {
         return {
             ...quizState,
             step: payload.step,
-            nextStep: getNextStep(quizState, quizState.quizMeta)
+            nextStep: getNextStep(quizState, payload.step)
         };
     },
 
@@ -107,6 +125,7 @@ const reducers = {
         const item = selectActiveItem(getRootState(quizState));
         return {
             ...quizState,
+            // TODO ### answered
             items: (new Map<ItemId, QuizItem>(quizState.items)).set(item.id, { ...item, answered: true })
         };
     },
@@ -119,7 +138,7 @@ const reducers = {
             ...quizState,
             answers,
             finished: answers.size === quizState.quizMeta.totalQuestions,
-            score: quizState.score + (payload.answer.correct ? 1 : 0),
+            score: quizState.score + (payload.answer.correct ? 1 : 0)
         };
     }
 };

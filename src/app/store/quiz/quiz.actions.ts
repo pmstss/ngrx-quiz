@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { ChoiceId, QuizMeta, QuizItem, QuizId, QuizItemChoice, ItemId, QuizItemAnswer } from '../../core';
+import { ChoiceId, QuizMeta, QuizItem, QuizId, QuizItemChoice, QuizItemAnswer, ServerQuizState } from '../../core';
 
 export enum QuizActionTypes {
     LOAD_QUIZ = '[Quiz] Load Quiz',
@@ -21,7 +21,7 @@ export class ActionLoadQuiz implements Action {
 
 export class ActionLoadQuizSuccess implements Action {
     readonly type = QuizActionTypes.LOAD_QUIZ_SUCCESS;
-    constructor(public payload: { quizMeta: QuizMeta }) {}
+    constructor(public payload: { quizMeta: QuizMeta, quizState: ServerQuizState }) {}
 }
 
 export class ActionLoadQuizError implements Action {
