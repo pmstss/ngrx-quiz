@@ -44,22 +44,4 @@ export class QuizStepComponent implements OnInit {
     toggleChoice(choiceId: string): void {
         this.appStore.dispatch(new ActionToggleChoice({ choiceId }));
     }
-
-    getNextStep(): Observable<number> {
-        return this.quizState$.pipe(
-            filter(state => !!state.quizMeta),
-            map((state) => {
-                if (state.finished) {
-                    return 0;
-                }
-                const total = state.quizMeta.totalQuestions;
-                for (let step = state.step, idx = step; idx < step + total; ++idx) {
-                    if (!state.isAnswered(idx % total + 1)) {
-                        return idx % total + 1;
-                    }
-                }
-                return 1;
-            })
-        );
-    }
 }

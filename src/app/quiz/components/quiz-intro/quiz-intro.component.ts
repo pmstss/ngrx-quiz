@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { QuizMeta, AutoUnsubscribe } from '../../../core';
-import { AppState, selectQuizMeta, ActionLoadQuiz } from '../../../store';
+import { AutoUnsubscribe } from '../../../core';
+import { AppState, ActionLoadQuiz, QuizState, selectQuizState } from '../../../store';
 
 @Component({
     selector: 'app-quiz-intro',
@@ -13,7 +13,7 @@ import { AppState, selectQuizMeta, ActionLoadQuiz } from '../../../store';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizIntroComponent implements OnInit {
-    quizMeta$: Observable<QuizMeta>;
+    quizState$: Observable<QuizState>;
     @AutoUnsubscribe routeSubscription: Subscription;
 
     constructor(private route: ActivatedRoute, private appStore: Store<AppState>) {
@@ -27,6 +27,6 @@ export class QuizIntroComponent implements OnInit {
             (quizName: string) => this.appStore.dispatch(new ActionLoadQuiz({ quizName }))
         );
 
-        this.quizMeta$ = this.appStore.select(selectQuizMeta);
+        this.quizState$ = this.appStore.select(selectQuizState);
     }
 }

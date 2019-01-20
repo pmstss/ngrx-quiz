@@ -34,7 +34,7 @@
 
         <nb-card-footer class="d-flex">
             <a *ngIf="!itemState.answered" class="btn btn-outline-secondary btn-lg ml-auto"
-                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{getNextStep() | async}}">
+                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{quizState.nextStep}}">
                 Skip
             </a>
             <button *ngIf="!itemState.answered" class="btn btn-outline-primary btn-lg ml-4"
@@ -42,7 +42,7 @@
                 Submit
             </button>
             <a *ngIf="itemState.answered && !quizState.finished" class="btn btn-outline-primary btn-lg ml-auto"
-                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{getNextStep() | async}}">
+                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{quizState.nextStep}}">
                 Next
             </a>
             <a *ngIf="quizState.finished" class="btn btn-outline-primary btn-lg ml-auto"

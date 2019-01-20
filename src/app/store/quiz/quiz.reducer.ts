@@ -5,7 +5,7 @@ import {
 } from './quiz.actions';
 import { QuizState, initialQuizState } from './quiz.state';
 import { selectActiveItemChoices, selectActiveItem } from './quiz.selectors';
-import { ItemId, ChoiceId, QuizItem, QuizItemChoice } from '../../core';
+import { ItemId, ChoiceId, QuizItem, QuizItemChoice, QuizMeta } from '../../core';
 
 function getRootState(quizState) {
     return {
@@ -13,6 +13,20 @@ function getRootState(quizState) {
         auth: null,
         token: null
     };
+}
+
+function getNextStep(quizState: QuizState, quizMeta: QuizMeta) {
+    if (!quizState || !quizMeta || quizState.finished) {
+        return 0;
+    }
+    const total = quizMeta.totalQuestions;
+    const step = Math.max(quizState.step, 1);
+    for (let idx = step; idx < step + total; ++idx) {
+        if (quizState.answers.has(quizMeta.itemIds[idx % total])) {
+            return idx % total + 1;
+        }
+    }
+    return 1;
 }
 
 export function quizReducer(quizState = initialQuizState, action: Action): QuizState {
@@ -45,9 +59,12 @@ const reducers = {
     },
 
     [QuizActionTypes.LOAD_QUIZ_SUCCESS]: (quizState: QuizState, action: Action): QuizState => {
+        const quizMeta = (<ActionLoadQuizSuccess>action).payload.quizMeta;
         return {
             ...quizState,
-            quizMeta: (<ActionLoadQuizSuccess>action).payload.quizMeta
+            quizMeta,
+            step: 0,
+            nextStep: getNextStep(quizState, quizMeta)
         };
     },
 
@@ -55,7 +72,8 @@ const reducers = {
         const payload = (<ActionLoadItem>action).payload;
         return {
             ...quizState,
-            step: payload.step
+            step: payload.step,
+            nextStep: getNextStep(quizState, quizState.quizMeta)
         };
     },
 
