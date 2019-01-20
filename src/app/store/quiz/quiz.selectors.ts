@@ -2,8 +2,6 @@ import { createSelector, select } from '@ngrx/store';
 import { QuizItem, ItemId, QuizMeta, QuizId, QuizItemChoice, ChoiceId, QuizItemChoiceAnswer } from '../../core';
 import { QuizState } from './quiz.state';
 import { AppState, selectQuizState } from '../app.state';
-import { filter } from 'rxjs/operators';
-import { pipe } from 'rxjs';
 
 export interface QuizItemStatus extends QuizItem {
     choicesStatus: (QuizItemChoice & QuizItemChoiceAnswer & { wrong: boolean; })[];
@@ -32,7 +30,7 @@ export const selectStep = createSelector<AppState, QuizState, number>(
 export const selectActiveItem = createSelector<AppState, QuizState, number, QuizItem>(
     selectQuizState,
     selectStep,
-    (quiz: QuizState, step: number) => step && quiz.items.get(quiz.itemIds[step - 1])
+    (quiz: QuizState, step: number) => step && quiz.items.get(quiz.quizMeta.itemIds[step - 1])
 );
 
 export const selectActiveItemId = createSelector<AppState, QuizItem, string>(

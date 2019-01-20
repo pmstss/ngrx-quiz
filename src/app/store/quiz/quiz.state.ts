@@ -9,7 +9,6 @@ export interface QuizState {
     answers: Map<ItemId, Map<ChoiceId, QuizItemChoiceAnswer>>;
     score: number;
     step: number;
-    startTime: number;
     finished: boolean;
 
     isAnswered(step: number): boolean;
@@ -25,7 +24,6 @@ export const initialQuizState: QuizState = {
     answers: new Map<ItemId, Map<ChoiceId, QuizItemChoiceAnswer>>(),
     step: 1,
     score: 0,
-    startTime: 0,
     finished: false,
 
     isAnswered(step: number): boolean {
@@ -42,5 +40,4 @@ export const initialQuizState: QuizState = {
             .filter((ch: QuizItemChoiceAnswer) => ch.correct).map(ch => ch.id);
         return userAnswer.length === correctIds.length && userAnswer.every(id => correctIds.includes(id));
     }
-
 };

@@ -3,7 +3,7 @@
         <nb-card-header>
             <div class="lead float-right">Score: {{quizState.score}}</div>
             <div class="lead">
-                Question {{quizState.step}} from {{quizState.itemIds.length}}
+                Question {{quizState.step}} from {{quizState.quizMeta.totalQuestions}}
                 (left: {{quizState.quizMeta.totalQuestions - quizState.answers.size}})
             </div>
         </nb-card-header>
@@ -51,6 +51,16 @@
             </a>
         </nb-card-footer>
     </nb-card>
+
+    <div class="text-center">
+        <span *ngFor="let itemId of quizState.quizMeta.itemIds; let i = index">
+            <a *ngIf="quizState.step !== i + 1" routerLink="/quiz/{{quizState.quizName}}/{{i + 1}}">
+                {{i + 1}}
+            </a>
+            <span *ngIf="quizState.step === i + 1">{{i + 1}}</span>
+        </span>
+    </div>
+
 </div>
 
 <ng-template #loading>

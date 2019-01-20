@@ -19,16 +19,8 @@ export class QuizService {
         return this.apiService.get<QuizMeta[]>('/quizes');
     }
 
-    loadQuizMeta(shortName: string): Observable<{quizMeta: QuizMeta, itemIds: ItemId[]}> {
+    loadQuizMeta(shortName: string): Observable<QuizMeta> {
         return this.apiService.get<QuizMetaResponse>(`/quizes/${encodeURIComponent(shortName)}`).pipe(
-            map((res) => {
-                const quizMeta = { ...res, totalQuestions: res.items.length };
-                delete quizMeta.items;
-                return {
-                    quizMeta,
-                    itemIds: res.items.map(x => x.id)
-                };
-            }),
             catchError((err) => {
                 if (err.status === 404) {
                     this.router.navigateByUrl('/quizes');

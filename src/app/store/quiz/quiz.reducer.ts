@@ -45,13 +45,9 @@ const reducers = {
     },
 
     [QuizActionTypes.LOAD_QUIZ_SUCCESS]: (quizState: QuizState, action: Action): QuizState => {
-        const { quizMeta, itemIds } = (<ActionLoadQuizSuccess>action).payload;
-
         return {
             ...quizState,
-            quizMeta,
-            itemIds,
-            startTime: Date.now()
+            quizMeta: (<ActionLoadQuizSuccess>action).payload.quizMeta
         };
     },
 

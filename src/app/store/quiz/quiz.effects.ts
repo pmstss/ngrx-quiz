@@ -24,7 +24,7 @@ export class QuizEffects {
         ofType(QuizActionTypes.LOAD_QUIZ),
         switchMap((action: Action) => {
             return this.quizService.loadQuizMeta((<ActionLoadQuiz>action).payload.quizName).pipe(
-                map(res => new ActionLoadQuizSuccess(res)),
+                map(res => new ActionLoadQuizSuccess({ quizMeta: res })),
                 catchError(error => of(new ActionLoadQuizError(error)))
             );
         })
@@ -36,7 +36,7 @@ export class QuizEffects {
         withLatestFrom(this.appStore),
         switchMap(([action, appState]: [Action, AppState]) => {
             const payload = (<ActionLoadItem>action).payload;
-            const id = appState.quiz.itemIds[payload.step - 1];
+            const id = appState.quiz.quizMeta.itemIds[payload.step - 1];
             const item = appState.quiz.items.get(id);
             return item ? of(new ActionLoadItemSuccess({
                 item,

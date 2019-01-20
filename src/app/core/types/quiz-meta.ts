@@ -1,4 +1,4 @@
-import { QuizId } from './id';
+import { QuizId, ItemId } from './id';
 
 export interface QuizMeta {
     id: QuizId;
@@ -9,4 +9,5 @@ export interface QuizMeta {
     totalQuestions: number;
     timeLimit: number;
     randomizeItems: true;
+    itemIds: ItemId[];
 }

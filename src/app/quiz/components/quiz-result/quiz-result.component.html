@@ -1,22 +1,26 @@
-<div class="container">
+<div class="container" *ngIf="quizState$ | async as quizState else loading">
     <div class="jumbotron">
-        <h1 class="display-4">Your score: {{(quizState$ | async).score}}</h1>
+        <h1 class="display-4">Your score: {{quizState.score}}</h1>
         <p class="lead">
             Quiz finished.
         </p>
         <hr class="my-4"/>
         <p>Congratulation! This is very good result!</p>
         <div class="text-center">
-            <a class="btn btn-outline-primary btn-lg" routerLink="/quiz/{{(quizState$ | async).quizName}}">Take quiz again</a>
+            <a class="btn btn-outline-primary btn-lg" routerLink="/quiz/{{quizState.quizName}}">Take quiz again</a>
         </div>
     </div>
 
     <div class="text-center">
-        <span *ngFor="let itemId of (quizState$ | async).itemIds; let i = index">
-            <a *ngIf="(quizState$ | async).step !== i + 1" routerLink="/quiz/{{(quizState$ | async).quizName}}/{{i + 1}}">
+        <span *ngFor="let itemId of quizState.quizMeta.itemIds; let i = index">
+            <a *ngIf="quizState.step !== i + 1" routerLink="/quiz/{{quizState.quizName}}/{{i + 1}}">
                 {{i + 1}}
             </a>
-            <span *ngIf="(quizState$ | async).step === i + 1">{{i + 1}}</span>
+            <span *ngIf="quizState.step === i + 1">{{i + 1}}</span>
         </span>
     </div>
 </div>
+
+<ng-template #loading>
+    <app-loader></app-loader>
+</ng-template>
