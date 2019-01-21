@@ -29,23 +29,11 @@ function getNextStep(quizState: QuizState, currentStep: number = 0) {
 }
 
 export function quizReducer(quizState = initialQuizState, action: Action): QuizState {
-    switch (action.type) {
-        case QuizActionTypes.LOAD_QUIZ:
-        case QuizActionTypes.LOAD_QUIZ_SUCCESS:
-        case QuizActionTypes.LOAD_ITEM:
-        case QuizActionTypes.LOAD_ITEM_SUCCESS:
-        case QuizActionTypes.TOGGLE_CHOICE:
-        case QuizActionTypes.SUBMIT_ANSWER:
-        case QuizActionTypes.SUBMIT_ANSWER_SUCCESS:
-            return reducers[action.type](quizState, action);
-
-        // TODO ### handle errors
-        case QuizActionTypes.LOAD_QUIZ_ERROR:
-        case QuizActionTypes.LOAD_ITEM_ERROR:
-        case QuizActionTypes.SUBMIT_ANSWER_ERROR:
-        default:
-            return quizState;
+    if (reducers[action.type]) {
+        return reducers[action.type](quizState, action);
     }
+
+    return quizState;
 }
 
 const reducers = {

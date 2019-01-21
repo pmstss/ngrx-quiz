@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { switchMap, catchError, map, withLatestFrom, tap } from 'rxjs/operators';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { QuizService, ChoiceId } from '../../core';
+import { DialogService } from '../../dialog';
 import {
     QuizActionTypes, ActionLoadQuiz, ActionLoadQuizError, ActionLoadQuizSuccess,
     ActionLoadItem,
@@ -15,12 +18,15 @@ import {
     ActionResetQuizError,
     ActionResetQuiz
 } from './quiz.actions';
-import { AppState } from '../app.state';
+import { AppState, selectQuizState } from '../app.state';
 import { selectActiveItemId, selectActiveItemChoices, selectQuizMeta } from './quiz.selectors';
+import { QuizState } from './quiz.state';
 
 @Injectable()
 export class QuizEffects {
-    constructor(private appStore: Store<AppState>, private actions$: Actions, private quizService: QuizService) { }
+    constructor(private appStore: Store<AppState>, private actions$: Actions,
+                private router: Router, private quizService: QuizService,
+                private location: Location, private dialogService: DialogService) { }
 
     @Effect()
     loadQuizMeta$ = this.actions$.pipe(
@@ -69,21 +75,37 @@ export class QuizEffects {
 
     @Effect()
     resetQuiz$ = this.actions$.pipe(
-        tap(console.log.bind(console, '#### resetQuizActionFilter')),
         ofType(QuizActionTypes.RESET_QUIZ),
         withLatestFrom(this.appStore),
         switchMap(([action, appState]: [Action, AppState]) => {
-            const quizName = (action as ActionResetQuiz).payload.quizName;
-            const quizMeta = selectQuizMeta(appState);
-            if (quizMeta.shortName === quizName) {
-                return this.quizService.resetQuiz(quizMeta.id).pipe(
+            const quizState = selectQuizState(appState);
+            return (!quizState.finished ?
+                    this.dialogService.confirm('Are you sure want to reset unfinished quiz?') : of(true))
+                .pipe(
+                    map(confirmed => [quizState, confirmed])
+                );
+        }),
+        switchMap(([quizState, confirmed]: [QuizState, boolean]) => {
+            if (confirmed) {
+                return this.quizService.resetQuiz(quizState.quizMeta.id).pipe(
                     map(() => {
-                        return new ActionResetQuizSuccess({});
+                        return new ActionResetQuizSuccess({ quizName: quizState.quizMeta.shortName });
                     }),
                     catchError(error => of(new ActionResetQuizError(error)))
                 );
             }
-            return of(new ActionResetQuizError('Only active quiz can be reset'));
+
+            this.location.back();
+            return of(new ActionResetQuizError({ canceled: true }));
+        })
+    );
+
+    @Effect({ dispatch: false })
+    resetQuizSuccess$ = this.actions$.pipe(
+        ofType(QuizActionTypes.RESET_QUIZ_SUCCESS),
+        tap((action: Action) => {
+            const quizName = (action as ActionResetQuizSuccess).payload.quizName;
+            this.router.navigateByUrl(`/quiz/${quizName}/1`);
         })
     );
 }

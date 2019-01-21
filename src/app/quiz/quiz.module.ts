@@ -8,12 +8,11 @@ import { SharedModule } from '../shared';
 import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
 import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
 import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
-import { QuizResetComponent } from './components/quiz-reset/quiz-reset.component';
 import { QuizFinishedGuard } from './guards/quiz-finished.guard';
 import { QuizGuard } from './guards/quiz.guard';
 
 @NgModule({
-    declarations: [QuizStepComponent, QuizIntroComponent, QuizResultComponent, QuizResetComponent],
+    declarations: [QuizStepComponent, QuizIntroComponent, QuizResultComponent],
     imports: [
         CommonModule,
         FormsModule,
@@ -25,10 +24,6 @@ import { QuizGuard } from './guards/quiz.guard';
             }, {
                 path: ':name/result',
                 component: QuizResultComponent,
-                canActivate: [QuizFinishedGuard, QuizGuard]
-            }, {
-                path: ':name/reset',
-                component: QuizResetComponent,
                 canActivate: [QuizFinishedGuard, QuizGuard]
             }, {
                 path: ':name/:step',

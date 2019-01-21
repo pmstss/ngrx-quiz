@@ -68,12 +68,12 @@ export class ActionSubmitAnswerError implements Action {
 
 export class ActionResetQuiz implements Action {
     readonly type = QuizActionTypes.RESET_QUIZ;
-    constructor(public payload: { quizName: string }) {}
+    constructor(public payload: {}) {}
 }
 
 export class ActionResetQuizSuccess implements Action {
     readonly type = QuizActionTypes.RESET_QUIZ_SUCCESS;
-    constructor(public payload: {}) {}
+    constructor(public payload: { quizName: string }) {}
 }
 
 export class ActionResetQuizError implements Action {
