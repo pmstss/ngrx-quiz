@@ -22,6 +22,7 @@ export class QuizGuard implements CanActivate {
                     return this.actions$.pipe(
                         filter(action => action.type === QuizActionTypes.LOAD_QUIZ_SUCCESS ||
                             action.type === QuizActionTypes.LOAD_QUIZ_SUCCESS),
+                        take(1),
                         map((action) => {
                             if (action.type !== QuizActionTypes.LOAD_QUIZ_SUCCESS) {
                                 this.messageService.publishWarning(
