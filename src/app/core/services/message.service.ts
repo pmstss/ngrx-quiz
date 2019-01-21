@@ -24,6 +24,17 @@ export class MessageService {
         });
     }
 
+    publishWarning(message: string, title: string = 'Warning') {
+        console.warn(message);
+        this.subject.next({
+            title,
+            message,
+            status: NbToastStatus.WARNING,
+            duration: 0
+        });
+    }
+
+
     get messages$(): Observable<Message> {
         return this.subject;
     }
