@@ -15,14 +15,14 @@ function getRootState(quizState) {
     };
 }
 
-function getNextStep(quizState: QuizState, step: number) {
-    if (!quizState || !quizState.quizMeta || quizState.finished) {
-        return 0;
-    }
-    const total = quizState.quizMeta.totalQuestions;
-    for (let idx = Math.max(step, 1); idx < Math.max(step, 1) + total; ++idx) {
-        if (quizState.answers.has(quizState.quizMeta.itemIds[idx % total])) {
-            return idx % total + 1;
+function getNextStep(quizState: QuizState, currentStep: number = 0) {
+    if (quizState && quizState.quizMeta && !quizState.finished) {
+        const total = quizState.quizMeta.totalQuestions;
+        const nextStep = currentStep + 1;
+        for (let idx = nextStep - 1; idx < nextStep + total; ++idx) {
+            if (!quizState.answers.has(quizState.quizMeta.itemIds[idx % total])) {
+                return idx % total + 1;
+            }
         }
     }
     return 1;
@@ -77,12 +77,11 @@ const reducers = {
             finished: answers.size === quizMeta.totalQuestions
         };
 
-        // TODO ### fix
-        const step = getNextStep(state, 0);
+        const step = getNextStep(state);
         return {
             ...state,
             step,
-            nextStep: step
+            nextStep: getNextStep(state, step)
         };
     },
 
