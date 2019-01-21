@@ -24,7 +24,7 @@
                             {{choice.popularity | percent : '1.0-2'}}
                         </span>
                     </div>
-                    <div *ngIf="itemState.answered && choice.checked && choice.explanation" class="alert"
+                    <div *ngIf="choice.explanation" class="alert"
                             [ngClass]="{'text-success': choice.correct, 'text-danger': choice.wrong}">
                         {{choice.explanation}}
                     </div>
