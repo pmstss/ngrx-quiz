@@ -56,12 +56,13 @@ export const selectActiveItemStatus = createSelector<AppState, QuizState, QuizIt
         const answers: Map<ChoiceId, QuizItemChoiceAnswer> = quizState.answers.get(item.id);
         return {
             ...item,
+            answered: !!answers,
             choicesStatus: [...choices.keys()].map((choiceId) => {
                 const answer = answers && answers.get(choiceId);
                 return {
                     ...choices.get(choiceId),
                     ...answer || <QuizItemChoiceAnswer>{},
-                    wrong: item.answered && answer && !answer.correct && choices.get(choiceId).checked
+                    wrong: answers && answer && answer.checked && !answer.correct
                 };
             })
         };

@@ -1,7 +1,7 @@
 import { QuizMeta } from '../types/quiz-meta';
 import { QuizItem } from '../types/quiz-item';
 import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
-import { ChoiceId } from '../types/id';
+import { QuizItemChoice } from '../types/quiz-item-choice';
 
 export interface ResponseWrapper<T> {
     success: boolean;
@@ -20,7 +20,7 @@ export interface QuizMetaResponse extends QuizMeta {
 }
 
 export interface QuizItemResponse extends QuizItem {
-    choices: {id: ChoiceId, text: string}[];
+    choices: QuizItemChoice[];
 }
 
 export interface QuizItemAnswerResponse {
