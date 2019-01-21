@@ -1,47 +1,60 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, take, concatMap } from 'rxjs/operators';
+import { map, take, concatMap, filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Actions } from '@ngrx/effects';
-import { QuizMeta } from '../../core';
+import { QuizMeta, MessageService } from '../../core';
 import { AppState, ActionLoadQuiz, QuizActionTypes, selectQuizMeta, selectQuizState, QuizState } from '../../store';
 
 @Injectable()
 export class QuizGuard implements CanActivate {
-    constructor(private router: Router, private appStore: Store<AppState>, private actions$: Actions) {
-        console.log('### quizGuard constructor');
+    constructor(private router: Router, private appStore: Store<AppState>,
+                private actions$: Actions, private messageService: MessageService) {
     }
 
-    canActivate(next: ActivatedRouteSnapshot, routerState: RouterStateSnapshot): Observable<boolean | UrlTree> {
-        console.log('### QuizGuard:canActivate() - state: %o, next: %o', routerState, next);
-
+    canActivate(next: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
         return this.appStore.select(selectQuizState).pipe(
             take(1),
-            concatMap((quizState: QuizState): Observable<boolean | UrlTree>  => {
+            concatMap((quizState: QuizState): Observable<boolean>  => {
                 if (!quizState.quizName && next.params.name) {
                     this.appStore.dispatch(new ActionLoadQuiz({ quizName: next.params.name }));
                     return this.actions$.pipe(
-                        take(1),
-                        map(action => action.type === QuizActionTypes.LOAD_QUIZ_SUCCESS ||
-                                this.router.parseUrl('/quizes'))
-                    );
-                }
-                return of(true);
-            }),
-            concatMap((x: boolean | UrlTree): Observable<boolean | UrlTree> => {
-                if (typeof x === 'boolean' && x) {
-                    return this.appStore.select(selectQuizMeta).pipe(
-                        take(1),
-                        map((quizMeta: QuizMeta) => {
-                            if (+next.params.step > quizMeta.totalQuestions) {
-                                return this.router.parseUrl('/quizes');
+                        filter(action => action.type === QuizActionTypes.LOAD_QUIZ_SUCCESS ||
+                            action.type === QuizActionTypes.LOAD_QUIZ_SUCCESS),
+                        map((action) => {
+                            if (action.type !== QuizActionTypes.LOAD_QUIZ_SUCCESS) {
+                                this.messageService.publishWarning(
+                                    'Quiz was not loaded successfully, will redirect to quiz list');
+                                return false;
                             }
                             return true;
                         })
                     );
                 }
-                return of(x);
+                return of(true);
+            }),
+            concatMap((loaded: boolean): Observable<boolean> => {
+                if (loaded && typeof next.params.step !== 'undefined') {
+                    return this.appStore.select(selectQuizMeta).pipe(
+                        take(1),
+                        map((quizMeta: QuizMeta) => {
+                            const step = parseInt(next.params.step, 10);
+                            if (isNaN(step)) {
+                                this.messageService.publishWarning(`Invalid step value: ${next.params.step}`);
+                            } else if (step < 1 || step > quizMeta.totalQuestions) {
+                                this.messageService.publishWarning(`Step is out of bound: ${step}`);
+                            } else {
+                                return true;
+                            }
+                            return false;
+                        })
+                    );
+                }
+                return of(loaded);
+            }),
+            map((success: boolean): boolean | UrlTree => {
+                return success || this.router.parseUrl('/quizes');
             })
         );
     }
