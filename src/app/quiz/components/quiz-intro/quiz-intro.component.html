@@ -15,8 +15,8 @@
                 {{quizState.answers.size > 0 ? 'Continue quiz' : 'Start quiz!'}}
             </a>
 
-            <a *ngIf="quizState.answers.size > 0" class="btn btn-lg btn-outline-warning mr-3" routerLink="/quiz/{{quizState.quizMeta.shortName}}/init">
-                Restart quiz
+            <a *ngIf="quizState.answers.size > 0" class="btn btn-lg btn-outline-warning mr-3" routerLink="/quiz/{{quizState.quizMeta.shortName}}/reset">
+                Take quiz again
             </a>
 
             <a *ngIf="quizState.finished" class="btn btn-lg btn-outline-info" routerLink="/quiz/{{quizState.quizMeta.shortName}}/result">

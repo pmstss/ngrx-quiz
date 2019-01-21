@@ -3,16 +3,17 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
-import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
-import { QuizGuard } from './guards/quiz.guard';
-import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
-import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
-import { QuizResultGuard } from './guards/quiz-result.guard';
 import { NbCardModule } from '@nebular/theme';
 import { SharedModule } from '../shared';
+import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
+import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
+import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
+import { QuizResetComponent } from './components/quiz-reset/quiz-reset.component';
+import { QuizFinishedGuard } from './guards/quiz-finished.guard';
+import { QuizGuard } from './guards/quiz.guard';
 
 @NgModule({
-    declarations: [QuizStepComponent, QuizIntroComponent, QuizResultComponent],
+    declarations: [QuizStepComponent, QuizIntroComponent, QuizResultComponent, QuizResetComponent],
     imports: [
         CommonModule,
         FormsModule,
@@ -24,7 +25,11 @@ import { SharedModule } from '../shared';
             }, {
                 path: ':name/result',
                 component: QuizResultComponent,
-                canActivate: [QuizResultGuard, QuizGuard]
+                canActivate: [QuizFinishedGuard, QuizGuard]
+            }, {
+                path: ':name/reset',
+                component: QuizResetComponent,
+                canActivate: [QuizFinishedGuard, QuizGuard]
             }, {
                 path: ':name/:step',
                 component: QuizStepComponent,
@@ -35,10 +40,9 @@ import { SharedModule } from '../shared';
         NbCardModule,
         SharedModule
     ],
-    providers: [QuizGuard, QuizResultGuard]
+    providers: [QuizGuard, QuizFinishedGuard]
 })
 export class QuizModule {
     constructor() {
-        console.log('### QuizModule constructor');
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
-import { switchMap, catchError, map, withLatestFrom } from 'rxjs/operators';
+import { switchMap, catchError, map, withLatestFrom, tap } from 'rxjs/operators';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { QuizService, ChoiceId } from '../../core';
@@ -10,7 +10,10 @@ import {
     ActionLoadItemSuccess,
     ActionLoadItemError,
     ActionSubmitAnswerSuccess,
-    ActionSubmitAnswerError
+    ActionSubmitAnswerError,
+    ActionResetQuizSuccess,
+    ActionResetQuizError,
+    ActionResetQuiz
 } from './quiz.actions';
 import { AppState } from '../app.state';
 import { selectActiveItemId, selectActiveItemChoices, selectQuizMeta } from './quiz.selectors';
@@ -61,6 +64,26 @@ export class QuizEffects {
                 map(answer => new ActionSubmitAnswerSuccess({ answer })),
                 catchError(error => of(new ActionSubmitAnswerError(error)))
             );
+        })
+    );
+
+    @Effect()
+    resetQuiz$ = this.actions$.pipe(
+        tap(console.log.bind(console, '#### resetQuizActionFilter')),
+        ofType(QuizActionTypes.RESET_QUIZ),
+        withLatestFrom(this.appStore),
+        switchMap(([action, appState]: [Action, AppState]) => {
+            const quizName = (action as ActionResetQuiz).payload.quizName;
+            const quizMeta = selectQuizMeta(appState);
+            if (quizMeta.shortName === quizName) {
+                return this.quizService.resetQuiz(quizMeta.id).pipe(
+                    map(() => {
+                        return new ActionResetQuizSuccess({});
+                    }),
+                    catchError(error => of(new ActionResetQuizError(error)))
+                );
+            }
+            return of(new ActionResetQuizError('Only active quiz can be reset'));
         })
     );
 }

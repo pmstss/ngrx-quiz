@@ -6,9 +6,8 @@ import { Store } from '@ngrx/store';
 import { selectQuizState, QuizState, AppState } from '../../store';
 
 @Injectable()
-export class QuizResultGuard implements CanActivate {
+export class QuizFinishedGuard implements CanActivate {
     constructor(private router: Router, private appStore: Store<AppState>) {
-        console.log('### QuizResultGuard');
     }
 
     canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
@@ -19,7 +18,7 @@ export class QuizResultGuard implements CanActivate {
                     return true;
                 }
 
-                return this.router.parseUrl(`/quiz/${route.params.name}/1`);
+                return this.router.parseUrl(`/quiz/${route.params.name}`);
             })
         );
     }

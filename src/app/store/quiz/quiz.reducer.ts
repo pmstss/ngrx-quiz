@@ -139,5 +139,33 @@ const reducers = {
             finished: answers.size === quizState.quizMeta.totalQuestions,
             score: quizState.score + (payload.answer.correct ? 1 : 0)
         };
+    },
+
+    [QuizActionTypes.RESET_QUIZ]: (quizState: QuizState, action: Action): QuizState => {
+        return {
+            ...quizState,
+            resetInProgress: true
+        };
+    },
+
+    [QuizActionTypes.RESET_QUIZ_SUCCESS]: (quizState: QuizState, action: Action): QuizState => {
+        return {
+            ...quizState,
+            items: new Map(),
+            choices: new Map(),
+            answers: new Map(),
+            step: 1,
+            nextStep: 1, // will be recalculated on item loading
+            score: 0,
+            finished: false,
+            resetInProgress: false
+        };
+    },
+
+    [QuizActionTypes.RESET_QUIZ_ERROR]: (quizState: QuizState, action: Action): QuizState => {
+        return {
+            ...quizState,
+            resetInProgress: false
+        };
     }
 };

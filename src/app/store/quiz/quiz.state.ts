@@ -11,6 +11,8 @@ export interface QuizState {
     step: number;
     nextStep: number;
     finished: boolean;
+
+    resetInProgress?: boolean;
 }
 
 export const initialQuizState: QuizState = {
@@ -23,5 +25,6 @@ export const initialQuizState: QuizState = {
     step: 1,
     nextStep: 0,
     score: 0,
-    finished: false
+    finished: false,
+    resetInProgress: false
 };

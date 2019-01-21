@@ -11,7 +11,10 @@ export enum QuizActionTypes {
     TOGGLE_CHOICE = '[Quiz] Toggle Choice',
     SUBMIT_ANSWER = '[Quiz] Submit answer',
     SUBMIT_ANSWER_SUCCESS = '[Quiz] Submit answer Success',
-    SUBMIT_ANSWER_ERROR = '[Quiz] Submit answer Error'
+    SUBMIT_ANSWER_ERROR = '[Quiz] Submit answer Error',
+    RESET_QUIZ = '[Quiz] Reset',
+    RESET_QUIZ_SUCCESS = '[Quiz] Reset Success',
+    RESET_QUIZ_ERROR = '[Quiz] Reset Error',
 }
 
 export class ActionLoadQuiz implements Action {
@@ -60,5 +63,20 @@ export class ActionSubmitAnswerSuccess implements Action {
 
 export class ActionSubmitAnswerError implements Action {
     readonly type = QuizActionTypes.SUBMIT_ANSWER_ERROR;
+    constructor(public payload: any) {}
+}
+
+export class ActionResetQuiz implements Action {
+    readonly type = QuizActionTypes.RESET_QUIZ;
+    constructor(public payload: { quizName: string }) {}
+}
+
+export class ActionResetQuizSuccess implements Action {
+    readonly type = QuizActionTypes.RESET_QUIZ_SUCCESS;
+    constructor(public payload: {}) {}
+}
+
+export class ActionResetQuizError implements Action {
+    readonly type = QuizActionTypes.RESET_QUIZ_ERROR;
     constructor(public payload: any) {}
 }

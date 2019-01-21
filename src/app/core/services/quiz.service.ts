@@ -58,4 +58,8 @@ export class QuizService {
             }))
         );
     }
+
+    resetQuiz(quizId: QuizId) {
+        return this.apiService.post<QuizItemAnswerResponse>(`/reset/${quizId}`, {});
+    }
 }

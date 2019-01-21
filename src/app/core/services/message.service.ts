@@ -34,7 +34,6 @@ export class MessageService {
         });
     }
 
-
     get messages$(): Observable<Message> {
         return this.subject;
     }
