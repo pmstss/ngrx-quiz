@@ -11,8 +11,16 @@
             <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quizState.quizMeta.descriptionFull"></quill-editor>
         </p>
         <div class="text-center mt-4">
-            <a class="btn btn-lg btn-outline-primary" routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{quizState.step}}">
+            <a *ngIf="!quizState.finished" class="btn btn-lg btn-outline-primary" routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{quizState.step}}">
                 {{quizState.answers.size > 0 ? 'Continue quiz' : 'Start quiz!'}}
+            </a>
+
+            <a *ngIf="quizState.answers.size > 0" class="btn btn-lg btn-outline-warning mr-3" routerLink="/quiz/{{quizState.quizMeta.shortName}}/init">
+                Restart quiz
+            </a>
+
+            <a *ngIf="quizState.finished" class="btn btn-lg btn-outline-info" routerLink="/quiz/{{quizState.quizMeta.shortName}}/result">
+                Results
             </a>
         </div>
     </div>
