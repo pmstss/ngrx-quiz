@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRe
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { from, Observable } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizMetaAdmin } from '../../types/quiz-meta-admin';
@@ -27,7 +27,7 @@ export class QuizMetaEditorComponent implements OnInit {
 
     ngOnInit() {
         this.quizMeta$ = this.route.params.pipe(
-            flatMap(params => (params.quizId === 'new' ? from([<QuizMetaAdmin><any>{
+            switchMap(params => (params.quizId === 'new' ? from([<QuizMetaAdmin><any>{
                 randomizeItems: false,
                 timeLimit: 30
             }]) : this.quizAdminService.loadQuiz(params.quizId)))

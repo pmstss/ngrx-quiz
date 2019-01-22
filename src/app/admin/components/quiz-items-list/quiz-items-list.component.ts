@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { QuizMetaAdmin } from '../../types/quiz-meta-admin';
@@ -16,14 +16,13 @@ import { QuizItemAdmin } from '../../types/quiz-item-admin';
 export class QuizItemsListComponent implements OnInit {
     quizMeta$: Observable<QuizMetaAdmin>;
 
-    constructor(private route: ActivatedRoute, private router: Router,
-                private toastrService: NbToastrService,
+    constructor(private route: ActivatedRoute, private toastrService: NbToastrService,
                 private quizAdminService: QuizAdminService) {
     }
 
     ngOnInit() {
         this.quizMeta$ = this.route.params.pipe(
-            flatMap((params: Params) => this.quizAdminService.loadQuiz(params.quizId))
+            switchMap((params: Params) => this.quizAdminService.loadQuiz(params.quizId))
         );
     }
 

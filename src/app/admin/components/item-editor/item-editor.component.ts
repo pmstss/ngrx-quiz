@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { Subscription, from, Observable } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
 import { AutoUnsubscribe, QuizId } from '../../../core';
 import { DialogService } from '../../../dialog';
@@ -33,7 +33,7 @@ export class ItemEditorComponent implements OnInit {
 
     ngOnInit() {
         this.quizMetaSubscription = this.route.params.pipe(
-            flatMap(
+            switchMap(
                 (params: Params): Observable<QuizItemAdmin> => {
                     return params.itemId === 'new' ? from([<QuizItemAdmin><any>{
                         singleChoice: true,
