@@ -1,159 +1,105 @@
 import { Action } from '@ngrx/store';
 import {
     QuizActionTypes, ActionLoadItem, ActionToggleChoice, ActionLoadQuizSuccess,
-    ActionLoadItemSuccess, ActionLoadQuiz, ActionSubmitAnswerSuccess
+    ActionLoadItemSuccess, ActionSubmitAnswerSuccess
 } from './quiz.actions';
-import { QuizState, initialQuizState } from './quiz.state';
+import { initialQuizState, QuizStateNormalized } from './quiz.state';
 import { selectActiveItemChoices, selectActiveItem } from './quiz.selectors';
 import { ItemId, ChoiceId, QuizItem, QuizItemChoice, QuizMeta } from '../../core';
+import { QuizHelpers } from './quiz-helpers';
 
-function getRootState(quizState) {
+function getRootState(state) {
     return {
-        quiz: quizState,
+        quiz: state,
         auth: null,
         token: null
     };
 }
 
-function getNextStep(quizState: QuizState, currentStep: number = 0) {
-    if (quizState && quizState.quizMeta && !quizState.finished) {
-        const total = quizState.quizMeta.totalQuestions;
-        const nextStep = currentStep + 1;
-        for (let idx = nextStep - 1; idx < nextStep + total; ++idx) {
-            if (!quizState.answers.has(quizState.quizMeta.itemIds[idx % total])) {
-                return idx % total + 1;
-            }
-        }
-    }
-    return 1;
-}
-
-export function quizReducer(quizState = initialQuizState, action: Action): QuizState {
+export function quizReducer(state = null, action: Action): QuizStateNormalized {
     if (reducers[action.type]) {
-        return reducers[action.type](quizState, action);
+        return reducers[action.type](state, action);
     }
 
-    return quizState;
+    return state;
 }
 
 const reducers = {
-    [QuizActionTypes.LOAD_QUIZ]: (quizState: QuizState, action: Action): QuizState => {
-        const payload = (<ActionLoadQuiz>action).payload;
+    [QuizActionTypes.LOAD_QUIZ]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         return {
-            ...initialQuizState,
-            quizName: payload.quizName
+            ...state,
+            ...initialQuizState
         };
     },
 
-    [QuizActionTypes.LOAD_QUIZ_SUCCESS]: (quizState: QuizState, action: Action): QuizState => {
+    [QuizActionTypes.LOAD_QUIZ_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         const quizMeta = (<ActionLoadQuizSuccess>action).payload.quizMeta;
-        const serverState = (<ActionLoadQuizSuccess>action).payload.quizState;
+        const serverState = (<ActionLoadQuizSuccess>action).payload.serverQuizState;
 
         const answers = Object.keys(serverState.answers).reduce(
             (answers, itemId) => answers.set(
                 itemId,
                 serverState.answers[itemId].choices.reduce((map, ch) => map.set(ch.id, ch), new Map())
             ),
-            new Map(quizState.answers)
+            new Map(state.answers)
         );
 
-        const state = {
-            ...quizState,
-            quizMeta,
-            answers,
-            score: serverState.score,
-            finished: answers.size === quizMeta.totalQuestions
+        const tmpState: QuizStateNormalized = {
+            ...state,
+            ...quizMeta,
+            answers
         };
 
-        const step = getNextStep(state);
+        const step = QuizHelpers.getNextStep(tmpState);
         return {
-            ...state,
-            step,
-            nextStep: getNextStep(state, step)
+            ...tmpState,
+            step
         };
     },
 
-    [QuizActionTypes.LOAD_ITEM]: (quizState: QuizState, action: Action): QuizState => {
+    [QuizActionTypes.LOAD_ITEM]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         const payload = (<ActionLoadItem>action).payload;
         return {
-            ...quizState,
-            step: payload.step,
-            nextStep: getNextStep(quizState, payload.step)
+            ...state,
+            step: payload.step
         };
     },
 
-    [QuizActionTypes.LOAD_ITEM_SUCCESS]: (quizState: QuizState, action: Action): QuizState => {
+    [QuizActionTypes.LOAD_ITEM_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         const { item, choices } = (<ActionLoadItemSuccess>action).payload;
         const res = {
-            ...quizState,
-            choices: quizState.choices.set(item.id, choices),
-            items: (new Map(quizState.items)).set(item.id, item)
+            ...state,
+            choices: (new Map(state.choices)).set(item.id, choices),
+            items: (new Map(state.items)).set(item.id, item)
         };
         return res;
     },
 
-    [QuizActionTypes.TOGGLE_CHOICE]: (quizState: QuizState, action: Action): QuizState => {
-        const item = selectActiveItem(getRootState(quizState));
-        if (item.answered) {
-            return quizState;
-        }
-
+    [QuizActionTypes.TOGGLE_CHOICE]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
+        const item = selectActiveItem(getRootState(state));
         const payload = (<ActionToggleChoice>action).payload;
-        const choices = new Map<ChoiceId, QuizItemChoice>(selectActiveItemChoices(getRootState(quizState)));
+        const choices = new Map<ChoiceId, QuizItemChoice>(selectActiveItemChoices(getRootState(state)));
         choices.get(payload.choiceId).checked = !choices.get(payload.choiceId).checked;
 
         return {
-            ...quizState,
-            choices: (new Map<ItemId, Map<ChoiceId, QuizItemChoice>>(quizState.choices)).set(item.id, choices)
+            ...state,
+            choices: (new Map<ItemId, Map<ChoiceId, QuizItemChoice>>(state.choices)).set(item.id, choices)
         };
     },
 
-    [QuizActionTypes.SUBMIT_ANSWER]: (quizState: QuizState, action: Action): QuizState => {
-        const item = selectActiveItem(getRootState(quizState));
+    [QuizActionTypes.SUBMIT_ANSWER_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
+        const item = selectActiveItem(getRootState(state));
+        const answer = (action as ActionSubmitAnswerSuccess).payload.answer;
         return {
-            ...quizState,
-            // TODO ### answered
-            items: (new Map<ItemId, QuizItem>(quizState.items)).set(item.id, { ...item, answered: true })
+            ...state,
+            answers: (new Map(state.answers)).set(item.id, answer.choiceAnswers)
         };
     },
 
-    [QuizActionTypes.SUBMIT_ANSWER_SUCCESS]: (quizState: QuizState, action: Action): QuizState => {
-        const item = selectActiveItem(getRootState(quizState));
-        const payload = (<ActionSubmitAnswerSuccess>action).payload;
-        const answers = (new Map(quizState.answers)).set(item.id, payload.answer.choiceAnswers);
+    [QuizActionTypes.RESET_QUIZ_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         return {
-            ...quizState,
-            answers,
-            finished: answers.size === quizState.quizMeta.totalQuestions,
-            score: quizState.score + (payload.answer.correct ? 1 : 0)
-        };
-    },
-
-    [QuizActionTypes.RESET_QUIZ]: (quizState: QuizState, action: Action): QuizState => {
-        return {
-            ...quizState,
-            resetInProgress: true
-        };
-    },
-
-    [QuizActionTypes.RESET_QUIZ_SUCCESS]: (quizState: QuizState, action: Action): QuizState => {
-        return {
-            ...quizState,
-            items: new Map(),
-            choices: new Map(),
-            answers: new Map(),
-            step: 1,
-            nextStep: 1, // will be recalculated on item loading
-            score: 0,
-            finished: false,
-            resetInProgress: false
-        };
-    },
-
-    [QuizActionTypes.RESET_QUIZ_ERROR]: (quizState: QuizState, action: Action): QuizState => {
-        return {
-            ...quizState,
-            resetInProgress: false
+            ...state,
+            ...initialQuizState
         };
     }
 };

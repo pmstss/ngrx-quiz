@@ -5,7 +5,7 @@ import { map, filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import {
     AppState, ActionSubmitAnswer, ActionToggleChoice, ActionLoadItem,
-    QuizState, selectQuizState, QuizItemStatus, selectActiveItemStatus, selectQuizMeta
+    QuizState, selectQuizState, QuizItemStatus, selectActiveItemStatus, selectQuizId
 } from '../../../store';
 import { AutoUnsubscribe } from '../../../core';
 
@@ -26,14 +26,14 @@ export class QuizStepComponent implements OnInit {
 
     ngOnInit() {
         this.routeSubscription = combineLatest(
-            this.appStore.select(selectQuizMeta),
+            this.appStore.select(selectQuizId),
             this.route.params.pipe(
                 map(params => +params.step)
             )
         ).pipe(
-            filter(([quizMeta, step]) => !!(quizMeta && step))
+            filter(([quizId, step]) => !!(quizId && step))
         ).subscribe(
-            ([quizMeta, step]) => this.appStore.dispatch(new ActionLoadItem({ step, quizId: quizMeta.id }))
+            ([quizId, step]) => this.appStore.dispatch(new ActionLoadItem({ step, quizId }))
         );
     }
 

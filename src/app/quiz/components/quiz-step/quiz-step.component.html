@@ -3,8 +3,8 @@
         <nb-card-header>
             <div class="lead float-right">Score: {{quizState.score}}</div>
             <div class="lead">
-                Question {{quizState.step}} from {{quizState.quizMeta.totalQuestions}}
-                (left: {{quizState.quizMeta.totalQuestions - quizState.answers.size}})
+                Question {{quizState.step}} from {{quizState.totalQuestions}}
+                (left: {{quizState.totalQuestions - quizState.answers.size}})
             </div>
         </nb-card-header>
 
@@ -34,7 +34,7 @@
 
         <nb-card-footer class="d-flex">
             <a *ngIf="!itemState.answered" class="btn btn-outline-secondary btn-lg ml-auto"
-                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{quizState.nextStep}}">
+                    routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
                 Skip
             </a>
             <button *ngIf="!itemState.answered" class="btn btn-outline-primary btn-lg ml-4"
@@ -42,19 +42,19 @@
                 Submit
             </button>
             <a *ngIf="itemState.answered && !quizState.finished" class="btn btn-outline-info btn-lg ml-auto"
-                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{quizState.nextStep}}">
+                    routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
                 Next
             </a>
             <a *ngIf="quizState.finished" class="btn btn-outline-info btn-lg ml-auto"
-                    routerLink="/quiz/{{quizState.quizMeta.shortName}}/result">
+                    routerLink="/quiz/{{quizState.shortName}}/result">
                 Results
             </a>
         </nb-card-footer>
     </nb-card>
 
     <div class="text-center">
-        <span *ngFor="let itemId of quizState.quizMeta.itemIds; let i = index">
-            <a *ngIf="quizState.step !== i + 1" routerLink="/quiz/{{quizState.quizName}}/{{i + 1}}">
+        <span *ngFor="let itemId of quizState.itemIds; let i = index">
+            <a *ngIf="quizState.step !== i + 1" routerLink="/quiz/{{quizState.shortName}}/{{i + 1}}">
                 {{i + 1}}
             </a>
             <span *ngIf="quizState.step === i + 1">{{i + 1}}</span>

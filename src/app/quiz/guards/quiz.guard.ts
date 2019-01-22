@@ -5,7 +5,7 @@ import { map, take, concatMap, filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Actions } from '@ngrx/effects';
 import { QuizMeta, MessageService } from '../../core';
-import { AppState, ActionLoadQuiz, QuizActionTypes, selectQuizMeta, selectQuizState, QuizState } from '../../store';
+import { AppState, ActionLoadQuiz, QuizActionTypes, selectQuizState, QuizState } from '../../store';
 
 @Injectable()
 export class QuizGuard implements CanActivate {
@@ -17,7 +17,7 @@ export class QuizGuard implements CanActivate {
         return this.appStore.select(selectQuizState).pipe(
             take(1),
             concatMap((quizState: QuizState): Observable<boolean>  => {
-                if (!quizState.quizName && next.params.name) {
+                if (!quizState.shortName && next.params.name) {
                     this.appStore.dispatch(new ActionLoadQuiz({ quizName: next.params.name }));
                     return this.actions$.pipe(
                         filter(action => action.type === QuizActionTypes.LOAD_QUIZ_SUCCESS ||
@@ -25,7 +25,7 @@ export class QuizGuard implements CanActivate {
                         take(1),
                         map((action) => {
                             if (action.type !== QuizActionTypes.LOAD_QUIZ_SUCCESS) {
-                                this.messageService.publishWarning(
+                                this.messageService.warn(
                                     'Quiz was not loaded successfully, will redirect to quiz list');
                                 return false;
                             }
@@ -37,14 +37,14 @@ export class QuizGuard implements CanActivate {
             }),
             concatMap((loaded: boolean): Observable<boolean> => {
                 if (loaded && typeof next.params.step !== 'undefined') {
-                    return this.appStore.select(selectQuizMeta).pipe(
+                    return this.appStore.select(selectQuizState).pipe(
                         take(1),
-                        map((quizMeta: QuizMeta) => {
+                        map((quizState: QuizState) => {
                             const step = parseInt(next.params.step, 10);
                             if (isNaN(step)) {
-                                this.messageService.publishWarning(`Invalid step value: ${next.params.step}`);
-                            } else if (step < 1 || step > quizMeta.totalQuestions) {
-                                this.messageService.publishWarning(`Step is out of bound: ${step}`);
+                                this.messageService.warn(`Invalid step value: ${next.params.step}`);
+                            } else if (step < 1 || step > quizState.totalQuestions) {
+                                this.messageService.warn(`Step is out of bound: ${step}`);
                             } else {
                                 return true;
                             }

@@ -1,14 +1,14 @@
 <div class="container" *ngIf="quizState$ | async as quizState else loading">
     <app-back-link routerLink="/quizes">Back to quiz list</app-back-link>
 
-    <div class="jumbotron my-3" *ngIf="quizState && quizState.quizMeta else loading">
-        <h1>Welcome to {{quizState.quizMeta.name}}!</h1>
+    <div class="jumbotron my-3" *ngIf="quizState else loading">
+        <h1>Welcome to {{quizState.name}}!</h1>
         <p class="lead">
-            <!--quill-editor theme="bubble" [readOnly]="true" [ngModel]="quizState.quizMeta.description"></quill-editor-->
+            <!--quill-editor theme="bubble" [readOnly]="true" [ngModel]="quizState.description"></quill-editor-->
         </p>
         <hr class="my-4"/>
         <p>
-            <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quizState.quizMeta.descriptionFull"></quill-editor>
+            <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quizState.descriptionFull"></quill-editor>
         </p>
         <div class="text-center mt-4">
             <a *ngIf="quizState.answers.size > 0" class="btn btn-lg mr-3" routerLink="./" (click)="reset()"
@@ -16,11 +16,11 @@
                 {{quizState.finished ? 'Take quiz again' : 'Restart quiz'}}
             </a>
 
-            <a *ngIf="!quizState.finished" class="btn btn-lg btn-outline-primary" routerLink="/quiz/{{quizState.quizMeta.shortName}}/{{quizState.step}}">
+            <a *ngIf="!quizState.finished" class="btn btn-lg btn-outline-primary" routerLink="/quiz/{{quizState.shortName}}/{{quizState.step}}">
                 {{quizState.answers.size > 0 ? 'Continue quiz' : 'Start quiz!'}}
             </a>
 
-            <a *ngIf="quizState.finished" class="btn btn-lg btn-outline-info" routerLink="/quiz/{{quizState.quizMeta.shortName}}/result">
+            <a *ngIf="quizState.finished" class="btn btn-lg btn-outline-info" routerLink="/quiz/{{quizState.shortName}}/result">
                 Results
             </a>
         </div>

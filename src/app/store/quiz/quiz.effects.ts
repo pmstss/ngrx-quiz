@@ -9,17 +9,12 @@ import { QuizService, ChoiceId } from '../../core';
 import { DialogService } from '../../dialog';
 import {
     QuizActionTypes, ActionLoadQuiz, ActionLoadQuizError, ActionLoadQuizSuccess,
-    ActionLoadItem,
-    ActionLoadItemSuccess,
-    ActionLoadItemError,
-    ActionSubmitAnswerSuccess,
-    ActionSubmitAnswerError,
-    ActionResetQuizSuccess,
-    ActionResetQuizError,
-    ActionResetQuiz
+    ActionLoadItem, ActionLoadItemSuccess, ActionLoadItemError,
+    ActionSubmitAnswerSuccess, ActionSubmitAnswerError,
+    ActionResetQuizSuccess, ActionResetQuizError
 } from './quiz.actions';
-import { AppState, selectQuizState } from '../app.state';
-import { selectActiveItemId, selectActiveItemChoices, selectQuizMeta } from './quiz.selectors';
+import { AppState } from '../app.state';
+import { selectActiveItem, selectActiveItemChoices, selectQuizState } from './quiz.selectors';
 import { QuizState } from './quiz.state';
 
 @Injectable()
@@ -33,7 +28,7 @@ export class QuizEffects {
         ofType(QuizActionTypes.LOAD_QUIZ),
         switchMap((action: Action) => {
             return this.quizService.loadQuizMeta((<ActionLoadQuiz>action).payload.quizName).pipe(
-                map(res => new ActionLoadQuizSuccess({ quizMeta: res.quizMeta, quizState: res.quizState })),
+                map(res => new ActionLoadQuizSuccess({ quizMeta: res.quizMeta, serverQuizState: res.quizState })),
                 catchError(error => of(new ActionLoadQuizError(error)))
             );
         })
@@ -45,7 +40,7 @@ export class QuizEffects {
         withLatestFrom(this.appStore),
         switchMap(([action, appState]: [Action, AppState]) => {
             const payload = (<ActionLoadItem>action).payload;
-            const id = appState.quiz.quizMeta.itemIds[payload.step - 1];
+            const id = appState.quiz.itemIds[payload.step - 1];
             const item = appState.quiz.items.get(id);
             return item ? of(new ActionLoadItemSuccess({
                 item,
@@ -63,8 +58,8 @@ export class QuizEffects {
         withLatestFrom(this.appStore),
         switchMap(([action, appState]: [Action, AppState]) => {
             return this.quizService.submitAnswer(
-                selectQuizMeta(appState).id,
-                selectActiveItemId(appState),
+                selectQuizState(appState).id,
+                selectActiveItem(appState).id,
                 new Set<ChoiceId>([...selectActiveItemChoices(appState).values()].filter(c => c.checked).map(c => c.id))
             ).pipe(
                 map(answer => new ActionSubmitAnswerSuccess({ answer })),
@@ -87,9 +82,9 @@ export class QuizEffects {
         }),
         switchMap(([quizState, confirmed]: [QuizState, boolean]) => {
             if (confirmed) {
-                return this.quizService.resetQuiz(quizState.quizMeta.id).pipe(
+                return this.quizService.resetQuiz(quizState.id).pipe(
                     map(() => {
-                        return new ActionResetQuizSuccess({ quizName: quizState.quizMeta.shortName });
+                        return new ActionResetQuizSuccess({ quizName: quizState.shortName });
                     }),
                     catchError(error => of(new ActionResetQuizError(error)))
                 );
