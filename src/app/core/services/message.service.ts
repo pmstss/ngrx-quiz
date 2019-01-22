@@ -16,7 +16,7 @@ export class MessageService {
         this.subject.next(msg);
     }
 
-    publishError(msg: Message) {
+    error(msg: Message) {
         this.subject.next({
             ...msg,
             status: NbToastStatus.DANGER,
@@ -24,7 +24,7 @@ export class MessageService {
         });
     }
 
-    publishWarning(message: string, title: string = 'Warning') {
+    warn(message: string, title: string = 'Warning') {
         console.warn(message);
         this.subject.next({
             title,

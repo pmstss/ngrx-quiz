@@ -17,7 +17,7 @@ export class CustomErrorHandler extends ErrorHandler {
 
         // trigger change detection
         this.ngZone.run(
-            () => this.messageService.publishError({
+            () => this.messageService.error({
                 message: error.message ? error.message.split('\n')[0] : error,
                 title: error.title || 'Error'
             }),

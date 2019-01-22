@@ -23,13 +23,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 // retry(1), // TODO ### retryWhen
                 catchError((error: HttpErrorResponse) => {
                     if (error.error instanceof ErrorEvent) {
-                        this.messageService.publishError({
+                        this.messageService.error({
                             title: 'Client side network error',
                             message: error.error.message
                         });
                     }
 
-                    this.messageService.publishError({
+                    this.messageService.error({
                         title: 'Network Error',
                         message: error.status === 0 ? 'Server is unavailable' :
                             error.error && error.error.message || error.message
