@@ -2,10 +2,10 @@
     <div class="my-3 text-center">There are {{quizList.length}} quizes available</div>
 
     <nb-card *ngFor="let quiz of quizList" class="my-3" [accent]="quiz.finished ? 'success' : (quiz.started ? 'warning' : 'info')">
-        <nb-card-header>
+        <nb-card-header class="d-flex justify-content-between">
             {{quiz.name}}
             <span class="ml-2" [ngClass]="quiz.finished ? 'text-success' : (quiz.started ? 'text-warning' : '')">
-                {{quiz.finished ? '(Finished)' : (quiz.started ? '(In progress)' : '')}}
+                {{quiz.finished ? 'Finished' : (quiz.started ? 'In progress' : '')}}
             </span>
         </nb-card-header>
         <nb-card-body>

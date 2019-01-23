@@ -1,11 +1,13 @@
-:host {
+@import '../../../../themes';
+
+@include nb-install-component() {
     width: 100%;
-}
 
-.navbar-brand {
-    color: white;
-}
+    .navbar-brand {
+        color: white;
+    }
 
-nb-user {
-    cursor: pointer;
+    nb-user {
+        cursor: pointer;
+    }
 }
