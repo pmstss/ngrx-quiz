@@ -9,6 +9,12 @@ import { QuizItemChoice } from '../types/quiz-item-choice';
 import { QuizItemAnswer } from '../types/quiz-item-answer';
 import { QuizItemAnswerResponse, QuizItemResponse, QuizMetaResponse } from '../api/api.types';
 import { ApiService } from '../api/api.service';
+import { QuizSession } from '../types/quiz-session';
+import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
+
+function arrayToMap<K, T extends { id: K }>(arr: T[]): Map<K, T> {
+    return arr.reduce((map: Map<K, T>, el: T) => map.set(el.id, el), new Map<K, T>());
+}
 
 @Injectable()
 export class QuizService {
@@ -19,14 +25,31 @@ export class QuizService {
         return this.apiService.get<QuizMeta[]>('/quizes');
     }
 
-    loadQuizMeta(shortName: string): Observable<QuizMetaResponse> {
+    loadQuizMeta(shortName: string): Observable<{quizMeta: QuizMeta, quizSession: QuizSession}> {
         return this.apiService.get<QuizMetaResponse>(`/quizes/${encodeURIComponent(shortName)}`).pipe(
             catchError((err) => {
+                // TODO ### centralized handling?
                 if (err.status === 404) {
                     this.router.navigateByUrl('/quizes');
                 } else {
                     return throwError(err);
                 }
+            }),
+            map((res) => {
+                const answers = res.quizState.answers;
+                return {
+                    quizMeta: res.quizMeta,
+                    quizSession: {
+                        score: res.quizState.score,
+                        answers: Object.keys(answers).reduce((map, itemId) => {
+                            const itemAnswer = answers[itemId];
+                            return map.set(itemId, {
+                                choiceAnswers: arrayToMap(itemAnswer.choices),
+                                correct: itemAnswer.correct
+                            });
+                        }, new Map<ItemId, QuizItemAnswer>())
+                    }
+                };
             })
         );
     }
@@ -38,10 +61,7 @@ export class QuizService {
                 delete item.choices;
                 return {
                     item,
-                    choices: res.choices.reduce(
-                        (choicesMap, choice) => choicesMap.set(choice.id, choice),
-                        new Map<ChoiceId, QuizItemChoice>()
-                    )
+                    choices: arrayToMap<ChoiceId, QuizItemChoice>(res.choices)
                 };
             })
         );
@@ -53,13 +73,13 @@ export class QuizService {
             choiceIds: [...choiceIds]
         }).pipe(
             map(res => ({
-                choiceAnswers: res.choices.reduce((map, ch) => map.set(ch.id, ch), new Map()),
+                choiceAnswers: arrayToMap<ChoiceId, QuizItemChoiceAnswer>(res.choices),
                 correct: res.correct
             }))
         );
     }
 
-    resetQuiz(quizId: QuizId) {
-        return this.apiService.post<QuizItemAnswerResponse>(`/reset/${quizId}`, {});
+    resetQuiz(quizId: QuizId): Observable<{}> {
+        return this.apiService.post<{}>(`/reset/${quizId}`, {});
     }
 }

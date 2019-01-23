@@ -3,20 +3,25 @@ import { QuizItem } from '../types/quiz-item';
 import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
 import { QuizItemChoice } from '../types/quiz-item-choice';
 
+/*** Internal data types that should be used only inside QuizService
+ *  External data types uses Maps instead of plain objects/arrays;
+ *  QuizService does conversion between that types.
+ */
+
 export interface ResponseWrapper<T> {
     success: boolean;
     message?: string;
     data?: T;
 }
 
-export interface ServerQuizState {
+export interface QuizSessionResponse {
     answers: { [itemId: string]: QuizItemAnswerResponse };
     score: number;
 }
 
-export interface QuizMetaResponse extends QuizMeta {
+export interface QuizMetaResponse {
     quizMeta: QuizMeta;
-    quizState: ServerQuizState;
+    quizState: QuizSessionResponse;
 }
 
 export interface QuizItemResponse extends QuizItem {

@@ -4,9 +4,8 @@ import {
     ActionLoadItemSuccess, ActionSubmitAnswerSuccess
 } from './quiz.actions';
 import { initialQuizState, QuizStateNormalized } from './quiz.state';
-import { selectActiveItemChoices, selectActiveItem } from './quiz.selectors';
-import { ItemId, ChoiceId, QuizItem, QuizItemChoice, QuizMeta } from '../../core';
-import { QuizHelpers } from './quiz-helpers';
+import { selectActiveItemChoices, selectQuizNextStep, selectQuizActiveItem } from './quiz.selectors';
+import { ItemId, ChoiceId, QuizItemChoice } from '../../core';
 
 function getRootState(state) {
     return {
@@ -34,23 +33,16 @@ const reducers = {
 
     [QuizActionTypes.LOAD_QUIZ_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         const quizMeta = (<ActionLoadQuizSuccess>action).payload.quizMeta;
-        const serverState = (<ActionLoadQuizSuccess>action).payload.serverQuizState;
-
-        const answers = Object.keys(serverState.answers).reduce(
-            (answers, itemId) => answers.set(
-                itemId,
-                serverState.answers[itemId].choices.reduce((map, ch) => map.set(ch.id, ch), new Map())
-            ),
-            new Map(state.answers)
-        );
+        const quizSession = (<ActionLoadQuizSuccess>action).payload.quizSession;
 
         const tmpState: QuizStateNormalized = {
             ...state,
             ...quizMeta,
-            answers
+            answers: new Map(quizSession.answers),
+            step: 0
         };
 
-        const step = QuizHelpers.getNextStep(tmpState);
+        const step = selectQuizNextStep(getRootState(tmpState));
         return {
             ...tmpState,
             step
@@ -59,6 +51,7 @@ const reducers = {
 
     [QuizActionTypes.LOAD_ITEM]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         const payload = (<ActionLoadItem>action).payload;
+        console.log('### LOAD_ITEM reducer, step: ', payload.step);
         return {
             ...state,
             step: payload.step
@@ -67,6 +60,7 @@ const reducers = {
 
     [QuizActionTypes.LOAD_ITEM_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         const { item, choices } = (<ActionLoadItemSuccess>action).payload;
+        console.log('### LOAD_ITEM_SUCCESS reducer, item: ', item);
         const res = {
             ...state,
             choices: (new Map(state.choices)).set(item.id, choices),
@@ -76,7 +70,7 @@ const reducers = {
     },
 
     [QuizActionTypes.TOGGLE_CHOICE]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
-        const item = selectActiveItem(getRootState(state));
+        const item = selectQuizActiveItem(getRootState(state));
         const payload = (<ActionToggleChoice>action).payload;
         const choices = new Map<ChoiceId, QuizItemChoice>(selectActiveItemChoices(getRootState(state)));
         choices.get(payload.choiceId).checked = !choices.get(payload.choiceId).checked;
@@ -88,11 +82,11 @@ const reducers = {
     },
 
     [QuizActionTypes.SUBMIT_ANSWER_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
-        const item = selectActiveItem(getRootState(state));
+        const item = selectQuizActiveItem(getRootState(state));
         const answer = (action as ActionSubmitAnswerSuccess).payload.answer;
         return {
             ...state,
-            answers: (new Map(state.answers)).set(item.id, answer.choiceAnswers)
+            answers: (new Map(state.answers)).set(item.id, answer)
         };
     },
 

@@ -3,5 +3,4 @@ export interface QuizItem {
     question: string;
     randomizeChoices: boolean;
     singleChoice: boolean;
-    answered: boolean;
 }

@@ -1,61 +1,144 @@
 import { createSelector } from '@ngrx/store';
-import { QuizItem, QuizItemChoice, ChoiceId, QuizItemChoiceAnswer, QuizId } from '../../core';
-import { QuizState, QuizStateNormalized } from './quiz.state';
+import { QuizItem, QuizItemChoiceAnswer, QuizId, ItemId } from '../../core';
+import { QuizState, QuizStateNormalized, QuizAnswers, QuizChoices,
+    QuizItemStatus, QuizItems, ItemChoices } from './quiz.state';
 import { AppState, selectQuizStateNormalized } from '../app.state';
-import { QuizHelpers } from './quiz-helpers';
-
-// TODO ### clarify necessity
-export interface QuizItemStatus extends QuizItem {
-    choicesStatus: (QuizItemChoice & QuizItemChoiceAnswer & { wrong: boolean; })[];
-}
+import { QuizItemAnswer } from 'src/app/core/types/quiz-item-answer';
 
 export const selectQuizId = createSelector<AppState, QuizStateNormalized, QuizId>(
     selectQuizStateNormalized,
-    (state: QuizStateNormalized): QuizId => state.id
+    (state: QuizStateNormalized): QuizId => state && state.id
 );
 
-export const selectQuizState = createSelector<AppState, QuizStateNormalized, QuizState>(
+const selectQuizTotalQuestions = createSelector<AppState, QuizStateNormalized, number>(
     selectQuizStateNormalized,
-    (state: QuizStateNormalized): QuizState => ({
+    (state: QuizStateNormalized) => state && state.totalQuestions
+);
+
+const selectQuizStep = createSelector<AppState, QuizStateNormalized, number>(
+    selectQuizStateNormalized,
+    (state: QuizStateNormalized) => state && state.step
+);
+
+const selectQuizItemIds = createSelector<AppState, QuizStateNormalized, ItemId[]>(
+    selectQuizStateNormalized,
+    (state: QuizStateNormalized) => state && state.itemIds
+);
+
+const selectQuizItems = createSelector<AppState, QuizStateNormalized, QuizItems>(
+    selectQuizStateNormalized,
+    (state: QuizStateNormalized) => state && state.items
+);
+
+const selectQuizAnswers = createSelector<AppState, QuizStateNormalized, QuizAnswers>(
+    selectQuizStateNormalized,
+    (state: QuizStateNormalized) => state && state.answers
+);
+
+const selectQuizChoices = createSelector<AppState, QuizStateNormalized, QuizChoices>(
+    selectQuizStateNormalized,
+    (state: QuizStateNormalized) => state && state.choices
+);
+
+const selectQuizFinished = createSelector<AppState, number, QuizAnswers, boolean>(
+    selectQuizTotalQuestions,
+    selectQuizAnswers,
+    (total: number, answers: QuizAnswers) => answers && total === answers.size
+);
+
+const selectQuizStarted = createSelector<AppState, QuizAnswers, boolean>(
+    selectQuizAnswers,
+    (answers: QuizAnswers) => answers && answers.size > 0
+);
+
+export const selectQuizActiveItem = createSelector<AppState, QuizItems, ItemId[], number, QuizItem>(
+    selectQuizItems,
+    selectQuizItemIds,
+    selectQuizStep,
+    (items: QuizItems, itemIds: ItemId[], step: number) => items && itemIds && items.get(itemIds[step - 1])
+);
+
+const selectQuizActiveItemId = createSelector<AppState, QuizItem, ItemId>(
+    selectQuizActiveItem,
+    (item: QuizItem) => item && item.id
+);
+
+// TODO ### ngrx 7 parameterized selector for answered?
+export const selectQuizNextStep = createSelector<AppState, ItemId[], number, number, boolean, QuizAnswers, number>(
+    selectQuizItemIds,
+    selectQuizStep,
+    selectQuizTotalQuestions,
+    selectQuizFinished,
+    selectQuizAnswers,
+    (itemIds: ItemId[], startStep: number, total: number, finished: boolean, answers: QuizAnswers) => {
+        if (!itemIds || !answers) {
+            return 0;
+        }
+
+        if (!finished) {
+            for (let step = startStep + 1; step <= startStep + total + 1; ++step) {
+                if (!answers.has(itemIds[step - 1])) {
+                    return step;
+                }
+            }
+        }
+        return 1;
+    }
+);
+
+export const selectActiveItemChoices = createSelector<AppState, ItemId, QuizChoices, ItemChoices>(
+    selectQuizActiveItemId,
+    selectQuizChoices,
+    (itemId: ItemId, choices: QuizChoices) => choices && choices.get(itemId)
+);
+
+const selectActiveItemAnswers = createSelector<AppState, ItemId, QuizAnswers, QuizItemAnswer>(
+    selectQuizActiveItemId,
+    selectQuizAnswers,
+    (itemId: ItemId, answers: QuizAnswers) => answers && answers.get(itemId)
+);
+
+export const selectQuizScore = createSelector<AppState, QuizAnswers, number>(
+    selectQuizAnswers,
+    (answers: QuizAnswers) => answers &&
+        [...answers.values()].reduce((score, answer) => score + (answer.correct ? 1 : 0), 0)
+);
+
+export const selectQuizState
+        = createSelector<AppState, QuizStateNormalized, boolean, boolean, number, number, QuizState>(
+    selectQuizStateNormalized,  // TODO ### extract shorter version of interface for memoization?
+    selectQuizStarted,
+    selectQuizFinished,
+    selectQuizNextStep,
+    selectQuizScore,
+    (state: QuizStateNormalized, started: boolean, finished: boolean, nextStep: number, score: number): QuizState => ({
         ...state,
-        nextStep: QuizHelpers.getNextStep(state),
-        finished: QuizHelpers.isFinished(state),
-        started: QuizHelpers.isStarted(state),
-        score: QuizHelpers.getScore(state)
+        started,
+        finished,
+        nextStep,
+        score
     })
 );
 
-export const selectActiveItem = createSelector<AppState, QuizStateNormalized, QuizItem>(
-    selectQuizStateNormalized,
-    (state: QuizStateNormalized) => state.items.get(state.itemIds[state.step - 1])
-);
-
-export const selectActiveItemChoices
-        = createSelector<AppState, QuizStateNormalized, QuizItem, Map<ChoiceId, QuizItemChoice>>(
-    selectQuizStateNormalized,
-    selectActiveItem,
-    (state: QuizStateNormalized, item: QuizItem) => state.choices.get(item.id)
-);
-
-export const selectActiveItemStatus = createSelector<AppState, QuizStateNormalized, QuizItem, QuizItemStatus>(
-    selectQuizStateNormalized,
-    selectActiveItem,
-    (state: QuizStateNormalized, item: QuizItem) => {
+export const selectActiveItemStatus =
+        createSelector<AppState, QuizItem, ItemChoices, QuizItemAnswer, QuizItemStatus>(
+    selectQuizActiveItem,
+    selectActiveItemChoices,
+    selectActiveItemAnswers,
+    (item: QuizItem, choices: ItemChoices, itemAnswer: QuizItemAnswer) => {
         if (!item) {
             return null;
         }
 
-        const choices: Map<ChoiceId, QuizItemChoice> = state.choices.get(item.id);
-        const answers: Map<ChoiceId, QuizItemChoiceAnswer> = state.answers.get(item.id);
         return {
             ...item,
-            answered: !!answers,
+            answered: !!itemAnswer,
             choicesStatus: [...choices.keys()].map((choiceId) => {
-                const answer = answers && answers.get(choiceId);
+                const choiceAnswer = itemAnswer && itemAnswer.choiceAnswers.get(choiceId);
                 return {
                     ...choices.get(choiceId),
-                    ...answer || <QuizItemChoiceAnswer>{},
-                    wrong: answers && answer && answer.checked && !answer.correct
+                    ...choiceAnswer || <QuizItemChoiceAnswer>{},
+                    wrong: itemAnswer && choiceAnswer && choiceAnswer.checked && !choiceAnswer.correct
                 };
             })
         };
