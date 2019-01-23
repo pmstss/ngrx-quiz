@@ -38,7 +38,7 @@ export class QuizAdminService {
     }
 
     updateQuizItemsOrder(quizId: QuizId, itemIds: ItemId[]) {
-        return this.apiService.put<{}>(`/admin/quizes/${quizId}/items`, { itemIds });
+        return this.apiService.put<{}>(`/admin/order/${quizId}`, { itemIds });
     }
 
     deleteQuiz(quizId: QuizId): Observable<{}> {
