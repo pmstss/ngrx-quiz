@@ -4,6 +4,7 @@ export { QuizItemChoice } from './types/quiz-item-choice';
 export { QuizItemAnswer } from './types/quiz-item-answer';
 export { QuizItemChoiceAnswer } from './types/quiz-item-choice-answer';
 export { QuizMeta } from './types/quiz-meta';
+export { QuizMetaListItem } from './types/quiz-meta';
 export { QuizSession } from './types/quiz-session';
 export { User } from './types/user';
 

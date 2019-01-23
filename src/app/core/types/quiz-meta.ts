@@ -11,3 +11,11 @@ export interface QuizMeta {
     randomizeItems: boolean;
     itemIds: ItemId[];
 }
+
+/* "started" and "finished" are calculated on the base of answer when quiz is active in QuizState selector;
+ * but for list they are returned as pre-calculated from server
+ */
+export interface QuizMetaListItem extends QuizMeta {
+    started: boolean;
+    finished: boolean;
+}

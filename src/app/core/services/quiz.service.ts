@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { QuizItem } from '../types/quiz-item';
-import { QuizMeta } from '../types/quiz-meta';
+import { QuizMeta, QuizMetaListItem } from '../types/quiz-meta';
 import { ChoiceId, ItemId, QuizId } from '../types/id';
 import { QuizItemChoice } from '../types/quiz-item-choice';
 import { QuizItemAnswer } from '../types/quiz-item-answer';
@@ -21,8 +21,8 @@ export class QuizService {
     constructor(private router: Router, private apiService: ApiService) {
     }
 
-    loadQuizList(): Observable<QuizMeta[]> {
-        return this.apiService.get<QuizMeta[]>('/quizes');
+    loadQuizList(): Observable<QuizMetaListItem[]> {
+        return this.apiService.get<QuizMetaListItem[]>('/quizes');
     }
 
     loadQuizMeta(shortName: string): Observable<{quizMeta: QuizMeta, quizSession: QuizSession}> {
