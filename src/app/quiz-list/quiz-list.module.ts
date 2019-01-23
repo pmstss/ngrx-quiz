@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NbCardModule } from '@nebular/theme';
@@ -12,7 +11,6 @@ import { QuizListComponent } from './components/quiz-list/quiz-list.component';
     declarations: [QuizListComponent],
     imports: [
         CoreModule,
-        CommonModule,
         FormsModule,
         RouterModule.forChild([
             {

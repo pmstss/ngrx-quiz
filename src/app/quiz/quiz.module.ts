@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
@@ -14,7 +13,6 @@ import { QuizGuard } from './guards/quiz.guard';
 @NgModule({
     declarations: [QuizStepComponent, QuizIntroComponent, QuizResultComponent],
     imports: [
-        CommonModule,
         FormsModule,
         RouterModule.forChild([{
             path: '',

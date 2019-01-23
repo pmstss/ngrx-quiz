@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NbCardModule, NbInputModule, NbTooltipModule, NbCheckboxModule } from '@nebular/theme';
 import { QuillModule } from 'ngx-quill';
@@ -15,7 +14,6 @@ import { SharedModule } from '../shared';
 
 @NgModule({
     imports: [
-        CommonModule,
         FormsModule,
         AdminRoutingModule,
         SharedModule,
