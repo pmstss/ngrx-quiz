@@ -1,18 +1,13 @@
 import { createSelector } from '@ngrx/store';
 import { QuizItem, QuizItemChoiceAnswer, QuizId, ItemId } from '../../core';
 import { QuizState, QuizStateNormalized, QuizAnswers, QuizChoices,
-    QuizItemStatus, QuizItems, ItemChoices } from './quiz.state';
+    QuizItemStatus, QuizItems, ItemChoices, QuizStateCalculated } from './quiz.state';
 import { AppState, selectQuizStateNormalized } from '../app.state';
 import { QuizItemAnswer } from 'src/app/core/types/quiz-item-answer';
 
 export const selectQuizId = createSelector<AppState, QuizStateNormalized, QuizId>(
     selectQuizStateNormalized,
     (state: QuizStateNormalized): QuizId => state && state.id
-);
-
-const selectQuizTotalQuestions = createSelector<AppState, QuizStateNormalized, number>(
-    selectQuizStateNormalized,
-    (state: QuizStateNormalized) => state && state.totalQuestions
 );
 
 const selectQuizStep = createSelector<AppState, QuizStateNormalized, number>(
@@ -23,6 +18,11 @@ const selectQuizStep = createSelector<AppState, QuizStateNormalized, number>(
 const selectQuizItemIds = createSelector<AppState, QuizStateNormalized, ItemId[]>(
     selectQuizStateNormalized,
     (state: QuizStateNormalized) => state && state.itemIds
+);
+
+const selectQuizTotalQuestions = createSelector<AppState, ItemId[], number>(
+    selectQuizItemIds,
+    (itemIds: ItemId[]) => itemIds && itemIds.length
 );
 
 const selectQuizItems = createSelector<AppState, QuizStateNormalized, QuizItems>(
@@ -104,19 +104,28 @@ export const selectQuizScore = createSelector<AppState, QuizAnswers, number>(
         [...answers.values()].reduce((score, answer) => score + (answer.correct ? 1 : 0), 0)
 );
 
-export const selectQuizState
-        = createSelector<AppState, QuizStateNormalized, boolean, boolean, number, number, QuizState>(
-    selectQuizStateNormalized,  // TODO ### extract shorter version of interface for memoization?
+export const selectQuizStateCalculated
+        = createSelector<AppState, number, boolean, boolean, number, number, QuizStateCalculated>(
+    selectQuizTotalQuestions,
     selectQuizStarted,
     selectQuizFinished,
     selectQuizNextStep,
     selectQuizScore,
-    (state: QuizStateNormalized, started: boolean, finished: boolean, nextStep: number, score: number): QuizState => ({
-        ...state,
+    (total: number, started: boolean, finished: boolean, nextStep: number, score: number): QuizStateCalculated => ({
         started,
         finished,
         nextStep,
-        score
+        score,
+        totalQuestions: total
+    })
+);
+
+export const selectQuizState = createSelector<AppState, QuizStateNormalized, QuizStateCalculated, QuizState>(
+    selectQuizStateNormalized,  // TODO ### extract shorter version of interface for memoization?
+    selectQuizStateCalculated,
+    (state: QuizStateNormalized, calculatedState: QuizStateCalculated): QuizState => ({
+        ...state,
+        ...calculatedState
     })
 );
 
@@ -130,15 +139,20 @@ export const selectActiveItemStatus =
             return null;
         }
 
+        const answered = !!itemAnswer;
         return {
             ...item,
-            answered: !!itemAnswer,
+            answered,
+            correct: answered && itemAnswer.correct,
+            wrong: answered && !itemAnswer.correct,
             choicesStatus: [...choices.keys()].map((choiceId) => {
-                const choiceAnswer = itemAnswer && itemAnswer.choiceAnswers.get(choiceId);
+                const choiceAnswer = answered && itemAnswer.choiceAnswers.get(choiceId);
+                const checked = !!choiceAnswer && choiceAnswer.checked;
                 return {
                     ...choices.get(choiceId),
-                    ...choiceAnswer || <QuizItemChoiceAnswer>{},
-                    wrong: itemAnswer && choiceAnswer && choiceAnswer.checked && !choiceAnswer.correct
+                    ...choiceAnswer,
+                    wrong: checked && !choiceAnswer.correct,
+                    semiCorrect: checked && choiceAnswer.correct && !itemAnswer.correct
                 };
             })
         };

@@ -5,28 +5,34 @@ export type ItemChoices = Map<ChoiceId, QuizItemChoice>;
 export type QuizChoices = Map<ItemId, ItemChoices>;
 export type QuizAnswers = Map<ItemId, QuizItemAnswer>;
 
-interface QuizStateAux {
+interface QuizStateProgress {
     step: number;
     items: QuizItems;
     choices: QuizChoices;
     answers: QuizAnswers;
 }
 
-export interface QuizStateNormalized extends QuizMeta, QuizStateAux {
+export interface QuizStateNormalized extends QuizMeta, QuizStateProgress {
 }
 
-export interface QuizState extends QuizStateNormalized {
+export interface QuizStateCalculated {
     nextStep: number;
     started: boolean;
     finished: boolean;
     score: number;
+    totalQuestions: number;
+}
+
+export interface QuizState extends QuizStateNormalized, QuizStateCalculated {
 }
 
 export interface QuizItemStatus extends QuizItem {
     choicesStatus: (QuizItemChoice & QuizItemChoiceAnswer & { wrong: boolean; })[];
+    correct: boolean;
+    wrong: boolean;
 }
 
-export const initialQuizState: QuizStateAux = {
+export const initialQuizState: QuizStateProgress = {
     step: 1,
     items: new Map<ItemId, QuizItem>(),
     choices: new Map<ItemId, ItemChoices>(),
