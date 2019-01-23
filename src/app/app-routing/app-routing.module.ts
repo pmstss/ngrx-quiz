@@ -27,6 +27,11 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
                 canActivate: [AuthGuard]
             },
             {
+                path: 'top',
+                loadChildren: '../rating/rating.module#RatingModule',
+                canActivate: [AuthGuard]
+            },
+            {
                 path: 'admin',
                 loadChildren: '../admin/admin.module#AdminModule',
                 canActivate: [AdminAuthGuard]

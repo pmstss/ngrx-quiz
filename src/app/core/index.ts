@@ -7,6 +7,7 @@ export { QuizMeta } from './types/quiz-meta';
 export { QuizMetaListItem } from './types/quiz-meta';
 export { QuizSession } from './types/quiz-session';
 export { User } from './types/user';
+export { TopScore } from './types/top-score';
 
 export { ApiService } from './api/api.service';
 export { QuizService } from './services/quiz.service';

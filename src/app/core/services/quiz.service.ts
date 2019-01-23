@@ -12,6 +12,7 @@ import { ApiService } from '../api/api.service';
 import { QuizSession } from '../types/quiz-session';
 import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
 import { ItemChoices } from '../../store';
+import { TopScore } from '../types/top-score';
 
 function arrayToMap<K, T extends { id: K }>(arr: T[]): Map<K, T> {
     return arr.reduce((map: Map<K, T>, el: T) => map.set(el.id, el), new Map<K, T>());
@@ -82,5 +83,9 @@ export class QuizService {
 
     resetQuiz(quizId: QuizId): Observable<{}> {
         return this.apiService.post<{}>(`/reset/${quizId}`, {});
+    }
+
+    loadTopScores(quizId: QuizId): Observable<TopScore[]> {
+        return this.apiService.get<TopScore[]>(`/top/${quizId}`);
     }
 }
