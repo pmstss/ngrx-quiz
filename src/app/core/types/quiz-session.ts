@@ -1,6 +1,5 @@
-import { ItemId } from './id';
-import { QuizItemAnswer } from './quiz-item-answer';
+import { QuizAnswers } from "../../store";
 
 export interface QuizSession {
-    answers: Map<ItemId, QuizItemAnswer>;
+    answers: QuizAnswers;
 }

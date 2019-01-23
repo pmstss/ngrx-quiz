@@ -5,7 +5,7 @@ import {
 } from './quiz.actions';
 import { initialQuizState, QuizStateNormalized } from './quiz.state';
 import { selectActiveItemChoices, selectQuizNextStep, selectQuizActiveItem } from './quiz.selectors';
-import { ItemId, ChoiceId, QuizItemChoice } from '../../core';
+import { ChoiceId, QuizItemChoice } from '../../core';
 
 function getRootState(state) {
     return {
@@ -77,7 +77,7 @@ const reducers = {
 
         return {
             ...state,
-            choices: (new Map<ItemId, Map<ChoiceId, QuizItemChoice>>(state.choices)).set(item.id, choices)
+            choices: (new Map(state.choices)).set(item.id, choices)
         };
     },
 

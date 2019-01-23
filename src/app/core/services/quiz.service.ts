@@ -11,6 +11,7 @@ import { QuizItemAnswerResponse, QuizItemResponse, QuizMetaResponse } from '../a
 import { ApiService } from '../api/api.service';
 import { QuizSession } from '../types/quiz-session';
 import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
+import { ItemChoices } from '../../store';
 
 function arrayToMap<K, T extends { id: K }>(arr: T[]): Map<K, T> {
     return arr.reduce((map: Map<K, T>, el: T) => map.set(el.id, el), new Map<K, T>());
@@ -54,7 +55,7 @@ export class QuizService {
         );
     }
 
-    loadItem(id: ItemId): Observable<{item: QuizItem, choices: Map<ChoiceId, QuizItemChoice>}> {
+    loadItem(id: ItemId): Observable<{item: QuizItem, choices: ItemChoices}> {
         return this.apiService.get<QuizItemResponse>(`/items/${encodeURIComponent(id)}`).pipe(
             map((res) => {
                 const item = { ...res, answered: false };
