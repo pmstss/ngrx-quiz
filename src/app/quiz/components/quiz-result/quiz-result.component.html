@@ -1,11 +1,11 @@
 <div class="container" *ngIf="quizState$ | async as quizState else loading">
     <div class="jumbotron">
-        <h1 class="display-4">Your score: {{quizState.score}}</h1>
+        <h1 class="display-4">Your score: {{quizState.score}} ({{quizState.score / quizState.totalQuestions | percent: '1.0-2'}})</h1>
         <p class="lead">
             Quiz finished.
         </p>
         <hr class="my-4"/>
-        <p>Congratulation! This is very good result!</p>
+        <p>You are awesome!</p>
         <div class="text-center">
             <a class="btn btn-outline-primary btn-lg" routerLink="./" (click)="reset()">Take quiz again</a>
         </div>
