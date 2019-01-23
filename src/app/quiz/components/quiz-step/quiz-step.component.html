@@ -1,11 +1,12 @@
 <div class="container" *ngIf="quizState$ | async as quizState">
-    <nb-card *ngIf="itemState$ | async as itemState else loading">
-        <nb-card-header>
-            <div class="lead float-right">Score: {{quizState.score}}</div>
-            <div class="lead">
+    <nb-card *ngIf="itemState$ | async as itemState else loading"
+            [status]="itemState.correct ? 'success' : (itemState.wrong ? 'danger': '')">
+        <nb-card-header class="d-flex justify-content-between">
+            <span>
                 Question {{quizState.step}} from {{quizState.totalQuestions}}
                 (left: {{quizState.totalQuestions - quizState.answers.size}})
-            </div>
+            </span>
+            <span>Score: {{quizState.score}}</span>
         </nb-card-header>
 
         <nb-card-body>
@@ -15,8 +16,9 @@
                 <div *ngFor="let choice of itemState.choicesStatus">
                     <div class="choice d-flex align-items-center mt-3 py-3" [ngClass]="{
                             'checked': !itemState.answered && choice.checked,
+                            'text-success': choice.correct && !choice.semiCorrect,
                             'text-danger': choice.wrong,
-                            'text-success': choice.correct
+                            'text-warning': choice.semiCorrect
                         }" (click)="toggleChoice(choice.id)">
                         <i class="fa mx-3" [ngClass]="{'fa-check': !choice.wrong, 'fa-times': choice.wrong}"></i>
                         <span>{{choice.text}}</span>

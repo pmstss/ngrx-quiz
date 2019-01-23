@@ -37,9 +37,12 @@
         border-radius: nb-theme(radius);
         opacity: 0.8;
 
-
-        &.text-success, &.text-danger {
+        &.text-success, &.text-danger, &.text-warning {
             font-weight: bold;
+
+            .fa {
+                color: inherit;
+            }
         }
 
         &.text-success {
@@ -50,13 +53,12 @@
             border-color: nb-theme(color-danger);
         }
 
+        &.text-warning {
+            border-color: nb-theme(color-warning);
+        }
+
         &.checked .fa {
             color: nb-theme(color-info);
         }
-    }
-
-    .choices--answered .choice.text-success .fa,
-    .choices--answered .choice.text-danger .fa {
-        color: inherit;
     }
 }
