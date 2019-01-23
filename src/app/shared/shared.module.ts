@@ -22,6 +22,6 @@ import { ThemeSwitcherListComponent } from './components/themes-switcher-list/th
         NbContextMenuModule
     ],
     entryComponents: [ThemeSwitcherListComponent],
-    exports: [HeaderComponent, LoaderComponent, BackLinkComponent]
+    exports: [CommonModule, HeaderComponent, LoaderComponent, BackLinkComponent]
 })
 export class SharedModule { }
