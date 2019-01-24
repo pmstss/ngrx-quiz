@@ -1,14 +1,11 @@
 import { QuizMeta, QuizItem, ChoiceId, ItemId, QuizItemChoice, QuizItemChoiceAnswer, QuizItemAnswer } from '../../core';
 
 export type QuizItems = Map<ItemId, QuizItem>;
-export type ItemChoices = Map<ChoiceId, QuizItemChoice>;
-export type QuizChoices = Map<ItemId, ItemChoices>;
 export type QuizAnswers = Map<ItemId, QuizItemAnswer>;
 
 interface QuizStateProgress {
     step: number;
     items: QuizItems;
-    choices: QuizChoices;
     answers: QuizAnswers;
 }
 
@@ -35,6 +32,5 @@ export interface QuizItemStatus extends QuizItem {
 export const initialQuizState: QuizStateProgress = {
     step: 1,
     items: new Map<ItemId, QuizItem>(),
-    choices: new Map<ItemId, ItemChoices>(),
     answers: new Map<ItemId, QuizItemAnswer>()
 };

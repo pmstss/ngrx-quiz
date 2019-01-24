@@ -14,7 +14,7 @@ import {
     ActionResetQuizSuccess, ActionResetQuizError
 } from './quiz.actions';
 import { AppState } from '../app.state';
-import { selectQuizActiveItem, selectActiveItemChoices, selectQuizState } from './quiz.selectors';
+import { selectQuizActiveItem, selectQuizState, selectActiveItemAnswer } from './quiz.selectors';
 import { QuizState } from './quiz.state';
 
 @Injectable()
@@ -27,8 +27,8 @@ export class QuizEffects {
     loadQuizMeta$ = this.actions$.pipe(
         ofType(QuizActionTypes.LOAD_QUIZ),
         switchMap((action: Action) => {
-            return this.quizService.loadQuizMeta((<ActionLoadQuiz>action).payload.quizName).pipe(
-                map(res => new ActionLoadQuizSuccess(res)),
+            return this.quizService.loadQuiz((<ActionLoadQuiz>action).payload.quizName).pipe(
+                map(quiz => new ActionLoadQuizSuccess({ quiz })),
                 catchError(error => of(new ActionLoadQuizError(error)))
             );
         })
@@ -43,10 +43,9 @@ export class QuizEffects {
             const id = appState.quiz.itemIds[payload.step - 1];
             const item = appState.quiz.items.get(id);
             return item ? of(new ActionLoadItemSuccess({
-                item,
-                choices: appState.quiz.choices.get(id)
+                item
             })) : this.quizService.loadItem(id).pipe(
-                map(res => new ActionLoadItemSuccess(res)),
+                map(item => new ActionLoadItemSuccess({ item })),
                 catchError(error => of(new ActionLoadItemError(error)))
             );
         })
@@ -57,10 +56,11 @@ export class QuizEffects {
         ofType(QuizActionTypes.SUBMIT_ANSWER),
         withLatestFrom(this.appStore),
         switchMap(([action, appState]: [Action, AppState]) => {
+            const choices = selectActiveItemAnswer(appState).choiceAnswers;
             return this.quizService.submitAnswer(
                 selectQuizState(appState).id,
                 selectQuizActiveItem(appState).id,
-                new Set<ChoiceId>([...selectActiveItemChoices(appState).values()].filter(c => c.checked).map(c => c.id))
+                new Set<ChoiceId>([...choices.keys()].filter(id => choices.get(id).checked))
             ).pipe(
                 map(answer => new ActionSubmitAnswerSuccess({ answer })),
                 catchError(error => of(new ActionSubmitAnswerError(error)))

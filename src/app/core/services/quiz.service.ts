@@ -5,13 +5,11 @@ import { map, catchError } from 'rxjs/operators';
 import { QuizItem } from '../types/quiz-item';
 import { QuizMeta, QuizMetaListItem } from '../types/quiz-meta';
 import { ChoiceId, ItemId, QuizId } from '../types/id';
-import { QuizItemChoice } from '../types/quiz-item-choice';
 import { QuizItemAnswer } from '../types/quiz-item-answer';
 import { QuizItemAnswerResponse, QuizItemResponse, QuizMetaResponse } from '../api/api.types';
 import { ApiService } from '../api/api.service';
 import { QuizSession } from '../types/quiz-session';
 import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
-import { ItemChoices } from '../../store';
 import { TopScore } from '../types/top-score';
 
 function arrayToMap<K, T extends { id: K }>(arr: T[]): Map<K, T> {
@@ -27,7 +25,7 @@ export class QuizService {
         return this.apiService.get<QuizMetaListItem[]>('/quizes');
     }
 
-    loadQuizMeta(shortName: string): Observable<{quizMeta: QuizMeta, quizSession: QuizSession}> {
+    loadQuiz(shortName: string): Observable<QuizMeta & QuizSession> {
         return this.apiService.get<QuizMetaResponse>(`/quizes/${encodeURIComponent(shortName)}`).pipe(
             catchError((err) => {
                 // TODO ### centralized handling?
@@ -40,33 +38,22 @@ export class QuizService {
             map((res) => {
                 const answers = res.quizState.answers;
                 return {
-                    quizMeta: res.quizMeta,
-                    quizSession: {
-                        score: res.quizState.score,
-                        answers: Object.keys(answers).reduce((map, itemId) => {
-                            const itemAnswer = answers[itemId];
-                            return map.set(itemId, {
-                                choiceAnswers: arrayToMap(itemAnswer.choices),
-                                correct: itemAnswer.correct
-                            });
-                        }, new Map<ItemId, QuizItemAnswer>())
-                    }
+                    ...res.quizMeta,
+                    answers: Object.keys(answers).reduce((map, itemId) => {
+                        const itemAnswer = answers[itemId];
+                        return map.set(itemId, {
+                            choiceAnswers: arrayToMap(itemAnswer.choices),
+                            correct: itemAnswer.correct,
+                            submitted: true
+                        });
+                    }, new Map<ItemId, QuizItemAnswer>())
                 };
             })
         );
     }
 
-    loadItem(id: ItemId): Observable<{item: QuizItem, choices: ItemChoices}> {
-        return this.apiService.get<QuizItemResponse>(`/items/${encodeURIComponent(id)}`).pipe(
-            map((res) => {
-                const item = { ...res, answered: false };
-                delete item.choices;
-                return {
-                    item,
-                    choices: arrayToMap<ChoiceId, QuizItemChoice>(res.choices)
-                };
-            })
-        );
+    loadItem(id: ItemId): Observable<QuizItem> {
+        return this.apiService.get<QuizItemResponse>(`/items/${encodeURIComponent(id)}`);
     }
 
     submitAnswer(quizId: QuizId, itemId: ItemId, choiceIds: Set<ChoiceId>): Observable<QuizItemAnswer> {
@@ -76,7 +63,8 @@ export class QuizService {
         }).pipe(
             map(res => ({
                 choiceAnswers: arrayToMap<ChoiceId, QuizItemChoiceAnswer>(res.choices),
-                correct: res.correct
+                correct: res.correct,
+                submitted: true
             }))
         );
     }

@@ -5,5 +5,6 @@ export type ChoiceAnswers = Map<ChoiceId, QuizItemChoiceAnswer>;
 
 export interface QuizItemAnswer {
     choiceAnswers: ChoiceAnswers;
-    correct: boolean;
+    submitted: boolean;
+    correct?: boolean;
 }

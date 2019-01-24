@@ -1,7 +1,7 @@
 import { createSelector } from '@ngrx/store';
-import { QuizItem, QuizItemChoiceAnswer, QuizId, ItemId } from '../../core';
-import { QuizState, QuizStateNormalized, QuizAnswers, QuizChoices,
-    QuizItemStatus, QuizItems, ItemChoices, QuizStateCalculated } from './quiz.state';
+import { QuizItem, QuizId, ItemId } from '../../core';
+import { QuizState, QuizStateNormalized, QuizAnswers,
+    QuizItemStatus, QuizItems, QuizStateCalculated } from './quiz.state';
 import { AppState, selectQuizStateNormalized } from '../app.state';
 import { QuizItemAnswer } from 'src/app/core/types/quiz-item-answer';
 
@@ -35,15 +35,17 @@ const selectQuizAnswers = createSelector<AppState, QuizStateNormalized, QuizAnsw
     (state: QuizStateNormalized) => state && state.answers
 );
 
-const selectQuizChoices = createSelector<AppState, QuizStateNormalized, QuizChoices>(
-    selectQuizStateNormalized,
-    (state: QuizStateNormalized) => state && state.choices
-);
-
 const selectQuizFinished = createSelector<AppState, number, QuizAnswers, boolean>(
     selectQuizTotalQuestions,
     selectQuizAnswers,
-    (total: number, answers: QuizAnswers) => answers && total === answers.size
+    // (total: number, answers: QuizAnswers) => answers &&
+    //     total === [...answers.values()].filter(a => a.submitted).length
+    (total: number, answers: QuizAnswers) => {
+        if (!answers) {
+            return false;
+        }
+        return total === [...answers.values()].filter(a => a.submitted).length;
+    }
 );
 
 const selectQuizStarted = createSelector<AppState, QuizAnswers, boolean>(
@@ -58,9 +60,10 @@ export const selectQuizActiveItem = createSelector<AppState, QuizItems, ItemId[]
     (items: QuizItems, itemIds: ItemId[], step: number) => items && itemIds && items.get(itemIds[step - 1])
 );
 
-const selectQuizActiveItemId = createSelector<AppState, QuizItem, ItemId>(
-    selectQuizActiveItem,
-    (item: QuizItem) => item && item.id
+const selectQuizActiveItemId = createSelector<AppState, ItemId[], number, ItemId>(
+    selectQuizItemIds,
+    selectQuizStep,
+    (itemIds: ItemId[], step: number) => itemIds && itemIds[step - 1]
 );
 
 // TODO ### ngrx 7 parameterized selector for answered?
@@ -76,9 +79,10 @@ export const selectQuizNextStep = createSelector<AppState, ItemId[], number, num
         }
 
         if (!finished) {
-            for (let step = startStep + 1; step <= startStep + total + 1; ++step) {
-                if (!answers.has(itemIds[step - 1])) {
-                    return step;
+            for (let idx = startStep; idx <= startStep + total; ++idx) {
+                const answer = answers.get(itemIds[idx % total]);
+                if (!answer || !answer.submitted) {
+                    return idx % total + 1;
                 }
             }
         }
@@ -86,13 +90,7 @@ export const selectQuizNextStep = createSelector<AppState, ItemId[], number, num
     }
 );
 
-export const selectActiveItemChoices = createSelector<AppState, ItemId, QuizChoices, ItemChoices>(
-    selectQuizActiveItemId,
-    selectQuizChoices,
-    (itemId: ItemId, choices: QuizChoices) => choices && choices.get(itemId)
-);
-
-const selectActiveItemAnswers = createSelector<AppState, ItemId, QuizAnswers, QuizItemAnswer>(
+export const selectActiveItemAnswer = createSelector<AppState, ItemId, QuizAnswers, QuizItemAnswer>(
     selectQuizActiveItemId,
     selectQuizAnswers,
     (itemId: ItemId, answers: QuizAnswers) => answers && answers.get(itemId)
@@ -101,7 +99,7 @@ const selectActiveItemAnswers = createSelector<AppState, ItemId, QuizAnswers, Qu
 export const selectQuizScore = createSelector<AppState, QuizAnswers, number>(
     selectQuizAnswers,
     (answers: QuizAnswers) => answers &&
-        [...answers.values()].reduce((score, answer) => score + (answer.correct ? 1 : 0), 0)
+        [...answers.values()].reduce((score, answer) => score + (answer.submitted && answer.correct ? 1 : 0), 0)
 );
 
 export const selectQuizStateCalculated
@@ -129,30 +127,28 @@ export const selectQuizState = createSelector<AppState, QuizStateNormalized, Qui
     })
 );
 
-export const selectActiveItemStatus =
-        createSelector<AppState, QuizItem, ItemChoices, QuizItemAnswer, QuizItemStatus>(
+export const selectActiveItemStatus = createSelector<AppState, QuizItem, QuizItemAnswer, QuizItemStatus>(
     selectQuizActiveItem,
-    selectActiveItemChoices,
-    selectActiveItemAnswers,
-    (item: QuizItem, choices: ItemChoices, itemAnswer: QuizItemAnswer) => {
+    selectActiveItemAnswer,
+    (item: QuizItem, itemAnswer: QuizItemAnswer) => {
         if (!item) {
             return null;
         }
 
-        const answered = !!itemAnswer;
+        const answered = itemAnswer && itemAnswer.submitted;
         return {
             ...item,
             answered,
             correct: answered && itemAnswer.correct,
             wrong: answered && !itemAnswer.correct,
-            choicesStatus: [...choices.keys()].map((choiceId) => {
-                const choiceAnswer = answered && itemAnswer.choiceAnswers.get(choiceId);
-                const checked = !!choiceAnswer && choiceAnswer.checked;
+            choicesStatus: item.choices.map((choice) => {
+                const choiceAnswer = itemAnswer.choiceAnswers.get(choice.id);
+                const active = answered && choiceAnswer.checked;
                 return {
-                    ...choices.get(choiceId),
+                    ...choice,
                     ...choiceAnswer,
-                    wrong: checked && !choiceAnswer.correct,
-                    semiCorrect: checked && choiceAnswer.correct && !itemAnswer.correct
+                    wrong: active && !choiceAnswer.correct,
+                    semiCorrect: active && choiceAnswer.correct && !itemAnswer.correct
                 };
             })
         };

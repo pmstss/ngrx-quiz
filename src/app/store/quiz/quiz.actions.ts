@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
 import { ChoiceId, QuizMeta, QuizItem, QuizId, QuizItemAnswer, QuizSession } from '../../core';
-import { ItemChoices } from './quiz.state';
 
 export enum QuizActionTypes {
     LOAD_QUIZ = '[Quiz] Load Quiz',
@@ -25,7 +24,7 @@ export class ActionLoadQuiz implements Action {
 
 export class ActionLoadQuizSuccess implements Action {
     readonly type = QuizActionTypes.LOAD_QUIZ_SUCCESS;
-    constructor(public payload: { quizMeta: QuizMeta, quizSession: QuizSession }) {}
+    constructor(public payload: { quiz: QuizMeta & QuizSession }) {}
 }
 
 export class ActionLoadQuizError implements Action {
@@ -40,7 +39,7 @@ export class ActionLoadItem implements Action {
 
 export class ActionLoadItemSuccess implements Action {
     readonly type = QuizActionTypes.LOAD_ITEM_SUCCESS;
-    constructor(public payload: { item: QuizItem; choices: ItemChoices}) {}
+    constructor(public payload: { item: QuizItem } ) {}
 }
 
 export class ActionLoadItemError implements Action {
