@@ -11,13 +11,14 @@
         </div>
     </div>
 
-    <div class="text-center">
-        <span *ngFor="let itemId of quizState.itemIds; let i = index">
-            <a *ngIf="quizState.step !== i + 1" routerLink="/quiz/{{quizState.shortName}}/{{i + 1}}">
-                {{i + 1}}
-            </a>
-            <span *ngIf="quizState.step === i + 1">{{i + 1}}</span>
-        </span>
+    <h2 class="text-info text-center">Quiz overview</h2>
+    <div *ngFor="let itemId of quizState.itemIds; let i = index">
+        <nb-card [accent]="quizState.answers.get(itemId).correct ? 'success' : 'danger'">
+            <nb-card-header class="d-flex justify-content-between">
+                <span>Question {{i + 1}}</span>
+                <a class="btn btn-xs btn-outline-primary" routerLink="/quiz/{{quizState.shortName}}/{{i + 1}}">Go to item</a>
+            </nb-card-header>
+        </nb-card>
     </div>
 </div>
 
