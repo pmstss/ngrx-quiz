@@ -74,11 +74,11 @@ export class QuizService {
     }
 
     resetQuiz(quizId: QuizId): Observable<{}> {
-        return this.apiService.post<{}>(`/reset/${quizId}`, {});
+        return this.apiService.post<{}>(`/quizes/reset/${quizId}`, {});
     }
 
     loadTopScores(quizId: QuizId): Observable<TopScore[]> {
-        return this.apiService.get<TopScore[]>(`/top/${quizId}`);
+        return this.apiService.get<TopScore[]>(`/quizes/top/${quizId}`);
     }
 
     loadComments(itemId: ItemId): Observable<Comment[]> {
