@@ -39,13 +39,16 @@ export class QuizMetaEditorComponent implements OnInit {
     }
 
     save(quizMeta: QuizMetaAdmin) {
+        const meta = { ...quizMeta };
+        delete meta.items;
+
         if (this.isNew(quizMeta)) {
-            this.quizAdminService.createQuiz(quizMeta).subscribe((qm: QuizMetaAdmin) => {
+            this.quizAdminService.createQuiz(meta).subscribe((qm: QuizMetaAdmin) => {
                 this.toastrService.show(`Quiz "${qm.shortName}", id: ${qm.id}`, 'Quiz created!');
                 this.router.navigate([`/admin/quiz/${qm.id}`]);
             });
         } else {
-            this.quizAdminService.updateQuiz(quizMeta).subscribe((qm: QuizMetaAdmin) => {
+            this.quizAdminService.updateQuiz(meta).subscribe((qm: QuizMetaAdmin) => {
                 this.toastrService.show(`Quiz "${qm.shortName}", id: ${qm.id}`, 'Quiz updated!');
                 this.form.form.markAsPristine();
                 this.changeDetectorRef.detectChanges();
