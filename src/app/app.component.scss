@@ -4,7 +4,6 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #f4f3ef;
 
     /deep/  {
         .btn {
@@ -70,6 +69,12 @@
             border-style: solid;
         }
 
+        .ql-editor.ql-blank::before {
+            color: nb-theme(color-fg-heading);
+            font-size: 1.1rem;
+            font-style: normal;
+        }
+
         .ql-editor {
             font-size: 1.25rem !important;
             max-height: 30vh;
@@ -102,6 +107,10 @@
         .ql-toolbar.ql-snow,
         .ql-container.ql-snow {
             border-color: nb-theme(color-bg) !important;
+        }
+
+        .ql-container.ql-snow {
+            height: auto;
         }
     }
 }
