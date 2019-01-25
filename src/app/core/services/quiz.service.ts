@@ -6,7 +6,7 @@ import { QuizItem } from '../types/quiz-item';
 import { QuizMeta, QuizMetaListItem } from '../types/quiz-meta';
 import { ChoiceId, ItemId, QuizId } from '../types/id';
 import { QuizItemAnswer } from '../types/quiz-item-answer';
-import { QuizItemAnswerResponse, QuizItemResponse, QuizMetaResponse } from '../api/api.types';
+import { QuizItemAnswerResponse, QuizItemResponse } from '../api/api.types';
 import { ApiService } from '../api/api.service';
 import { QuizSession } from '../types/quiz-session';
 import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
@@ -27,7 +27,7 @@ export class QuizService {
     }
 
     loadQuiz(shortName: string): Observable<QuizMeta & QuizSession> {
-        return this.apiService.get<QuizMetaResponse>(`/quizes/${encodeURIComponent(shortName)}`).pipe(
+        return this.apiService.get<QuizMeta & QuizSession>(`/quizes/${encodeURIComponent(shortName)}`).pipe(
             catchError((err) => {
                 // TODO ### centralized handling?
                 if (err.status === 404) {
@@ -37,9 +37,9 @@ export class QuizService {
                 }
             }),
             map((res) => {
-                const answers = res.quizState.answers;
+                const answers = res.answers;
                 return {
-                    ...res.quizMeta,
+                    ...res,
                     answers: Object.keys(answers).reduce(
                         (map, itemId) => {
                             const itemAnswer = answers[itemId];
@@ -73,8 +73,8 @@ export class QuizService {
         );
     }
 
-    resetQuiz(quizId: QuizId): Observable<{}> {
-        return this.apiService.post<{}>(`/quizes/reset/${quizId}`, {});
+    resetQuiz(quizId: QuizId): Observable<void> {
+        return this.apiService.post<void>(`/quizes/reset/${quizId}`, {});
     }
 
     loadTopScores(quizId: QuizId): Observable<TopScore[]> {

@@ -16,12 +16,6 @@ export interface ResponseWrapper<T> {
 
 export interface QuizSessionResponse {
     answers: { [itemId: string]: QuizItemAnswerResponse };
-    score: number;
-}
-
-export interface QuizMetaResponse {
-    quizMeta: QuizMeta;
-    quizState: QuizSessionResponse;
 }
 
 export interface QuizItemResponse extends QuizItem {
