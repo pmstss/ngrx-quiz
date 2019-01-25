@@ -1,0 +1,11 @@
+<div *ngIf="!collapsed" class="m-3">
+    <quill-editor theme="snow" [(ngModel)]="message" [modules]="quillToolbarConfig" placeholder="Your comment...">
+    </quill-editor>
+
+    <div class="d-flex justify-content-end mt-2">
+        <button class="btn btn-xs btn-info d-flex align-items-center"
+                (click)="sendMessage()" [disabled]="!message">
+            <span class="icon nb-paper-plane"></span>Post
+        </button>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="avatar mr-4 mt-3">
+    {{ getInitials(comment) }}
+</div>
+<div class="comment w-100">
+    <div class="meta d-flex justify-content-between mb-2">
+        {{ comment.userName }}
+        <time>{{ comment.date  | date:'medium' }}</time>
+    </div>
+    <div class="text">{{ comment.text }} id: {{ comment.id }}</div>
+</div>

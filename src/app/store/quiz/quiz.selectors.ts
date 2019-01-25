@@ -60,7 +60,7 @@ export const selectQuizActiveItem = createSelector<AppState, QuizItems, ItemId[]
     (items: QuizItems, itemIds: ItemId[], step: number) => items && itemIds && items.get(itemIds[step - 1])
 );
 
-const selectQuizActiveItemId = createSelector<AppState, ItemId[], number, ItemId>(
+export const selectQuizActiveItemId = createSelector<AppState, ItemId[], number, ItemId>(
     selectQuizItemIds,
     selectQuizStep,
     (itemIds: ItemId[], step: number) => itemIds && itemIds[step - 1]

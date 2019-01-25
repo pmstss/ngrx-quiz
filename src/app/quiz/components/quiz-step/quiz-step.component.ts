@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription, combineLatest, Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Subscription, combineLatest, Observable, of, Subject, BehaviorSubject } from 'rxjs';
+import { map, filter, shareReplay, delay, take, switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import {
     AppState, ActionSubmitAnswer, ActionToggleChoice, ActionLoadItem,
-    QuizState, selectQuizState, QuizItemStatus, selectActiveItemStatus, selectQuizId
+    QuizState, selectQuizState, QuizItemStatus, selectActiveItemStatus, selectQuizId, selectQuizActiveItemId
 } from '../../../store';
-import { AutoUnsubscribe } from '../../../core';
+import { AutoUnsubscribe, QuizService } from '../../../core';
+import { Comment } from '../../../comments';
 
 @Component({
     selector: 'app-quiz-step',
@@ -19,7 +20,11 @@ export class QuizStepComponent implements OnInit {
     quizState$: Observable<QuizState>;
     itemState$: Observable<QuizItemStatus>;
 
-    constructor(private route: ActivatedRoute, private appStore: Store<AppState>) {
+    private commentsSubject = new BehaviorSubject<Comment[]>([]);
+    comments$ = this.commentsSubject.asObservable();
+    commentsExpanded = false;
+
+    constructor(private route: ActivatedRoute, private appStore: Store<AppState>, private quizService: QuizService) {
         this.quizState$ = this.appStore.select(selectQuizState);
         this.itemState$ = this.appStore.select(selectActiveItemStatus).pipe(filter(v => !!v));
     }
@@ -43,5 +48,24 @@ export class QuizStepComponent implements OnInit {
 
     toggleChoice(choiceId: string): void {
         this.appStore.dispatch(new ActionToggleChoice({ choiceId }));
+    }
+
+    loadComments() {
+        this.commentsExpanded = true;
+        this.appStore.select(selectQuizActiveItemId).pipe(
+            switchMap(id => this.quizService.loadComments(id))
+        ).subscribe((comments) => {
+            this.commentsSubject.next(comments);
+        });
+    }
+
+    addComment({ text }: {text: string}) {
+        this.itemState$.pipe(
+            take(1),
+            switchMap(state => this.quizService.postComment(state.id, text))
+        ).subscribe((res) => {
+            const comments = [res].concat(this.commentsSubject.value);
+            this.commentsSubject.next(comments);
+        });
     }
 }

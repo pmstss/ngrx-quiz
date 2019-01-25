@@ -11,6 +11,7 @@ import { ApiService } from '../api/api.service';
 import { QuizSession } from '../types/quiz-session';
 import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
 import { TopScore } from '../types/top-score';
+import { Comment } from 'src/app/comments';
 
 function arrayToMap<K, T extends { id: K }>(arr: T[]): Map<K, T> {
     return arr.reduce((map: Map<K, T>, el: T) => map.set(el.id, el), new Map<K, T>());
@@ -39,14 +40,17 @@ export class QuizService {
                 const answers = res.quizState.answers;
                 return {
                     ...res.quizMeta,
-                    answers: Object.keys(answers).reduce((map, itemId) => {
-                        const itemAnswer = answers[itemId];
-                        return map.set(itemId, {
-                            choiceAnswers: arrayToMap(itemAnswer.choices),
-                            correct: itemAnswer.correct,
-                            submitted: true
-                        });
-                    }, new Map<ItemId, QuizItemAnswer>())
+                    answers: Object.keys(answers).reduce(
+                        (map, itemId) => {
+                            const itemAnswer = answers[itemId];
+                            return map.set(itemId, {
+                                choiceAnswers: arrayToMap(itemAnswer.choices),
+                                correct: itemAnswer.correct,
+                                submitted: true
+                            });
+                        },
+                        new Map<ItemId, QuizItemAnswer>()
+                    )
                 };
             })
         );
@@ -75,5 +79,15 @@ export class QuizService {
 
     loadTopScores(quizId: QuizId): Observable<TopScore[]> {
         return this.apiService.get<TopScore[]>(`/top/${quizId}`);
+    }
+
+    loadComments(itemId: ItemId): Observable<Comment[]> {
+        return this.apiService.get<Comment[]>(`/comments/item/${itemId}`);
+    }
+
+    postComment(itemId: ItemId, text: string): Observable<Comment> {
+        return this.apiService.post<Comment>(`/comments/item/${itemId}`, {
+            text
+        });
     }
 }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { NbCardModule } from '@nebular/theme';
 import { SharedModule } from '../shared';
+import { CommentsModule } from '../comments';
 import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
 import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
 import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
@@ -31,6 +32,7 @@ import { QuizGuard } from './guards/quiz.guard';
         }]),
         QuillModule,
         NbCardModule,
+        CommentsModule,
         SharedModule
     ],
     providers: [QuizGuard, QuizFinishedGuard]

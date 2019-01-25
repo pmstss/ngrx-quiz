@@ -1,0 +1,20 @@
+<div *ngIf="comments$ | async as comments else loading">
+    <div class="header d-flex justify-content-between p-2">
+        <a routerLink="./" (click)="collapsed = !collapsed" class="d-flex align-items-center">
+            <i [ngClass]="collapsed ? 'nb-arrow-dropright' : 'nb-arrow-dropdown'"></i>
+            Write comment
+        </a>
+        <span>Comments ({{comments.length}})</span>
+    </div>
+
+    <app-comment-form [collapsed]="collapsed" (message)="onMessage($event)"></app-comment-form>
+
+    <div class="comments px-2 py-3">
+        <app-comment-message *ngFor="let comment of comments" [comment]="comment"></app-comment-message>
+        <p class="no-comments" *ngIf="!comments?.length">No comments yet.</p>
+    </div>
+</div>
+
+<ng-template #loading>
+    Loading comments...
+</ng-template>

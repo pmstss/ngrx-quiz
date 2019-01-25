@@ -1,0 +1,29 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+    font-size: nb-theme(chat-font-size);
+    background: nb-theme(chat-bg);
+    border-radius: nb-theme(chat-border-radius);
+    box-shadow: nb-theme(chat-shadow);
+
+    .header {
+        color: nb-theme(chat-fg-text);
+        border-bottom: 1px solid nb-theme(chat-separator);
+        border-top-left-radius: nb-theme(chat-border-radius);
+        border-top-right-radius: nb-theme(chat-border-radius);
+        font-weight: nb-theme(font-weight-bolder);
+    }
+
+    .comments {
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        flex-shrink: 0;
+        flex-direction: column;
+    }
+
+    .no-comments {
+        font-size: 0.875rem;
+        text-align: center;
+    }
+}

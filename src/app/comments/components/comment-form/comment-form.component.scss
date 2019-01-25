@@ -1,0 +1,13 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+    /deep/ .ql-editor,
+    /deep/ quill-editor.ng-dirty {
+        color: nb-theme(chat-form-fg);
+        border: 1px solid nb-theme(chat-form-border);
+    }
+
+    .icon {
+        font-size: 1.5rem;
+    }
+}

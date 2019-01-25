@@ -1,0 +1,37 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: row;
+
+    .avatar {
+        width: 3rem;
+        height: 3rem;
+        line-height: 3rem;
+        color: white;
+        background-color: nb-theme(chat-message-avatar-bg);
+        border-radius: 50%;
+        text-align: center;
+    }
+
+    .comment {
+        .meta {
+            font-size: 0.875rem;
+            color: nb-theme(chat-message-sender-fg);
+        }
+
+        .text {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background: nb-theme(chat-message-bg);
+            color: nb-theme(chat-message-fg);
+        }
+
+        .meta, .text {
+            word-wrap: break-word;
+            word-break: break-all;
+            max-width: 100%;
+        }
+    }
+}
