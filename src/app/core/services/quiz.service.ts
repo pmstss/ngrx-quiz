@@ -61,7 +61,7 @@ export class QuizService {
     }
 
     submitAnswer(quizId: QuizId, itemId: ItemId, choiceIds: Set<ChoiceId>): Observable<QuizItemAnswer> {
-        return this.apiService.post<QuizItemAnswerResponse>(`/answers/${itemId}`, {
+        return this.apiService.post<QuizItemAnswerResponse>(`/items/answers/${itemId}`, {
             quizId,
             choiceIds: [...choiceIds]
         }).pipe(
