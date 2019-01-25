@@ -10,14 +10,27 @@ export type Message = Partial<NbToastrConfig> & {
 
 @Injectable()
 export class MessageService {
+    private static MAX_MESSAGE_LENGTH = 200;
+    private static MAX_TITLE_LENGTH = 50;
+
     private subject = new Subject<Message>();
 
+    private static truncate(str: string, maxLength: number) {
+        // tslint:disable-next-line prefer-template
+        return str && str.length > maxLength ? str.substr(0, maxLength) + '...' : str;
+    }
+
     publish(msg: Message) {
-        this.subject.next(msg);
+        this.subject.next({
+            ...msg,
+            title: MessageService.truncate(msg.title, MessageService.MAX_TITLE_LENGTH),
+            message: MessageService.truncate(msg.message, MessageService.MAX_MESSAGE_LENGTH)
+        });
     }
 
     error(msg: Message) {
-        this.subject.next({
+        console.error(msg.message);
+        this.publish({
             ...msg,
             status: NbToastStatus.DANGER,
             duration: 0
@@ -26,7 +39,7 @@ export class MessageService {
 
     warn(message: string, title: string = 'Warning') {
         console.warn(message);
-        this.subject.next({
+        this.publish({
             title,
             message,
             status: NbToastStatus.WARNING,
@@ -35,6 +48,6 @@ export class MessageService {
     }
 
     get messages$(): Observable<Message> {
-        return this.subject;
+        return this.subject.asObservable();
     }
 }
