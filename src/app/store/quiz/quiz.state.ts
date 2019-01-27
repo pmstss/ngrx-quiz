@@ -1,7 +1,6 @@
-import { QuizMeta, QuizItem, ChoiceId, ItemId, QuizItemChoice, QuizItemChoiceAnswer, QuizItemAnswer } from '../../core';
-
-export type QuizItems = Map<ItemId, QuizItem>;
-export type QuizAnswers = Map<ItemId, QuizItemAnswer>;
+import { QuizMeta, QuizItem, ItemId, QuizItemChoice, QuizItemChoiceAnswer,
+    QuizItemAnswer, QuizItems, QuizAnswers
+} from '../../core';
 
 interface QuizStateProgress {
     step: number;

@@ -1,9 +1,7 @@
 import { createSelector } from '@ngrx/store';
-import { QuizItem, QuizId, ItemId } from '../../core';
-import { QuizState, QuizStateNormalized, QuizAnswers,
-    QuizItemStatus, QuizItems, QuizStateCalculated } from './quiz.state';
+import { QuizId, ItemId, QuizItem, QuizAnswers, QuizItems, QuizItemAnswer } from '../../core';
+import { QuizState, QuizStateNormalized, QuizItemStatus, QuizStateCalculated } from './quiz.state';
 import { AppState, selectQuizStateNormalized } from '../app.state';
-import { QuizItemAnswer } from 'src/app/core/types/quiz-item-answer';
 
 export const selectQuizId = createSelector<AppState, QuizStateNormalized, QuizId>(
     selectQuizStateNormalized,

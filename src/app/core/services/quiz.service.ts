@@ -2,16 +2,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { QuizItem } from '../types/quiz-item';
-import { QuizMeta, QuizMetaListItem } from '../types/quiz-meta';
-import { ChoiceId, ItemId, QuizId } from '../types/id';
-import { QuizItemAnswer } from '../types/quiz-item-answer';
 import { QuizItemAnswerResponse, QuizItemResponse } from '../api/api.types';
 import { ApiService } from '../api/api.service';
-import { QuizSession } from '../types/quiz-session';
-import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
-import { TopScore } from '../types/top-score';
-import { Comment } from 'src/app/comments';
+import { QuizId, ItemId, ChoiceId, QuizMeta, QuizMetaListItem, QuizItem,
+    QuizItemAnswer, QuizItemChoiceAnswer, QuizSession, TopScore, Comment } from '../types/common';
 
 function arrayToMap<K, T extends { id: K }>(arr: T[]): Map<K, T> {
     return arr.reduce((map: Map<K, T>, el: T) => map.set(el.id, el), new Map<K, T>());

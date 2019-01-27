@@ -1,8 +1,8 @@
 import { Component, AfterViewInit, Input, ContentChildren,
     QueryList, OnInit, EventEmitter, Output } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Comment } from '../../../core';
 import { CommentMessageComponent } from '../comment-message/comment-message.component';
-import { Comment } from '../../comment';
 
 @Component({
     selector: 'app-comments',

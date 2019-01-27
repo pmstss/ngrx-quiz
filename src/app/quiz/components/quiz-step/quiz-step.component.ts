@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription, combineLatest, Observable, of, Subject, BehaviorSubject } from 'rxjs';
-import { map, filter, shareReplay, delay, take, switchMap } from 'rxjs/operators';
+import { map, filter, take, switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import {
     AppState, ActionSubmitAnswer, ActionToggleChoice, ActionLoadItem,
     QuizState, selectQuizState, QuizItemStatus, selectActiveItemStatus, selectQuizId, selectQuizActiveItemId
 } from '../../../store';
-import { AutoUnsubscribe, QuizService } from '../../../core';
-import { Comment } from '../../../comments';
+import { AutoUnsubscribe, QuizService, Comment } from '../../../core';
 
 @Component({
     selector: 'app-quiz-step',

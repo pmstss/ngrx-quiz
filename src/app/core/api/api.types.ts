@@ -1,7 +1,4 @@
-import { QuizMeta } from '../types/quiz-meta';
-import { QuizItem } from '../types/quiz-item';
-import { QuizItemChoiceAnswer } from '../types/quiz-item-choice-answer';
-import { QuizItemChoice } from '../types/quiz-item-choice';
+import { QuizItem, QuizItemChoice, QuizItemChoiceAnswer } from '../types/common';
 
 /*** Internal data types that should be used only inside QuizService
  *  External data types uses Maps instead of plain objects/arrays;

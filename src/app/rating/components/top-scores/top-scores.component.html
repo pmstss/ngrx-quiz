@@ -21,7 +21,7 @@
         <tbody>
             <tr *ngFor="let topScore of topScores; let index = index">
                 <th scope="row">{{index + 1}}</th>
-                <td>{{topScore.name}}</td>
+                <td>{{topScore.userName}}</td>
                 <td>{{topScore.score | percent: '1.0-2'}}</td>
                 <td>{{topScore.date | date : 'mediumDate'}}</td>
             </tr>

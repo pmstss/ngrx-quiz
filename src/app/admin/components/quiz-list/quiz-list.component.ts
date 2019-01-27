@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { QuizMeta, QuizService } from '../../../core';
+import { QuizService, QuizMetaListItem } from '../../../core';
 
 @Component({
     selector: 'app-quiz-list',
@@ -9,7 +9,7 @@ import { QuizMeta, QuizService } from '../../../core';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizListComponent implements OnInit {
-    quizList$: Observable<QuizMeta[]>;
+    quizList$: Observable<QuizMetaListItem[]>;
 
     constructor(private quizService: QuizService) {
     }
