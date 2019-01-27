@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { QuizItemAnswerResponse, QuizItemResponse } from '../api/api.types';
-import { ApiService } from '../api/api.service';
 import { QuizId, ItemId, ChoiceId, QuizMeta, QuizMetaListItem, QuizItem,
-    QuizItemAnswer, QuizItemChoiceAnswer, QuizSession, TopScore, Comment } from '../types/common';
+    QuizItemChoiceAnswer, QuizSession, TopScore, Comment, QuizItemAnswer } from 'ngrx-quiz-common';
+import { ItemAnswerStatus, AnswersState } from '../../store';
+import { ApiService } from '../api/api.service';
 
 function arrayToMap<K, T extends { id: K }>(arr: T[]): Map<K, T> {
     return arr.reduce((map: Map<K, T>, el: T) => map.set(el.id, el), new Map<K, T>());
@@ -20,7 +20,7 @@ export class QuizService {
         return this.apiService.get<QuizMetaListItem[]>('/quizes');
     }
 
-    loadQuiz(shortName: string): Observable<QuizMeta & QuizSession> {
+    loadQuiz(shortName: string): Observable<QuizMeta & AnswersState> {
         return this.apiService.get<QuizMeta & QuizSession>(`/quizes/${encodeURIComponent(shortName)}`).pipe(
             catchError((err) => {
                 // TODO ### centralized handling?
@@ -43,7 +43,7 @@ export class QuizService {
                                 submitted: true
                             });
                         },
-                        new Map<ItemId, QuizItemAnswer>()
+                        new Map<ItemId, ItemAnswerStatus>()
                     )
                 };
             })
@@ -51,15 +51,15 @@ export class QuizService {
     }
 
     loadItem(id: ItemId): Observable<QuizItem> {
-        return this.apiService.get<QuizItemResponse>(`/items/${encodeURIComponent(id)}`);
+        return this.apiService.get<QuizItem>(`/items/${encodeURIComponent(id)}`);
     }
 
-    submitAnswer(quizId: QuizId, itemId: ItemId, choiceIds: Set<ChoiceId>): Observable<QuizItemAnswer> {
-        return this.apiService.post<QuizItemAnswerResponse>(`/items/answers/${itemId}`, {
+    submitAnswer(quizId: QuizId, itemId: ItemId, choiceIds: Set<ChoiceId>): Observable<ItemAnswerStatus> {
+        return this.apiService.post<QuizItemAnswer>(`/items/answers/${itemId}`, {
             quizId,
             choiceIds: [...choiceIds]
         }).pipe(
-            map(res => ({
+            map((res): ItemAnswerStatus => ({
                 choiceAnswers: arrayToMap<ChoiceId, QuizItemChoiceAnswer>(res.choices),
                 correct: res.correct,
                 submitted: true

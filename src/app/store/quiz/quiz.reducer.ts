@@ -1,8 +1,6 @@
 import { Action } from '@ngrx/store';
-import {
-    QuizActionTypes, ActionLoadItem, ActionToggleChoice, ActionLoadQuizSuccess,
-    ActionLoadItemSuccess, ActionSubmitAnswerSuccess
-} from './quiz.actions';
+import { QuizActionTypes, ActionLoadItem, ActionToggleChoice, ActionLoadQuizSuccess,
+    ActionLoadItemSuccess, ActionSubmitAnswerSuccess } from './quiz.actions';
 import { initialQuizState, QuizStateNormalized } from './quiz.state';
 import { selectQuizNextStep, selectQuizActiveItem, selectActiveItemAnswer } from './quiz.selectors';
 import { ChoiceId, QuizItemChoiceAnswer } from 'src/app/core';
@@ -57,11 +55,15 @@ const reducers = {
         const { item }  = (<ActionLoadItemSuccess>action).payload;
         const answer = selectActiveItemAnswer(getRootState(state)) || {
             submitted: false,
+            correct: false,
             choiceAnswers: item.choices.reduce(
                 (choiceAnswers, ch) => {
                     return choiceAnswers.set(ch.id, {
                         id: ch.id,
-                        checked: false
+                        checked: false,
+                        correct: false,
+                        explanation: null,
+                        popularity: 0
                     });
                 },
                 new Map<ChoiceId, QuizItemChoiceAnswer>()

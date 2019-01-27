@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { QuizMetaBasic, QuizMetaAdmin } from 'ngrx-quiz-common';
+import { QuizMetaBasic, QuizMetaAdmin, QuizItemAdmin } from 'ngrx-quiz-common';
 import { QuizId, QuizItem, ItemId, ApiService } from '../../core';
-
-import { QuizItemAdmin } from '../types/quiz-item-admin'; // TODO ###
 
 @Injectable()
 export class QuizAdminService {

@@ -4,11 +4,10 @@ import { NgForm } from '@angular/forms';
 import { Subscription, from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
-import { AutoUnsubscribe, QuizId } from '../../../core';
+import { QuizId, QuizItemAdmin, QuizItemChoiceAdmin } from 'ngrx-quiz-common';
+import { AutoUnsubscribe } from '../../../core';
 import { DialogService } from '../../../dialog';
 import { QuizAdminService } from '../../services/quiz-admin.service';
-import { QuizItemAdmin } from '../../types/quiz-item-admin';
-import { QuizItemChoiceAdmin } from '../../types/quiz-item-choice-admin';
 import { quillToolbarConfig } from '../quill-config';
 
 @Component({

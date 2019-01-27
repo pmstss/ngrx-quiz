@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import { ChoiceId, QuizMeta, QuizItem, QuizId, QuizItemAnswer, QuizSession } from '../../core';
+import { ChoiceId, QuizMeta, QuizItem, QuizId } from 'ngrx-quiz-common';
+import { ItemAnswerStatus, AnswersState } from './quiz.state';
 
 export enum QuizActionTypes {
     LOAD_QUIZ = '[Quiz] Load Quiz',
@@ -24,7 +25,7 @@ export class ActionLoadQuiz implements Action {
 
 export class ActionLoadQuizSuccess implements Action {
     readonly type = QuizActionTypes.LOAD_QUIZ_SUCCESS;
-    constructor(public payload: { quiz: QuizMeta & QuizSession }) {}
+    constructor(public payload: { quiz: QuizMeta & AnswersState }) {}
 }
 
 export class ActionLoadQuizError implements Action {
@@ -39,7 +40,7 @@ export class ActionLoadItem implements Action {
 
 export class ActionLoadItemSuccess implements Action {
     readonly type = QuizActionTypes.LOAD_ITEM_SUCCESS;
-    constructor(public payload: { item: QuizItem } ) {}
+    constructor(public payload: { item: QuizItem }) {}
 }
 
 export class ActionLoadItemError implements Action {
@@ -58,7 +59,7 @@ export class ActionSubmitAnswer implements Action {
 
 export class ActionSubmitAnswerSuccess implements Action {
     readonly type = QuizActionTypes.SUBMIT_ANSWER_SUCCESS;
-    constructor(public payload: { answer: QuizItemAnswer }) {}
+    constructor(public payload: { answer: ItemAnswerStatus }) {}
 }
 
 export class ActionSubmitAnswerError implements Action {

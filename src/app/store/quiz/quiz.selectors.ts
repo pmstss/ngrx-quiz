@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
-import { QuizId, ItemId, QuizItem, QuizAnswers, QuizItems, QuizItemAnswer } from '../../core';
-import { QuizState, QuizStateNormalized, QuizItemStatus, QuizStateCalculated } from './quiz.state';
+import { QuizId, ItemId, QuizItem } from 'ngrx-quiz-common';
+import { QuizState, QuizStateNormalized, QuizItemStatus, QuizStateCalculated, ItemAnswerStatus,
+    AnswerStatuses, QuizItems } from './quiz.state';
 import { AppState, selectQuizStateNormalized } from '../app.state';
 
 export const selectQuizId = createSelector<AppState, QuizStateNormalized, QuizId>(
@@ -28,17 +29,17 @@ const selectQuizItems = createSelector<AppState, QuizStateNormalized, QuizItems>
     (state: QuizStateNormalized) => state && state.items
 );
 
-const selectQuizAnswers = createSelector<AppState, QuizStateNormalized, QuizAnswers>(
+const selectQuizAnswers = createSelector<AppState, QuizStateNormalized, AnswerStatuses>(
     selectQuizStateNormalized,
     (state: QuizStateNormalized) => state && state.answers
 );
 
-const selectQuizFinished = createSelector<AppState, number, QuizAnswers, boolean>(
+const selectQuizFinished = createSelector<AppState, number, AnswerStatuses, boolean>(
     selectQuizTotalQuestions,
     selectQuizAnswers,
     // (total: number, answers: QuizAnswers) => answers &&
     //     total === [...answers.values()].filter(a => a.submitted).length
-    (total: number, answers: QuizAnswers) => {
+    (total: number, answers: AnswerStatuses) => {
         if (!answers) {
             return false;
         }
@@ -46,9 +47,9 @@ const selectQuizFinished = createSelector<AppState, number, QuizAnswers, boolean
     }
 );
 
-const selectQuizStarted = createSelector<AppState, QuizAnswers, boolean>(
+const selectQuizStarted = createSelector<AppState, AnswerStatuses, boolean>(
     selectQuizAnswers,
-    (answers: QuizAnswers) => answers && answers.size > 0
+    (answers: AnswerStatuses) => answers && answers.size > 0
 );
 
 export const selectQuizActiveItem = createSelector<AppState, QuizItems, ItemId[], number, QuizItem>(
@@ -65,13 +66,14 @@ export const selectQuizActiveItemId = createSelector<AppState, ItemId[], number,
 );
 
 // TODO ### ngrx 7 parameterized selector for answered?
-export const selectQuizNextStep = createSelector<AppState, ItemId[], number, number, boolean, QuizAnswers, number>(
+export const selectQuizNextStep =
+        createSelector<AppState, ItemId[], number, number, boolean, AnswerStatuses, number>(
     selectQuizItemIds,
     selectQuizStep,
     selectQuizTotalQuestions,
     selectQuizFinished,
     selectQuizAnswers,
-    (itemIds: ItemId[], startStep: number, total: number, finished: boolean, answers: QuizAnswers) => {
+    (itemIds: ItemId[], startStep: number, total: number, finished: boolean, answers: AnswerStatuses) => {
         if (!itemIds || !answers) {
             return 0;
         }
@@ -88,15 +90,15 @@ export const selectQuizNextStep = createSelector<AppState, ItemId[], number, num
     }
 );
 
-export const selectActiveItemAnswer = createSelector<AppState, ItemId, QuizAnswers, QuizItemAnswer>(
+export const selectActiveItemAnswer = createSelector<AppState, ItemId, AnswerStatuses, ItemAnswerStatus>(
     selectQuizActiveItemId,
     selectQuizAnswers,
-    (itemId: ItemId, answers: QuizAnswers) => answers && answers.get(itemId)
+    (itemId: ItemId, answers: AnswerStatuses) => answers && answers.get(itemId)
 );
 
-export const selectQuizScore = createSelector<AppState, QuizAnswers, number>(
+export const selectQuizScore = createSelector<AppState, AnswerStatuses, number>(
     selectQuizAnswers,
-    (answers: QuizAnswers) => answers &&
+    (answers: AnswerStatuses) => answers &&
         [...answers.values()].reduce((score, answer) => score + (answer.submitted && answer.correct ? 1 : 0), 0)
 );
 
@@ -125,10 +127,10 @@ export const selectQuizState = createSelector<AppState, QuizStateNormalized, Qui
     })
 );
 
-export const selectActiveItemStatus = createSelector<AppState, QuizItem, QuizItemAnswer, QuizItemStatus>(
+export const selectActiveItemStatus = createSelector<AppState, QuizItem, ItemAnswerStatus, QuizItemStatus>(
     selectQuizActiveItem,
     selectActiveItemAnswer,
-    (item: QuizItem, itemAnswer: QuizItemAnswer) => {
+    (item: QuizItem, itemAnswer: ItemAnswerStatus) => {
         if (!item) {
             return null;
         }

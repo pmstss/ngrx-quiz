@@ -1,11 +1,22 @@
-import { QuizMeta, QuizItem, ItemId, QuizItemChoice, QuizItemChoiceAnswer,
-    QuizItemAnswer, QuizItems, QuizAnswers
-} from '../../core';
+import { ItemId, ChoiceId, QuizMeta, QuizItem, QuizItemChoice, QuizItemChoiceAnswer } from '../../core';
 
-interface QuizStateProgress {
+export type QuizItems = Map<ItemId, QuizItem>;
+
+export interface ItemAnswerStatus {
+    choiceAnswers: Map<ChoiceId, QuizItemChoiceAnswer>;
+    submitted: boolean;
+    correct: boolean;
+}
+
+export type AnswerStatuses = Map<ItemId, ItemAnswerStatus>;
+
+export interface AnswersState {
+    answers: AnswerStatuses;
+}
+
+interface QuizStateProgress extends AnswersState {
     step: number;
     items: QuizItems;
-    answers: QuizAnswers;
 }
 
 export interface QuizStateNormalized extends QuizMeta, QuizStateProgress {
@@ -31,5 +42,5 @@ export interface QuizItemStatus extends QuizItem {
 export const initialQuizState: QuizStateProgress = {
     step: 1,
     items: new Map<ItemId, QuizItem>(),
-    answers: new Map<ItemId, QuizItemAnswer>()
+    answers: new Map<ItemId, ItemAnswerStatus>()
 };
