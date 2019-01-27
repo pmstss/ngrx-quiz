@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
+import { QuizMetaAdmin } from 'ngrx-quiz-common';
 import { QuizAdminService } from '../../services/quiz-admin.service';
-import { QuizMetaAdmin } from '../../types/quiz-meta-admin';
 import { quillToolbarConfig } from '../quill-config';
 import { DialogService } from '../../../dialog';
 

@@ -3,8 +3,10 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
+import { QuizMetaAdmin } from 'ngrx-quiz-common';
+
 import { QuizAdminService } from '../../services/quiz-admin.service';
-import { QuizMetaAdmin } from '../../types/quiz-meta-admin';
+
 import { QuizItemAdmin } from '../../types/quiz-item-admin';
 
 @Component({

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { QuizId, QuizItem, ItemId, ApiService, QuizMeta } from '../../core';
-import { QuizMetaAdmin } from '../types/quiz-meta-admin';
-import { QuizItemAdmin } from '../types/quiz-item-admin';
+import { QuizMetaBasic, QuizMetaAdmin } from 'ngrx-quiz-common';
+import { QuizId, QuizItem, ItemId, ApiService } from '../../core';
+
+import { QuizItemAdmin } from '../types/quiz-item-admin'; // TODO ###
 
 @Injectable()
 export class QuizAdminService {
@@ -17,7 +18,7 @@ export class QuizAdminService {
         return this.apiService.post<{}>('/admin/quizes', quizMeta);
     }
 
-    updateQuiz(quizMeta: QuizMeta) {
+    updateQuiz(quizMeta: QuizMetaBasic) {
         return this.apiService.put<{}>(`/admin/quizes/${quizMeta.id}`, quizMeta);
     }
 
