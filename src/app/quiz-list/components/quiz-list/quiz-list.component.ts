@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { QuizService, QuizMetaListItem } from '../../../core';
+import { QuizMetaListItem } from 'ngrx-quiz-common';
+import { QuizService } from '../../../core';
 
 @Component({
     selector: 'app-quiz-list',

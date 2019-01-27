@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Comment } from '../../../core';
+import { Comment } from 'ngrx-quiz-common';
 
 @Component({
     selector: 'app-comment-message',

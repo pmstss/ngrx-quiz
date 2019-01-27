@@ -5,7 +5,8 @@ import { of } from 'rxjs';
 import { switchMap, catchError, map, withLatestFrom, tap } from 'rxjs/operators';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { QuizService, ChoiceId } from '../../core';
+import { ChoiceId } from 'ngrx-quiz-common';
+import { QuizService } from '../../core';
 import { DialogService } from '../../dialog';
 import {
     QuizActionTypes, ActionLoadQuiz, ActionLoadQuizError, ActionLoadQuizSuccess,

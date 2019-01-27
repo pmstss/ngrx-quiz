@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import { tap, filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { NbMenuService, NbMenuItem } from '@nebular/theme';
+import { User } from 'ngrx-quiz-common';
 import { AppState, selectUser } from '../../../store';
-import { User } from '../../../core';
 
 @Component({
     selector: 'app-header',

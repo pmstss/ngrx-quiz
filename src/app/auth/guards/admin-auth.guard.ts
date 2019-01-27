@@ -3,8 +3,8 @@ import { CanActivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+import { User } from 'ngrx-quiz-common';
 import { AppState, selectUser } from '../../store';
-import { User } from '../../core';
 
 @Injectable()
 export class AdminAuthGuard implements CanActivate {

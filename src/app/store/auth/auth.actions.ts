@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { User } from '../../core';
+import { User } from 'ngrx-quiz-common';
 
 export enum AuthActionTypes {
     LOGIN = '[Auth] Login',

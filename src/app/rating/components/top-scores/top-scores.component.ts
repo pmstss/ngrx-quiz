@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, combineLatest } from 'rxjs';
-import { QuizService, TopScore, QuizMetaListItem, QuizId } from '../../../core';
+import { TopScore, QuizMetaListItem, QuizId } from 'ngrx-quiz-common';
+import { QuizService } from '../../../core';
 import { switchMap, map, filter, tap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
 
 @Component({

@@ -3,11 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, combineLatest, Observable, of, Subject, BehaviorSubject } from 'rxjs';
 import { map, filter, take, switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+import { Comment } from 'ngrx-quiz-common';
 import {
     AppState, ActionSubmitAnswer, ActionToggleChoice, ActionLoadItem,
     QuizState, selectQuizState, QuizItemStatus, selectActiveItemStatus, selectQuizId, selectQuizActiveItemId
 } from '../../../store';
-import { AutoUnsubscribe, QuizService, Comment } from '../../../core';
+import { AutoUnsubscribe, QuizService } from '../../../core';
 
 @Component({
     selector: 'app-quiz-step',

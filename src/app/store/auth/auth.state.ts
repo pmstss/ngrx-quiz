@@ -1,4 +1,4 @@
-import { User } from '../../core';
+import { User } from 'ngrx-quiz-common';
 
 export interface AuthState {
     user: User;

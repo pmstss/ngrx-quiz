@@ -4,7 +4,8 @@ import { Observable, of } from 'rxjs';
 import { map, take, concatMap, filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Actions } from '@ngrx/effects';
-import { QuizMeta, MessageService } from '../../core';
+import { QuizMeta } from 'ngrx-quiz-common';
+import { MessageService } from '../../core';
 import { AppState, ActionLoadQuiz, QuizActionTypes, selectQuizState, QuizState } from '../../store';
 
 @Injectable()

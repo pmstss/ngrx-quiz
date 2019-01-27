@@ -1,5 +1,3 @@
-export * from './types/common';
-
 export { ApiService } from './api/api.service';
 export { QuizService } from './services/quiz.service';
 export { MessageService } from './services/message.service';

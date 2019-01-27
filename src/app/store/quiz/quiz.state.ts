@@ -1,4 +1,4 @@
-import { ItemId, ChoiceId, QuizMeta, QuizItem, QuizItemChoice, QuizItemChoiceAnswer } from '../../core';
+import { ItemId, ChoiceId, QuizMeta, QuizItem, QuizItemChoice, QuizItemChoiceAnswer } from 'ngrx-quiz-common';
 
 export type QuizItems = Map<ItemId, QuizItem>;
 

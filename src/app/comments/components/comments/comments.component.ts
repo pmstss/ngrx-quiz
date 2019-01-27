@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, Input, ContentChildren,
     QueryList, OnInit, EventEmitter, Output } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Comment } from '../../../core';
+import { Comment } from 'ngrx-quiz-common';
 import { CommentMessageComponent } from '../comment-message/comment-message.component';
 
 @Component({

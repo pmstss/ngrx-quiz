@@ -1,9 +1,9 @@
 import { Action } from '@ngrx/store';
+import { ChoiceId, QuizItemChoiceAnswer } from 'ngrx-quiz-common';
 import { QuizActionTypes, ActionLoadItem, ActionToggleChoice, ActionLoadQuizSuccess,
     ActionLoadItemSuccess, ActionSubmitAnswerSuccess } from './quiz.actions';
 import { initialQuizState, QuizStateNormalized } from './quiz.state';
 import { selectQuizNextStep, selectQuizActiveItem, selectActiveItemAnswer } from './quiz.selectors';
-import { ChoiceId, QuizItemChoiceAnswer } from 'src/app/core';
 
 function getRootState(state) {
     return {
