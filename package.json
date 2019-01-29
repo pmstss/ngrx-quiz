@@ -32,6 +32,8 @@
     "core-js": "^2.6.2",
     "font-awesome": "^4.7.0",
     "nebular-icons": "^1.1.0",
+    "ng-animate": "^0.3.4",
+    "ngrx-quiz-common": "^0.0.2",
     "ngx-quill": "^4.5.0",
     "quill": "^1.3.6",
     "rxjs": "~6.3.3",
