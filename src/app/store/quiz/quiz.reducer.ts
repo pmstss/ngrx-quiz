@@ -1,7 +1,8 @@
 import { Action } from '@ngrx/store';
 import { ChoiceId, QuizItemChoiceAnswer } from 'ngrx-quiz-common';
 import { QuizActionTypes, ActionLoadItem, ActionToggleChoice, ActionLoadQuizSuccess,
-    ActionLoadItemSuccess, ActionSubmitAnswerSuccess } from './quiz.actions';
+    ActionLoadItemSuccess, ActionSubmitAnswerSuccess,
+    ActionLoadItemCommentsSuccess, ActionPostItemCommentSuccess } from './quiz.actions';
 import { initialQuizState, QuizStateNormalized } from './quiz.state';
 import { selectQuizNextStep, selectQuizActiveItem, selectActiveItemAnswer } from './quiz.selectors';
 
@@ -76,6 +77,22 @@ const reducers = {
             answers: (new Map(state.answers)).set(item.id, answer)
         };
         return res;
+    },
+
+    [QuizActionTypes.LOAD_ITEM_COMMENTS_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
+        const payload = (action as ActionLoadItemCommentsSuccess).payload;
+        return {
+            ...state,
+            comments: new Map(state.comments).set(payload.itemId, payload.comments)
+        };
+    },
+
+    [QuizActionTypes.POST_ITEM_COMMENT_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
+        const payload = (action as ActionPostItemCommentSuccess).payload;
+        return {
+            ...state,
+            comments: new Map(state.comments).set(payload.itemId, [payload.comment])
+        };
     },
 
     [QuizActionTypes.TOGGLE_CHOICE]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {

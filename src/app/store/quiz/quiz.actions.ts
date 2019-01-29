@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { ChoiceId, QuizMeta, QuizItem, Comment } from 'ngrx-quiz-common';
+import { ItemId, ChoiceId, QuizMeta, QuizItem, Comment } from 'ngrx-quiz-common';
 import { ItemAnswerStatus, AnswersState } from './quiz.state';
 
 export enum QuizActionTypes {
@@ -16,6 +16,9 @@ export enum QuizActionTypes {
     RESET_QUIZ = '[Quiz] Reset',
     RESET_QUIZ_SUCCESS = '[Quiz] Reset Success',
     RESET_QUIZ_ERROR = '[Quiz] Reset Error',
+    LOAD_ITEM_COMMENTS = '[Quiz] Load Item Comments',
+    LOAD_ITEM_COMMENTS_SUCCESS = '[Quiz] Load Item Comments Success',
+    LOAD_ITEM_COMMENTS_ERROR = '[Quiz] Load Item Comments Error',
     POST_ITEM_COMMENT = '[Quiz] Post Item Comment',
     POST_ITEM_COMMENT_SUCCESS = '[Quiz] Post Item Comment Success',
     POST_ITEM_COMMENT_ERROR = '[Quiz] Post Item Comment Error'
@@ -85,14 +88,28 @@ export class ActionResetQuizError implements Action {
     constructor(public payload: any) {}
 }
 
+export class ActionLoadItemComments implements Action {
+    readonly type = QuizActionTypes.LOAD_ITEM_COMMENTS;
+}
+
+export class ActionLoadItemCommentsSuccess implements Action {
+    readonly type = QuizActionTypes.LOAD_ITEM_COMMENTS_SUCCESS;
+    constructor(public payload: { itemId: ItemId, comments: Comment[] }) {}
+}
+
+export class ActionLoadItemCommentsError implements Action {
+    readonly type = QuizActionTypes.LOAD_ITEM_COMMENTS_ERROR;
+    constructor(public payload: any) {}
+}
+
 export class ActionPostItemComment implements Action {
     readonly type = QuizActionTypes.POST_ITEM_COMMENT;
-    constructor(public payload: { text: string}) {}
+    constructor(public payload: { text: string }) {}
 }
 
 export class ActionPostItemCommentSuccess implements Action {
     readonly type = QuizActionTypes.POST_ITEM_COMMENT_SUCCESS;
-    constructor(public payload: { comment: Comment }) {}
+    constructor(public payload: { itemId: ItemId, comment: Comment }) {}
 }
 
 export class ActionPostItemCommentError implements Action {

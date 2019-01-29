@@ -13,11 +13,13 @@ import {
     ActionLoadItem, ActionLoadItemSuccess, ActionLoadItemError,
     ActionSubmitAnswerSuccess, ActionSubmitAnswerError,
     ActionResetQuizSuccess, ActionResetQuizError,
-    ActionPostItemComment, ActionPostItemCommentSuccess, ActionPostItemCommentError
+    ActionPostItemComment, ActionPostItemCommentSuccess, ActionPostItemCommentError,
+    ActionLoadItemCommentsSuccess, ActionLoadItemCommentsError
 } from './quiz.actions';
 import { AppState } from '../app.state';
 import { selectQuizActiveItem, selectQuizState, selectActiveItemAnswer,
-    selectQuizActiveItemId } from './quiz.selectors';
+    selectQuizActiveItemId,
+    selectItemComments} from './quiz.selectors';
 import { QuizState } from './quiz.state';
 
 @Injectable()
@@ -50,6 +52,22 @@ export class QuizEffects {
             })) : this.quizService.loadItem(id).pipe(
                 map(item => new ActionLoadItemSuccess({ item })),
                 catchError(error => of(new ActionLoadItemError(error)))
+            );
+        })
+    );
+
+    @Effect()
+    loadItemComments$ = this.actions$.pipe(
+        ofType(QuizActionTypes.LOAD_ITEM_COMMENTS),
+        withLatestFrom(this.appStore),
+        switchMap(([action, appState]: [Action, AppState]) => {
+            const itemId = selectQuizActiveItemId(appState);
+            const comments = selectItemComments(appState);
+            return typeof comments !== 'undefined' ? of(new ActionLoadItemCommentsSuccess({
+                itemId, comments
+            })) : this.quizService.loadComments(itemId).pipe(
+                map(comments => new ActionLoadItemCommentsSuccess({ itemId, comments })),
+                catchError(error => of(new ActionLoadItemCommentsError(error)))
             );
         })
     );
@@ -115,7 +133,7 @@ export class QuizEffects {
             const text = (action as ActionPostItemComment).payload.text;
             const itemId = selectQuizActiveItemId(appState);
             return this.quizService.postComment(itemId, text).pipe(
-                map(comment => new ActionPostItemCommentSuccess({ comment })),
+                map(comment => new ActionPostItemCommentSuccess({ itemId, comment })),
                 catchError(error => of(new ActionPostItemCommentError(error)))
             );
         })

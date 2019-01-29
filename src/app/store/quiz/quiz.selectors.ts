@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { QuizId, ItemId, QuizItem } from 'ngrx-quiz-common';
+import { QuizId, ItemId, QuizItem, Comment } from 'ngrx-quiz-common';
 import { QuizState, QuizStateNormalized, QuizItemStatus, QuizStateCalculated, ItemAnswerStatus,
     AnswerStatuses, QuizItems } from './quiz.state';
 import { AppState, selectQuizStateNormalized } from '../app.state';
@@ -65,6 +65,12 @@ export const selectQuizActiveItemId = createSelector<AppState, ItemId[], number,
     (itemIds: ItemId[], step: number) => itemIds && itemIds[step - 1]
 );
 
+export const selectItemComments = createSelector<AppState, QuizStateNormalized, ItemId, Comment[]>(
+    selectQuizStateNormalized,
+    selectQuizActiveItemId,
+    (state: QuizStateNormalized, itemId: ItemId): Comment[] => state ? state.comments.get(itemId) : null
+);
+
 // TODO ### ngrx 7 parameterized selector for answered?
 export const selectQuizNextStep =
         createSelector<AppState, ItemId[], number, number, boolean, AnswerStatuses, number>(
@@ -94,6 +100,11 @@ export const selectActiveItemAnswer = createSelector<AppState, ItemId, AnswerSta
     selectQuizActiveItemId,
     selectQuizAnswers,
     (itemId: ItemId, answers: AnswerStatuses) => answers && answers.get(itemId)
+);
+
+export const selectActiveItemAnswered = createSelector<AppState, ItemAnswerStatus, boolean>(
+    selectActiveItemAnswer,
+    (answer: ItemAnswerStatus) => answer && answer.submitted
 );
 
 export const selectQuizScore = createSelector<AppState, AnswerStatuses, number>(

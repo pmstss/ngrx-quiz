@@ -1,4 +1,4 @@
-import { ItemId, ChoiceId, QuizMeta, QuizItem, QuizItemChoice, QuizItemChoiceAnswer } from 'ngrx-quiz-common';
+import { ItemId, ChoiceId, QuizMeta, QuizItem, QuizItemChoice, QuizItemChoiceAnswer, Comment } from 'ngrx-quiz-common';
 
 export type QuizItems = Map<ItemId, QuizItem>;
 
@@ -17,6 +17,7 @@ export interface AnswersState {
 interface QuizStateProgress extends AnswersState {
     step: number;
     items: QuizItems;
+    comments: Map<ItemId, Comment[]>;
 }
 
 export interface QuizStateNormalized extends QuizMeta, QuizStateProgress {
@@ -47,5 +48,6 @@ export interface QuizItemStatus extends QuizItem {
 export const initialQuizState: QuizStateProgress = {
     step: 1,
     items: new Map<ItemId, QuizItem>(),
-    answers: new Map<ItemId, ItemAnswerStatus>()
+    answers: new Map<ItemId, ItemAnswerStatus>(),
+    comments: new Map<ItemId, Comment[]>()
 };
