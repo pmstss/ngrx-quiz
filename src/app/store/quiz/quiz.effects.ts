@@ -18,8 +18,7 @@ import {
 } from './quiz.actions';
 import { AppState } from '../app.state';
 import { selectQuizActiveItem, selectQuizState, selectActiveItemAnswer,
-    selectQuizActiveItemId,
-    selectItemComments} from './quiz.selectors';
+    selectQuizActiveItemId, selectItemComments} from './quiz.selectors';
 import { QuizState } from './quiz.state';
 
 @Injectable()
@@ -60,7 +59,7 @@ export class QuizEffects {
     loadItemComments$ = this.actions$.pipe(
         ofType(QuizActionTypes.LOAD_ITEM_COMMENTS),
         withLatestFrom(this.appStore),
-        switchMap(([action, appState]: [Action, AppState]) => {
+        switchMap(([, appState]: [Action, AppState]) => {
             const itemId = selectQuizActiveItemId(appState);
             const comments = selectItemComments(appState);
             return typeof comments !== 'undefined' ? of(new ActionLoadItemCommentsSuccess({
@@ -76,7 +75,7 @@ export class QuizEffects {
     submitAnswer$ = this.actions$.pipe(
         ofType(QuizActionTypes.SUBMIT_ANSWER),
         withLatestFrom(this.appStore),
-        switchMap(([action, appState]: [Action, AppState]) => {
+        switchMap(([, appState]: [Action, AppState]) => {
             const choices = selectActiveItemAnswer(appState).choiceAnswers;
             return this.quizService.submitAnswer(
                 selectQuizState(appState).id,
@@ -93,7 +92,7 @@ export class QuizEffects {
     resetQuiz$ = this.actions$.pipe(
         ofType(QuizActionTypes.RESET_QUIZ),
         withLatestFrom(this.appStore),
-        switchMap(([action, appState]: [Action, AppState]) => {
+        switchMap(([, appState]: [Action, AppState]) => {
             const quizState = selectQuizState(appState);
             return (!quizState.finished ?
                     this.dialogService.confirm('Are you sure want to reset unfinished quiz?') : of(true))
