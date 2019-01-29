@@ -1,4 +1,4 @@
-export { QuizState, QuizItemStatus, ItemAnswerStatus, AnswersState } from './quiz/quiz.state';
+export { QuizState, QuizItemStatus, ItemAnswerStatus, AnswersState, QuizItemChoiceStatus } from './quiz/quiz.state';
 export * from './quiz/quiz.actions';
 export * from './quiz/quiz.selectors';
 

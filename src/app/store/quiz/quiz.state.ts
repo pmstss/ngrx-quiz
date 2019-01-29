@@ -33,8 +33,12 @@ export interface QuizStateCalculated {
 export interface QuizState extends QuizStateNormalized, QuizStateCalculated {
 }
 
+export interface QuizItemChoiceStatus extends QuizItemChoice, QuizItemChoiceAnswer {
+    wrong: boolean;
+}
+
 export interface QuizItemStatus extends QuizItem {
-    choicesStatus: (QuizItemChoice & QuizItemChoiceAnswer & { wrong: boolean; })[];
+    choicesStatus: QuizItemChoiceStatus[];
     correct: boolean;
     wrong: boolean;
 }
