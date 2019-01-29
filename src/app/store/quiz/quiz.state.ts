@@ -39,6 +39,7 @@ export interface QuizItemChoiceStatus extends QuizItemChoice, QuizItemChoiceAnsw
 
 export interface QuizItemStatus extends QuizItem {
     choicesStatus: QuizItemChoiceStatus[];
+    answered: boolean;
     correct: boolean;
     wrong: boolean;
 }
