@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { trigger, transition, style, animate, keyframes, useAnimation } from '@angular/animations';
-import { Subscription, combineLatest, Observable, of, BehaviorSubject, from } from 'rxjs';
+import { ActivatedRoute, Params } from '@angular/router';
+import { trigger, transition, useAnimation } from '@angular/animations';
+import { Subscription, Observable, of, BehaviorSubject, from } from 'rxjs';
 import { map, filter, take, switchMap, delay, concatMap, tap, distinctUntilChanged } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { bounceInLeft, fadeIn } from 'ng-animate';
@@ -9,9 +9,10 @@ import { Comment } from 'ngrx-quiz-common';
 import {
     AppState, QuizState, QuizItemStatus, QuizItemChoiceStatus,
     ActionSubmitAnswer, ActionLoadItem,
-    selectQuizState, selectActiveItemStatus, selectQuizId, selectQuizActiveItemId
+    selectQuizState, selectActiveItemStatus, selectQuizActiveItemId
 } from '../../../store';
 import { AutoUnsubscribe, QuizService } from '../../../core';
+import { DialogService } from 'src/app/dialog';
 
 const DELAY_CHOICES_QUEUE = 150;
 
@@ -26,22 +27,7 @@ const DELAY_CHOICES_QUEUE = 150;
         }))]),
         trigger('bounceInLeft', [transition(':enter', useAnimation(bounceInLeft, {
             params: { timing: 0.5, delay: 0, a: '-80%' }
-        }))]),
-        // trigger('zoomInLeft', [transition('* => *', useAnimation(zoomInLeft))]),
-        // trigger('flipInX', [transition('* => *', useAnimation(flipInX))]),
-        trigger('flyInAnimation', [
-            transition(':enter', [
-                style({
-                    transform: 'translate3d(-100%, 0, 0)'
-                }),
-                animate('0.5s ease-out', keyframes([
-                    style({
-                        transform: 'translate3d(0, 0, 0)',
-                        offset: 1
-                    })
-                ]))
-            ])
-        ])
+        }))])
     ]
 })
 export class QuizStepComponent implements OnInit {
@@ -50,41 +36,43 @@ export class QuizStepComponent implements OnInit {
     itemStatus$: Observable<QuizItemStatus>;
     choices$: Observable<QuizItemChoiceStatus[]>;
 
-    flyCounter: number = 0;
+    choicesAnimationCounter: number = 0;
 
     private commentsSubject = new BehaviorSubject<Comment[]>([]);
     comments$ = this.commentsSubject.asObservable();
     commentsExpanded = false;
 
-    constructor(private route: ActivatedRoute, private appStore: Store<AppState>, private quizService: QuizService) {
+    constructor(private route: ActivatedRoute, private appStore: Store<AppState>,
+                private quizService: QuizService, private dialogService: DialogService) {
     }
 
     ngOnInit() {
         this.quizState$ = this.appStore.select(selectQuizState);
         this.itemStatus$ = this.appStore.select(selectActiveItemStatus).pipe(filter(v => !!v));
 
-        this.routeSubscription = combineLatest(
-            this.appStore.select(selectQuizId),
-            this.route.params.pipe(
-                map(params => +params.step)
-            )
-        ).pipe(
-            filter(([quizId, step]) => !!(quizId && step))
-        ).subscribe(
-            ([quizId, step]) => this.appStore.dispatch(new ActionLoadItem({ step, quizId }))
-        );
+        this.routeSubscription = this.route.params.pipe(
+            map((params: Params) => +params.step),
+            filter(step => !!step)
+        ).subscribe((step: number) => {
+            this.commentsExpanded = false;
+            this.appStore.dispatch(new ActionLoadItem({ step }));
+        });
 
+        // transform choicesStatus array observable into sequence of growing arrays for
+        // choices one by one appearing animation
         this.choices$ = this.itemStatus$.pipe(
             map(status => status.choicesStatus),
             distinctUntilChanged(
                 (ch1, ch2) => ch1.length === ch2.length && ch1.every((ch, idx) => ch.id === ch2[idx].id)
             ),
-            tap(() => this.flyCounter = 0),
+            tap(() => this.choicesAnimationCounter = 0),
             switchMap((choices: QuizItemChoiceStatus[]) =>
                 from(choices.map((ch, idx) => choices.slice(0, idx + 1)))
                     .pipe(concatMap(ch => of(ch).pipe(delay(DELAY_CHOICES_QUEUE))))
             )
         );
+
+        this.choices$.subscribe(x => console.log(x));
     }
 
     submit() {
@@ -92,11 +80,18 @@ export class QuizStepComponent implements OnInit {
     }
 
     loadComments() {
-        this.commentsExpanded = true;
-        this.appStore.select(selectQuizActiveItemId).pipe(
-            switchMap(id => this.quizService.loadComments(id))
-        ).subscribe((comments) => {
-            this.commentsSubject.next(comments);
+        this.itemStatus$.pipe(
+            map(itemStatus => itemStatus.answered),
+            take(1)
+        ).subscribe((answered) => {
+            if (!answered) {
+                this.dialogService.alert({ title: 'Information', message: 'Please answer first to see comments' });
+            } else {
+                this.commentsExpanded = true;
+                this.appStore.select(selectQuizActiveItemId).pipe(
+                    switchMap(id => this.quizService.loadComments(id))
+                ).subscribe(comments => this.commentsSubject.next(comments));
+            }
         });
     }
 
@@ -110,9 +105,9 @@ export class QuizStepComponent implements OnInit {
         });
     }
 
-    animationDone(event: any) {
+    choiceAnimationDone(event: any) {
         if (event.fromState === 'void') {
-            this.flyCounter++;
+            this.choicesAnimationCounter++;
         }
     }
 

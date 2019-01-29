@@ -35,7 +35,7 @@ export class ActionLoadQuizError implements Action {
 
 export class ActionLoadItem implements Action {
     readonly type = QuizActionTypes.LOAD_ITEM;
-    constructor(public payload: { quizId: QuizId, step: number; }) {}
+    constructor(public payload: { step: number; }) {}
 }
 
 export class ActionLoadItemSuccess implements Action {

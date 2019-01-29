@@ -12,14 +12,14 @@
             <nb-card-body>
                 <quill-editor theme="bubble" [readOnly]="true" [ngModel]="itemStatus.question"></quill-editor>
                 <div class="mt-4 choices">
-                    <div class="choices-animated-aux" *ngIf="flyCounter !==  itemStatus.choicesStatus.length">
+                    <div class="choices-animated-aux" *ngIf="choicesAnimationCounter !==  itemStatus.choicesStatus.length">
                         <div *ngFor="let choice of (choices$ | async); trackBy: trackChoice"
-                                @bounceInLeft (@bounceInLeft.done)="animationDone($event)">
+                                @bounceInLeft (@bounceInLeft.done)="choiceAnimationDone($event)">
                             <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
                         </div>
                     </div>
 
-                    <div [ngStyle]="{visibility: flyCounter ===  itemStatus.choicesStatus.length ? 'visible' : 'hidden'}">
+                    <div [ngStyle]="{visibility: choicesAnimationCounter ===  itemStatus.choicesStatus.length ? 'visible' : 'hidden'}">
                         <div *ngFor="let choice of itemStatus.choicesStatus">
                             <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
                         </div>
@@ -49,7 +49,7 @@
 
         <div class="text-center">
             <span class="btn btn-outline-secondary" *ngIf="!commentsExpanded" (click)="loadComments()">
-                Show Comments ({{quizState.numberOfComments}})
+                Show Comments ({{itemStatus.numberOfComments}})
             </span>
         </div>
 
