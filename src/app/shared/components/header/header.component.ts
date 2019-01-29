@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
 
     items: NbMenuItem[] = [
         { title: 'Profile', data: { id: 'profile' } },
-        { title: 'Logout', link: '/auth/logout' },
+        { title: 'Logout', link: '/auth/logout' }
     ];
 
     constructor(private appStore: Store<AppState>, private nbMenuService: NbMenuService) {
@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
 
         this.nbMenuService.onItemClick().pipe(
             tap(tmp => console.log(tmp)),
-            filter(({ tag, item: { data } }) => tag === 'user-context-menu' && data && data.id === 'profile'),
+            filter(({ tag, item: { data } }) => tag === 'user-context-menu' && data && data.id === 'profile')
         ).subscribe(item => alert('Profile click!'));
     }
 }

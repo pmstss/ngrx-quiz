@@ -16,7 +16,7 @@ const routes = [
             component: AdminWelcomeComponent
         }, {
             path: 'quizes',
-            component: QuizListComponent,
+            component: QuizListComponent
         }, {
             path: 'quiz/:quizId',
             component: QuizMetaEditorComponent

@@ -17,7 +17,7 @@ export const nbAuthOptions: NbAuthOptions = {
                 requireValidToken: false,
                 redirect: {
                     success: '/',
-                    failure: null,
+                    failure: null
                 },
                 defaultErrors: ['Login/Email combination is not correct, please try again.'],
                 defaultMessages: ['You have been successfully logged in.']
@@ -29,7 +29,7 @@ export const nbAuthOptions: NbAuthOptions = {
                 requireValidToken: false,
                 redirect: {
                     success: '/',
-                    failure: null,
+                    failure: null
                 },
                 defaultErrors: ['Something went wrong, please try logout again.'],
                 defaultMessages: ['You have been successfully logged out.']
@@ -41,10 +41,10 @@ export const nbAuthOptions: NbAuthOptions = {
                 requireValidToken: false,
                 redirect: {
                     success: '/',
-                    failure: null,
+                    failure: null
                 },
                 defaultErrors: ['Something went wrong, please try registration again.'],
-                defaultMessages: ['You have been successfully registered.'],
+                defaultMessages: ['You have been successfully registered.']
             },
             requestPass: {
                 endpoint: '/reset',
@@ -56,7 +56,7 @@ export const nbAuthOptions: NbAuthOptions = {
                 requireValidToken: false,
                 redirect: {
                     success: null,
-                    failure: null,
+                    failure: null
                 },
                 defaultErrors: ['Something went wrong, please try again.'],
                 defaultMessages: ['Your token has been successfully refreshed.']

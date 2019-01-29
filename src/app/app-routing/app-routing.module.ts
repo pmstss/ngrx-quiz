@@ -14,7 +14,7 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
             },
             {
                 path: 'auth',
-                loadChildren: '../auth-ui/auth-ui.module#AuthUIModule',
+                loadChildren: '../auth-ui/auth-ui.module#AuthUIModule'
             },
             {
                 path: 'quizes',

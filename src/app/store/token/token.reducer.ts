@@ -8,7 +8,7 @@ export function tokenReducer(tokenState = initialTokenState, action: Action): To
             return {
                 ...tokenState,
                 token: (action as ActionTokenChanged).payload.token,
-                payload: (action as ActionTokenChanged).payload.tokenPayload,
+                payload: (action as ActionTokenChanged).payload.tokenPayload
             };
     }
 
