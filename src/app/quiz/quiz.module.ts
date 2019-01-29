@@ -6,13 +6,14 @@ import { NbCardModule } from '@nebular/theme';
 import { SharedModule } from '../shared';
 import { CommentsModule } from '../comments';
 import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
+import { QuizStepChoiceComponent } from './components/quiz-step-choice/quiz-step-choice.component';
 import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
 import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
 import { QuizFinishedGuard } from './guards/quiz-finished.guard';
 import { QuizGuard } from './guards/quiz.guard';
 
 @NgModule({
-    declarations: [QuizStepComponent, QuizIntroComponent, QuizResultComponent],
+    declarations: [QuizStepComponent, QuizIntroComponent, QuizResultComponent, QuizStepChoiceComponent],
     imports: [
         FormsModule,
         RouterModule.forChild([{

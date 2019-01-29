@@ -1,0 +1,16 @@
+<div class="choice d-flex align-items-center mt-3 py-3" [ngClass]="{
+      'checked': !answered && choice.checked,
+      'text-success': choice.correct && !choice.semiCorrect,
+      'text-danger': choice.wrong,
+      'text-warning': choice.semiCorrect,
+      'choice--answered': answered
+    }" (click)="toggleChoice(choice.id)">
+    <i class="fa mx-3" [ngClass]="{'fa-check': !choice.wrong, 'fa-times': choice.wrong}"></i>
+    <span>{{choice.text}}</span>
+    <span *ngIf="answered" class="ml-auto mr-3">
+        {{choice.popularity | percent : '1.0-2'}}
+    </span>
+</div>
+<div *ngIf="choice.explanation" class="alert" [ngClass]="{'text-success': choice.correct, 'text-danger': choice.wrong}">
+  {{choice.explanation}}
+</div>
