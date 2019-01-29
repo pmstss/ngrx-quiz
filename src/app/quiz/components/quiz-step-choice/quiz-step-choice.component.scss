@@ -19,6 +19,10 @@
         border-radius: nb-theme(radius);
         opacity: 0.8;
 
+        &.choice--answered {
+            cursor: auto;
+        }
+
         &.text-success, &.text-danger, &.text-warning {
             font-weight: bold;
 
