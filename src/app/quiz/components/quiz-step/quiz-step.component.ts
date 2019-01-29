@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { trigger, transition, style, animate, keyframes, useAnimation } from '@angular/animations';
 import { Subscription, combineLatest, Observable, of, BehaviorSubject, from } from 'rxjs';
@@ -19,6 +19,7 @@ const DELAY_CHOICES_QUEUE = 150;
     selector: 'app-quiz-step',
     templateUrl: './quiz-step.component.html',
     styleUrls: ['./quiz-step.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('fadeIn', [transition('* => *', useAnimation(fadeIn, {
             params: { timing: 0.6, delay: 0 }
