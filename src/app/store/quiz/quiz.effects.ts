@@ -12,10 +12,12 @@ import {
     QuizActionTypes, ActionLoadQuiz, ActionLoadQuizError, ActionLoadQuizSuccess,
     ActionLoadItem, ActionLoadItemSuccess, ActionLoadItemError,
     ActionSubmitAnswerSuccess, ActionSubmitAnswerError,
-    ActionResetQuizSuccess, ActionResetQuizError
+    ActionResetQuizSuccess, ActionResetQuizError,
+    ActionPostItemComment, ActionPostItemCommentSuccess, ActionPostItemCommentError
 } from './quiz.actions';
 import { AppState } from '../app.state';
-import { selectQuizActiveItem, selectQuizState, selectActiveItemAnswer } from './quiz.selectors';
+import { selectQuizActiveItem, selectQuizState, selectActiveItemAnswer,
+    selectQuizActiveItemId } from './quiz.selectors';
 import { QuizState } from './quiz.state';
 
 @Injectable()
@@ -102,6 +104,20 @@ export class QuizEffects {
         tap((action: Action) => {
             const quizName = (action as ActionResetQuizSuccess).payload.quizName;
             this.router.navigateByUrl(`/quiz/${quizName}/1`);
+        })
+    );
+
+    @Effect()
+    commentItem$ = this.actions$.pipe(
+        ofType(QuizActionTypes.POST_ITEM_COMMENT),
+        withLatestFrom(this.appStore),
+        switchMap(([action, appState]: [Action, AppState]) => {
+            const text = (action as ActionPostItemComment).payload.text;
+            const itemId = selectQuizActiveItemId(appState);
+            return this.quizService.postComment(itemId, text).pipe(
+                map(comment => new ActionPostItemCommentSuccess({ comment })),
+                catchError(error => of(new ActionPostItemCommentError(error)))
+            );
         })
     );
 }

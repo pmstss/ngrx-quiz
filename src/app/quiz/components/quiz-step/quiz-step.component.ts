@@ -2,14 +2,14 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { Subscription, Observable, of, BehaviorSubject, from } from 'rxjs';
-import { map, filter, take, switchMap, delay, concatMap, tap, distinctUntilChanged,
+import { map, filter, switchMap, delay, concatMap, tap, distinctUntilChanged,
     shareReplay, first } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { bounceInLeft, fadeIn } from 'ng-animate';
 import { Comment } from 'ngrx-quiz-common';
 import {
     AppState, QuizState, QuizItemStatus, QuizItemChoiceStatus,
-    ActionSubmitAnswer, ActionLoadItem,
+    ActionSubmitAnswer, ActionLoadItem, ActionPostItemComment,
     selectQuizState, selectActiveItemStatus, selectQuizActiveItemId
 } from '../../../store';
 import { AutoUnsubscribe, QuizService } from '../../../core';
@@ -120,15 +120,8 @@ export class QuizStepComponent implements OnInit {
     }
 
     addComment({ text }: {text: string}) {
-        this.itemStatus$.pipe(
-            take(1),
-            switchMap(state => this.quizService.postComment(state.id, text))
-        ).subscribe((res) => {
-            this.commentsEditor = false;
-            // TODO ### restore functionality after remake to redux
-            /*const comments = [res].concat(this.commentsSubject.value);
-            this.commentsSubject.next(comments);*/
-        });
+        this.appStore.dispatch(new ActionPostItemComment({ text }));
+        this.commentsExpanded.next(true); // trigger comments reloading
     }
 
     choiceAnimationDone(event: any) {

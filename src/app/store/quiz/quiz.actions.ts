@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { ChoiceId, QuizMeta, QuizItem, QuizId } from 'ngrx-quiz-common';
+import { ChoiceId, QuizMeta, QuizItem, Comment } from 'ngrx-quiz-common';
 import { ItemAnswerStatus, AnswersState } from './quiz.state';
 
 export enum QuizActionTypes {
@@ -16,6 +16,9 @@ export enum QuizActionTypes {
     RESET_QUIZ = '[Quiz] Reset',
     RESET_QUIZ_SUCCESS = '[Quiz] Reset Success',
     RESET_QUIZ_ERROR = '[Quiz] Reset Error',
+    POST_ITEM_COMMENT = '[Quiz] Post Item Comment',
+    POST_ITEM_COMMENT_SUCCESS = '[Quiz] Post Item Comment Success',
+    POST_ITEM_COMMENT_ERROR = '[Quiz] Post Item Comment Error'
 }
 
 export class ActionLoadQuiz implements Action {
@@ -79,5 +82,20 @@ export class ActionResetQuizSuccess implements Action {
 
 export class ActionResetQuizError implements Action {
     readonly type = QuizActionTypes.RESET_QUIZ_ERROR;
+    constructor(public payload: any) {}
+}
+
+export class ActionPostItemComment implements Action {
+    readonly type = QuizActionTypes.POST_ITEM_COMMENT;
+    constructor(public payload: { text: string}) {}
+}
+
+export class ActionPostItemCommentSuccess implements Action {
+    readonly type = QuizActionTypes.POST_ITEM_COMMENT_SUCCESS;
+    constructor(public payload: { comment: Comment }) {}
+}
+
+export class ActionPostItemCommentError implements Action {
+    readonly type = QuizActionTypes.POST_ITEM_COMMENT_ERROR;
     constructor(public payload: any) {}
 }
