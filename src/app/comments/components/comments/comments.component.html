@@ -1,9 +1,25 @@
-<div *ngIf="comments$ | async as comments else loading">
-    <app-comment-form [collapsed]="!editor" (message)="onMessage($event)"></app-comment-form>
+<div class="d-flex" [ngClass]="(commentsExpanded$ | async) ? 'justify-content-between' : 'justify-content-around'">
+    <span class="btn btn-xs btn-outline-secondary" *ngIf="!(commentsExpanded$ | async)" (click)="showComments()">
+        Show Comments ({{numberOfComments}})
+    </span>
 
-    <div class="comments px-2 py-3">
-        <app-comment-message *ngFor="let comment of comments" [comment]="comment" @animComment></app-comment-message>
-        <p class="no-comments" *ngIf="!comments?.length">No comments yet.</p>
+    <span class="btn btn-xs btn-outline-secondary mr-3" *ngIf="(commentsExpanded$ | async)" (click)="hideComments()">
+        Hide Comments
+    </span>
+
+    <span class="btn btn-xs btn-outline-success" *ngIf="(commentsExpanded$ | async)" (click)="commentsEditor = !commentsEditor">
+        {{ commentsEditor ? 'Hide editor' : 'Write comment' }}
+    </span>
+</div>
+
+<div *ngIf="commentsExpanded$ | async">
+    <div *ngIf="comments$ | async as comments else loading">
+        <app-comment-form [collapsed]="!commentsEditor" (message)="onMessage($event)"></app-comment-form>
+
+        <div class="comments px-2 py-3">
+            <app-comment-message *ngFor="let comment of comments" [comment]="comment" @animComment></app-comment-message>
+            <p class="no-comments" *ngIf="!comments?.length">No comments yet.</p>
+        </div>
     </div>
 </div>
 

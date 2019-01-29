@@ -9,7 +9,7 @@ export const selectQuizId = createSelector<AppState, QuizStateNormalized, QuizId
     (state: QuizStateNormalized): QuizId => state && state.id
 );
 
-const selectQuizStep = createSelector<AppState, QuizStateNormalized, number>(
+export const selectQuizStep = createSelector<AppState, QuizStateNormalized, number>(
     selectQuizStateNormalized,
     (state: QuizStateNormalized) => state && state.step
 );
