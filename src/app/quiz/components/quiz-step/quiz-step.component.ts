@@ -2,15 +2,14 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { Subscription, Observable, of, BehaviorSubject, from } from 'rxjs';
-import { map, filter, switchMap, delay, concatMap, tap, distinctUntilChanged,
-    shareReplay, first } from 'rxjs/operators';
+import { map, filter, switchMap, delay, concatMap, tap, distinctUntilChanged, first } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { bounceInLeft, fadeIn } from 'ng-animate';
 import { Comment } from 'ngrx-quiz-common';
 import {
     AppState, QuizState, QuizItemStatus, QuizItemChoiceStatus,
     ActionSubmitAnswer, ActionLoadItem, ActionPostItemComment,
-    selectQuizState, selectActiveItemStatus, selectQuizActiveItemId
+    selectQuizState, selectActiveItemStatus, selectItemComments, ActionLoadItemComments
 } from '../../../store';
 import { AutoUnsubscribe, QuizService } from '../../../core';
 import { DialogService } from '../../../dialog';
@@ -39,18 +38,20 @@ export class QuizStepComponent implements OnInit {
 
     choicesAnimationCounter: number = 0;
 
+    itemComments$: Observable<Comment[]>;
     comments$: Observable<Comment[]>;
     private commentsExpanded = new BehaviorSubject<boolean>(false);
     commentsExpanded$: Observable<boolean> = this.commentsExpanded.asObservable();
     commentsEditor = false;
 
     constructor(private route: ActivatedRoute, private appStore: Store<AppState>,
-                private quizService: QuizService, private dialogService: DialogService) {
+                private dialogService: DialogService) {
     }
 
     ngOnInit() {
         this.quizState$ = this.appStore.select(selectQuizState);
         this.itemStatus$ = this.appStore.select(selectActiveItemStatus).pipe(filter(v => !!v));
+        this.itemComments$ = this.appStore.select(selectItemComments);
 
         this.routeSubscription = this.route.params.pipe(
             map((params: Params) => +params.step),
@@ -93,9 +94,7 @@ export class QuizStepComponent implements OnInit {
                     }
                     return true;
                 }),
-                switchMap(() => this.appStore.select(selectQuizActiveItemId).pipe(first())),
-                switchMap(itemId => this.quizService.loadComments(itemId).pipe(first())),
-                shareReplay(1)
+                switchMap(() => this.itemComments$.pipe(filter(x => !!x), first()))
             ))
         );
     }
@@ -112,6 +111,7 @@ export class QuizStepComponent implements OnInit {
     }
 
     showComments() {
+        this.appStore.dispatch(new ActionLoadItemComments());
         this.commentsExpanded.next(true);
     }
 
@@ -121,7 +121,6 @@ export class QuizStepComponent implements OnInit {
 
     addComment({ text }: {text: string}) {
         this.appStore.dispatch(new ActionPostItemComment({ text }));
-        this.commentsExpanded.next(true); // trigger comments reloading
     }
 
     choiceAnimationDone(event: any) {
