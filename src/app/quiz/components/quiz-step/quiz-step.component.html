@@ -1,6 +1,6 @@
-<div class="container" *ngIf="itemState$ | async as itemState else loading">
+<div class="container" *ngIf="itemStatus$ | async as itemStatus else loading">
     <div *ngIf="quizState$ | async as quizState">
-        <nb-card [status]="itemState.correct ? 'success' : (itemState.wrong ? 'danger': '')">
+        <nb-card [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')" [@fadeIn]="quizState.step">
             <nb-card-header class="d-flex justify-content-between">
                 <span>
                     Question {{quizState.step}} from {{quizState.totalQuestions}}
@@ -10,40 +10,34 @@
             </nb-card-header>
 
             <nb-card-body>
-                <quill-editor theme="bubble" [readOnly]="true" [ngModel]="itemState.question"></quill-editor>
-
-                <div class="mt-4 choices" [ngClass]="{'choices--answered': itemState.answered}">
-                    <div *ngFor="let choice of itemState.choicesStatus">
-                        <div class="choice d-flex align-items-center mt-3 py-3" [ngClass]="{
-                                'checked': !itemState.answered && choice.checked,
-                                'text-success': choice.correct && !choice.semiCorrect,
-                                'text-danger': choice.wrong,
-                                'text-warning': choice.semiCorrect
-                            }" (click)="toggleChoice(choice.id)">
-                            <i class="fa mx-3" [ngClass]="{'fa-check': !choice.wrong, 'fa-times': choice.wrong}"></i>
-                            <span>{{choice.text}}</span>
-                            <span *ngIf="itemState.answered" class="ml-auto mr-3">
-                                {{choice.popularity | percent : '1.0-2'}}
-                            </span>
+                <quill-editor theme="bubble" [readOnly]="true" [ngModel]="itemStatus.question"></quill-editor>
+                <div class="mt-4 choices">
+                    <div style="position: absolute; top: 0; left: 0; right: 0"
+                            *ngIf="flyCounter !==  itemStatus.choicesStatus.length">
+                        <div *ngFor="let choice of (choices$ | async); trackBy: trackingFunction"
+                                @bounceInLeft (@bounceInLeft.done)="animationDone($event)">
+                            <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
                         </div>
-                        <div *ngIf="choice.explanation" class="alert"
-                                [ngClass]="{'text-success': choice.correct, 'text-danger': choice.wrong}">
-                            {{choice.explanation}}
+                    </div>
+
+                    <div [ngStyle]="{opacity: flyCounter ===  itemStatus.choicesStatus.length ? 1 : 0}">
+                        <div *ngFor="let choice of itemStatus.choicesStatus">
+                            <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
                         </div>
                     </div>
                 </div>
             </nb-card-body>
 
             <nb-card-footer class="d-flex">
-                <a *ngIf="!itemState.answered" class="btn btn-outline-secondary btn-lg ml-auto"
+                <a *ngIf="!itemStatus.answered" class="btn btn-outline-secondary btn-lg ml-auto"
                         routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
                     Skip
                 </a>
-                <button *ngIf="!itemState.answered" class="btn btn-outline-primary btn-lg ml-4"
+                <button *ngIf="!itemStatus.answered" class="btn btn-outline-primary btn-lg ml-4"
                         (click)="submit()">
                     Submit
                 </button>
-                <a *ngIf="itemState.answered && !quizState.finished" class="btn btn-outline-info btn-lg ml-auto"
+                <a *ngIf="itemStatus.answered && !quizState.finished" class="btn btn-outline-info btn-lg ml-auto"
                         routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
                     Next
                 </a>
@@ -60,7 +54,7 @@
             </span>
         </div>
 
-        <app-comments *ngIf="commentsExpanded && itemState.answered"
+        <app-comments *ngIf="commentsExpanded && itemStatus.answered"
             [comments]="comments$" (comment)="addComment($event)"></app-comments>
 
         <div class="text-center">

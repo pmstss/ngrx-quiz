@@ -13,48 +13,11 @@
         list-style-type: none;
         margin-left: 0;
         padding-left: 0;
+        position: relative;
+        border: 1px solid transparent;
     }
 
-    .fa {
-        font-size: 1.25rem;
-        color: nb-theme(color-bg-active);
-    }
-
-    .choice.checked,
-    .choices:not(.choices--answered) .choice:hover {
-        border-color: nb-theme(color-info);
-        opacity: 1;
-        transition: border-color 1s, opacity 0.5s;
-    }
-
-    .choice {
-        cursor: pointer;
-        border: 2px solid nb-theme(color-bg-active);
-        border-radius: nb-theme(radius);
-        opacity: 0.8;
-
-        &.text-success, &.text-danger, &.text-warning {
-            font-weight: bold;
-
-            .fa {
-                color: inherit;
-            }
-        }
-
-        &.text-success {
-            border-color: nb-theme(color-success);
-        }
-
-        &.text-danger {
-            border-color: nb-theme(color-danger);
-        }
-
-        &.text-warning {
-            border-color: nb-theme(color-warning);
-        }
-
-        &.checked .fa {
-            color: nb-theme(color-info);
-        }
+    nb-card-body {
+        overflow-x: hidden;
     }
 }
