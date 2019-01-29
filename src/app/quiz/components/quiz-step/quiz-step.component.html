@@ -47,22 +47,22 @@
             </nb-card-footer>
         </nb-card>
 
-        <div class="d-flex" [ngClass]="commentsExpanded ? 'justify-content-end' : 'justify-content-around'">
-            <span class="btn btn-xs btn-outline-secondary" *ngIf="!commentsExpanded" (click)="showComments()">
+        <div class="d-flex" [ngClass]="(commentsExpanded$ | async) ? 'justify-content-between' : 'justify-content-around'">
+            <span class="btn btn-xs btn-outline-secondary" *ngIf="!(commentsExpanded$ | async)" (click)="showComments()">
                 Show Comments ({{itemStatus.numberOfComments}})
             </span>
 
-            <span class="btn btn-xs btn-outline-secondary mr-3" *ngIf="commentsExpanded" (click)="hideComments()">
+            <span class="btn btn-xs btn-outline-secondary mr-3" *ngIf="(commentsExpanded$ | async)" (click)="hideComments()">
                 Hide Comments
             </span>
 
-            <span class="btn btn-xs btn-outline-success" *ngIf="commentsExpanded" (click)="commentsEditor = !commentsEditor">
+            <span class="btn btn-xs btn-outline-success" *ngIf="(commentsExpanded$ | async)" (click)="commentsEditor = !commentsEditor">
                 {{ commentsEditor ? 'Hide editor' : 'Write comment' }}
             </span>
         </div>
 
-        <app-comments *ngIf="commentsExpanded && itemStatus.answered"
-            [comments]="comments$" [editor]="commentsEditor" (comment)="addComment($event)"></app-comments>
+        <app-comments *ngIf="(commentsExpanded$ | async) && itemStatus.answered"
+                [comments]="comments$" [editor]="commentsEditor" (comment)="addComment($event)"></app-comments>
 
         <div class="text-center">
             <span *ngFor="let itemId of quizState.itemIds; let i = index">

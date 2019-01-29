@@ -2,7 +2,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { Subscription, Observable, of, BehaviorSubject, from } from 'rxjs';
-import { map, filter, take, switchMap, delay, concatMap, tap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
+import { map, filter, take, switchMap, delay, concatMap, tap, distinctUntilChanged,
+    shareReplay, first } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { bounceInLeft, fadeIn } from 'ng-animate';
 import { Comment } from 'ngrx-quiz-common';
@@ -12,7 +13,7 @@ import {
     selectQuizState, selectActiveItemStatus, selectQuizActiveItemId
 } from '../../../store';
 import { AutoUnsubscribe, QuizService } from '../../../core';
-import { DialogService } from 'src/app/dialog';
+import { DialogService } from '../../../dialog';
 
 const DELAY_CHOICES_QUEUE = 150;
 
@@ -38,9 +39,9 @@ export class QuizStepComponent implements OnInit {
 
     choicesAnimationCounter: number = 0;
 
-    private commentsSubject = new BehaviorSubject<Comment[]>([]);
-    comments$: Observable<Comment[]>; // = this.commentsSubject.asObservable();
-    commentsExpanded = false;
+    comments$: Observable<Comment[]>;
+    private commentsExpanded = new BehaviorSubject<boolean>(false);
+    commentsExpanded$: Observable<boolean> = this.commentsExpanded.asObservable();
     commentsEditor = false;
 
     constructor(private route: ActivatedRoute, private appStore: Store<AppState>,
@@ -55,13 +56,18 @@ export class QuizStepComponent implements OnInit {
             map((params: Params) => +params.step),
             filter(step => !!step)
         ).subscribe((step: number) => {
-            this.commentsExpanded = false;
+            this.commentsExpanded.next(false);
             this.appStore.dispatch(new ActionLoadItem({ step }));
         });
 
+        this.choices$ = this.initAnimatedChoicesObservable();
+        this.comments$ = this.initCommentsObservable();
+    }
+
+    private initAnimatedChoicesObservable() {
         // transform choicesStatus array observable into sequence of growing arrays for
-        // choices one by one appearing animation
-        this.choices$ = this.itemStatus$.pipe(
+        // choices one by one appearing animation (in combination with proper trackBy)
+        return this.itemStatus$.pipe(
             map(status => status.choicesStatus),
             distinctUntilChanged(
                 (ch1, ch2) => ch1.length === ch2.length && ch1.every((ch, idx) => ch.id === ch2[idx].id)
@@ -74,34 +80,43 @@ export class QuizStepComponent implements OnInit {
         );
     }
 
+    private initCommentsObservable() {
+        return this.commentsExpanded$.pipe(
+            switchMap(expanded => !expanded ? of([]) : this.itemStatus$.pipe(
+                first(),
+                map(itemStatus => itemStatus.answered),
+                filter((answered) => {
+                    if (!answered) {
+                        this.commentsExpanded.next(false);
+                        this.showAnswerFirstDialog();
+                        return false;
+                    }
+                    return true;
+                }),
+                switchMap(() => this.appStore.select(selectQuizActiveItemId).pipe(first())),
+                switchMap(itemId => this.quizService.loadComments(itemId).pipe(first())),
+                shareReplay(1)
+            ))
+        );
+    }
+
+    private showAnswerFirstDialog() {
+        this.dialogService.alert({
+            title: 'Information',
+            message: 'Please answer first to see comments'
+        });
+    }
+
     submit() {
         this.appStore.dispatch(new ActionSubmitAnswer());
     }
 
     showComments() {
-        this.comments$ = this.itemStatus$.pipe(
-            map(itemStatus => itemStatus.answered),
-            take(1),
-            switchMap((answered) => {
-                if (!answered) {
-                    this.dialogService.alert({ title: 'Information', message: 'Please answer first to see comments' });
-                    return of([]);
-                }
-
-                this.commentsExpanded = true;
-                return this.appStore.select(selectQuizActiveItemId).pipe(
-                    take(1),
-                    switchMap(id => this.quizService.loadComments(id))
-                );
-            }),
-            shareReplay(1)
-        );
-
-        this.comments$.subscribe(console.log);
+        this.commentsExpanded.next(true);
     }
 
     hideComments() {
-        this.commentsExpanded = false;
+        this.commentsExpanded.next(false);
     }
 
     addComment({ text }: {text: string}) {
@@ -110,8 +125,9 @@ export class QuizStepComponent implements OnInit {
             switchMap(state => this.quizService.postComment(state.id, text))
         ).subscribe((res) => {
             this.commentsEditor = false;
-            const comments = [res].concat(this.commentsSubject.value);
-            this.commentsSubject.next(comments);
+            // TODO ### restore functionality after remake to redux
+            /*const comments = [res].concat(this.commentsSubject.value);
+            this.commentsSubject.next(comments);*/
         });
     }
 
