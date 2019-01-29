@@ -47,14 +47,18 @@
             </nb-card-footer>
         </nb-card>
 
-        <div class="text-center">
-            <span class="btn btn-outline-secondary" *ngIf="!commentsExpanded" (click)="loadComments()">
-                Show Comments ({{itemStatus.numberOfComments}})
+        <div class="d-flex" [ngClass]="commentsExpanded ? 'justify-content-between' : 'justify-content-around'">
+            <span class="btn btn-xs btn-outline-secondary" (click)="loadComments()">
+                {{ commentsExpanded ? 'Hide' : 'Show' }} Comments ({{itemStatus.numberOfComments}})
+            </span>
+
+            <span class="btn btn-xs btn-outline-success ml-3" *ngIf="commentsExpanded" (click)="commentsEditor = !commentsEditor">
+                {{ commentsEditor ? 'Hide editor' : 'Write comment' }}
             </span>
         </div>
 
         <app-comments *ngIf="commentsExpanded && itemStatus.answered"
-            [comments]="comments$" (comment)="addComment($event)"></app-comments>
+            [comments]="comments$" [editor]="commentsEditor" (comment)="addComment($event)"></app-comments>
 
         <div class="text-center">
             <span *ngFor="let itemId of quizState.itemIds; let i = index">

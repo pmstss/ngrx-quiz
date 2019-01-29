@@ -41,6 +41,7 @@ export class QuizStepComponent implements OnInit {
     private commentsSubject = new BehaviorSubject<Comment[]>([]);
     comments$ = this.commentsSubject.asObservable();
     commentsExpanded = false;
+    commentsEditor = false;
 
     constructor(private route: ActivatedRoute, private appStore: Store<AppState>,
                 private quizService: QuizService, private dialogService: DialogService) {
@@ -80,6 +81,11 @@ export class QuizStepComponent implements OnInit {
     }
 
     loadComments() {
+        if (this.commentsExpanded) {
+            this.commentsExpanded = false;
+            return;
+        }
+
         this.itemStatus$.pipe(
             map(itemStatus => itemStatus.answered),
             take(1)
@@ -100,6 +106,7 @@ export class QuizStepComponent implements OnInit {
             take(1),
             switchMap(state => this.quizService.postComment(state.id, text))
         ).subscribe((res) => {
+            this.commentsEditor = false;
             const comments = [res].concat(this.commentsSubject.value);
             this.commentsSubject.next(comments);
         });

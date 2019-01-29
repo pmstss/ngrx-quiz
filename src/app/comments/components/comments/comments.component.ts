@@ -10,13 +10,13 @@ import { CommentMessageComponent } from '../comment-message/comment-message.comp
     styleUrls: ['./comments.component.scss']
 })
 export class CommentsComponent implements AfterViewInit, OnInit {
-    @Input('comments') comments$: Observable<Comment[]>;
     @Input() title: string = 'Comments';
+    @Input('comments') comments$: Observable<Comment[]>;
+    @Input('editor') editor: boolean = false;
+
     @Output('comment') commentEmitter = new EventEmitter<{ text: string }>();
 
     @ContentChildren(CommentMessageComponent) messageComponents: QueryList<CommentMessageComponent>;
-
-    collapsed: boolean = true;
 
     ngOnInit() {
     }
@@ -29,7 +29,6 @@ export class CommentsComponent implements AfterViewInit, OnInit {
     }
 
     onMessage(message) {
-
         this.commentEmitter.emit({
             text: message
         });
