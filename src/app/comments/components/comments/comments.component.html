@@ -1,9 +1,8 @@
 <div *ngIf="comments$ | async as comments else loading">
-
     <app-comment-form [collapsed]="!editor" (message)="onMessage($event)"></app-comment-form>
 
     <div class="comments px-2 py-3">
-        <app-comment-message *ngFor="let comment of comments" [comment]="comment"></app-comment-message>
+        <app-comment-message *ngFor="let comment of comments" [comment]="comment" @animComment></app-comment-message>
         <p class="no-comments" *ngIf="!comments?.length">No comments yet.</p>
     </div>
 </div>

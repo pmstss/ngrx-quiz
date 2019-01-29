@@ -1,6 +1,6 @@
 <div class="container" *ngIf="itemStatus$ | async as itemStatus else loading">
     <div *ngIf="quizState$ | async as quizState">
-        <nb-card [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')" [@fadeIn]="quizState.step">
+        <nb-card [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')" [@animCard]="quizState.step">
             <nb-card-header class="d-flex justify-content-between">
                 <span>
                     Question {{quizState.step}} from {{quizState.totalQuestions}}
@@ -14,7 +14,7 @@
                 <div class="mt-4 choices">
                     <div class="choices-animated-aux" *ngIf="choicesAnimationCounter !==  itemStatus.choicesStatus.length">
                         <div *ngFor="let choice of (choices$ | async); trackBy: trackChoice"
-                                @bounceInLeft (@bounceInLeft.done)="choiceAnimationDone($event)">
+                                @animChoice (@animChoice.done)="choiceAnimationDone($event)">
                             <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
                         </div>
                     </div>
@@ -47,12 +47,16 @@
             </nb-card-footer>
         </nb-card>
 
-        <div class="d-flex" [ngClass]="commentsExpanded ? 'justify-content-between' : 'justify-content-around'">
-            <span class="btn btn-xs btn-outline-secondary" (click)="loadComments()">
-                {{ commentsExpanded ? 'Hide' : 'Show' }} Comments ({{itemStatus.numberOfComments}})
+        <div class="d-flex" [ngClass]="commentsExpanded ? 'justify-content-end' : 'justify-content-around'">
+            <span class="btn btn-xs btn-outline-secondary" *ngIf="!commentsExpanded" (click)="showComments()">
+                Show Comments ({{itemStatus.numberOfComments}})
             </span>
 
-            <span class="btn btn-xs btn-outline-success ml-3" *ngIf="commentsExpanded" (click)="commentsEditor = !commentsEditor">
+            <span class="btn btn-xs btn-outline-secondary mr-3" *ngIf="commentsExpanded" (click)="hideComments()">
+                Hide Comments
+            </span>
+
+            <span class="btn btn-xs btn-outline-success" *ngIf="commentsExpanded" (click)="commentsEditor = !commentsEditor">
                 {{ commentsEditor ? 'Hide editor' : 'Write comment' }}
             </span>
         </div>

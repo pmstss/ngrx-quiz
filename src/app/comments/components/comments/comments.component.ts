@@ -3,11 +3,16 @@ import { Component, AfterViewInit, Input, ContentChildren,
 import { Observable } from 'rxjs';
 import { Comment } from 'ngrx-quiz-common';
 import { CommentMessageComponent } from '../comment-message/comment-message.component';
+import { trigger, useAnimation, transition } from '@angular/animations';
+import { lightSpeedIn, fadeIn, flip } from 'ng-animate';
 
 @Component({
     selector: 'app-comments',
     templateUrl: './comments.component.html',
-    styleUrls: ['./comments.component.scss']
+    styleUrls: ['./comments.component.scss'],
+    animations: [
+        trigger('animComment', [transition(':enter', useAnimation(fadeIn))])
+    ]
 })
 export class CommentsComponent implements AfterViewInit, OnInit {
     @Input() title: string = 'Comments';

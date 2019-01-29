@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { Subscription, Observable, of, BehaviorSubject, from } from 'rxjs';
-import { map, filter, take, switchMap, delay, concatMap, tap, distinctUntilChanged } from 'rxjs/operators';
+import { map, filter, take, switchMap, delay, concatMap, tap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { bounceInLeft, fadeIn } from 'ng-animate';
 import { Comment } from 'ngrx-quiz-common';
@@ -22,10 +22,10 @@ const DELAY_CHOICES_QUEUE = 150;
     styleUrls: ['./quiz-step.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
-        trigger('fadeIn', [transition('* => *', useAnimation(fadeIn, {
+        trigger('animCard', [transition('* => *', useAnimation(fadeIn, {
             params: { timing: 0.6, delay: 0 }
         }))]),
-        trigger('bounceInLeft', [transition(':enter', useAnimation(bounceInLeft, {
+        trigger('animChoice', [transition(':enter', useAnimation(bounceInLeft, {
             params: { timing: 0.5, delay: 0, a: '-80%' }
         }))])
     ]
@@ -39,7 +39,7 @@ export class QuizStepComponent implements OnInit {
     choicesAnimationCounter: number = 0;
 
     private commentsSubject = new BehaviorSubject<Comment[]>([]);
-    comments$ = this.commentsSubject.asObservable();
+    comments$: Observable<Comment[]>; // = this.commentsSubject.asObservable();
     commentsExpanded = false;
     commentsEditor = false;
 
@@ -72,33 +72,36 @@ export class QuizStepComponent implements OnInit {
                     .pipe(concatMap(ch => of(ch).pipe(delay(DELAY_CHOICES_QUEUE))))
             )
         );
-
-        this.choices$.subscribe(x => console.log(x));
     }
 
     submit() {
         this.appStore.dispatch(new ActionSubmitAnswer());
     }
 
-    loadComments() {
-        if (this.commentsExpanded) {
-            this.commentsExpanded = false;
-            return;
-        }
-
-        this.itemStatus$.pipe(
+    showComments() {
+        this.comments$ = this.itemStatus$.pipe(
             map(itemStatus => itemStatus.answered),
-            take(1)
-        ).subscribe((answered) => {
-            if (!answered) {
-                this.dialogService.alert({ title: 'Information', message: 'Please answer first to see comments' });
-            } else {
+            take(1),
+            switchMap((answered) => {
+                if (!answered) {
+                    this.dialogService.alert({ title: 'Information', message: 'Please answer first to see comments' });
+                    return of([]);
+                }
+
                 this.commentsExpanded = true;
-                this.appStore.select(selectQuizActiveItemId).pipe(
+                return this.appStore.select(selectQuizActiveItemId).pipe(
+                    take(1),
                     switchMap(id => this.quizService.loadComments(id))
-                ).subscribe(comments => this.commentsSubject.next(comments));
-            }
-        });
+                );
+            }),
+            shareReplay(1)
+        );
+
+        this.comments$.subscribe(console.log);
+    }
+
+    hideComments() {
+        this.commentsExpanded = false;
     }
 
     addComment({ text }: {text: string}) {
