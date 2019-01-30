@@ -1,7 +1,27 @@
-import { NbPasswordAuthStrategy, NbAuthJWTToken, NbAuthOptions } from '@nebular/auth';
+import { NbPasswordAuthStrategy, NbAuthJWTToken, NbAuthOptions, NbAuthSocialLink } from '@nebular/auth';
 import { BASE_URL } from '../../consts';
 
 export const nbAuthOptions: NbAuthOptions = {
+    forms: {
+        login: {
+            redirectDelay: 0,
+            socialLinks: <NbAuthSocialLink[]>[
+                {
+                    url: '/assets/oauth-google.html',
+                    target: '_blank',
+                    icon: 'icon-quiz-google',
+                    title: 'Google'
+                },
+                {
+                    url: '/assets/oauth-github.html',
+                    target: '_blank',
+                    icon: 'icon-quiz-github',
+                    title: 'Github'
+                }
+            ]
+        }
+    },
+
     strategies: [
         NbPasswordAuthStrategy.setup({
             name: 'email',
@@ -28,7 +48,7 @@ export const nbAuthOptions: NbAuthOptions = {
                 method: 'post',
                 requireValidToken: false,
                 redirect: {
-                    success: '/',
+                    success: '/auth/login',
                     failure: null
                 },
                 defaultErrors: ['Something went wrong, please try logout again.'],
@@ -61,8 +81,14 @@ export const nbAuthOptions: NbAuthOptions = {
                 defaultErrors: ['Something went wrong, please try again.'],
                 defaultMessages: ['Your token has been successfully refreshed.']
             },
-            resetPass: false
+            resetPass: false,
+            validation: {
+                password: {
+                    required: true,
+                    minLength: 8,
+                    maxLength: 64
+                }
+            }
         })
-    ],
-    forms: {}
+    ]
 };

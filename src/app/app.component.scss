@@ -23,7 +23,7 @@
             opacity: 0.4;
         }
 
-        .ng-invalid {
+        .ng-touched.ng-invalid {
             border-color: nb-theme(color-danger);
         }
 
@@ -111,6 +111,23 @@
 
         .ql-container.ql-snow {
             height: auto;
+        }
+
+        /*** Social icons ***/
+
+        .nb-auth-block .links .socials a.with-icon.icon-quiz-google {
+            background-image: url(/assets/google.svg);
+            background-repeat: no-repeat;
+            padding-left: 50px;
+            padding-right: 20px;
+            font-size: 1.25rem;
+            background-color: white;
+            opacity: 1;
+            color: #7575a0;
+            height: 42px;
+            display: inline-block;
+            line-height: 42px;
+            background-position: 0;
         }
     }
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { NbToastrService } from '@nebular/theme';
-import { NbTokenService, NbAuthToken } from '@nebular/auth';
+import { NbTokenService, NbAuthToken, NbAuthJWTToken } from '@nebular/auth';
 import { MessageService } from './core/services/message.service';
 import { AppState, ActionTokenChanged } from './store';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -12,7 +13,8 @@ import { AppState, ActionTokenChanged } from './store';
 })
 export class AppComponent implements OnInit {
     constructor(private appStore: Store<AppState>, private messageService: MessageService,
-                private toastrService: NbToastrService, private nbTokenService: NbTokenService) {
+                private toastrService: NbToastrService, private nbTokenService: NbTokenService,
+                private router: Router, private tokenService: NbTokenService) {
     }
 
     ngOnInit() {
@@ -29,5 +31,17 @@ export class AppComponent implements OnInit {
                 tokenPayload: nbAuthToken.getPayload()
             }));
         });
+
+        window.addEventListener(
+            'storage',
+            (e) => {
+                if (e.key === 'oauthToken' && e.newValue) {
+                    this.tokenService.set(new NbAuthJWTToken(e.newValue, 'email'));
+                    localStorage.removeItem('oauthToken');
+                    this.router.navigateByUrl('/quizes');
+                }
+            },
+            false
+        );
     }
 }
