@@ -28,7 +28,7 @@ export class QuizAdminService {
         return this.apiService.get<QuizItemAdmin>(`/admin/items/${itemId}`);
     }
 
-    createItem(quizId: QuizId, item: QuizItemAdmin): Observable<QuizItem> {
+    createItem(quizId: QuizId, item: QuizItemAdmin): Observable<QuizItemAdmin> {
         return this.apiService.post<QuizItemAdmin>(`/admin/items?quizId=${encodeURIComponent(quizId)}`, item);
     }
 
