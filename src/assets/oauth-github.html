@@ -1,0 +1,11 @@
+<div>Redirecting to GitHub for authorization...</div>
+<script>
+    var params = {
+        client_id: '89f6755a4a379635f6b5',
+        redirect_uri: 'http://localhost:3333/oauth/github',
+        scope: 'user'
+    };
+    document.location = 'https://github.com/login/oauth/authorize?' + Object.keys(params).map(function (param) {
+        return param + '=' + encodeURIComponent(params[param])
+    }).join('&');
+</script>
