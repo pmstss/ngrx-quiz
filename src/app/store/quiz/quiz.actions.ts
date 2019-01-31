@@ -94,7 +94,8 @@ export class ActionLoadItemComments implements Action {
 
 export class ActionLoadItemCommentsSuccess implements Action {
     readonly type = QuizActionTypes.LOAD_ITEM_COMMENTS_SUCCESS;
-    constructor(public payload: { itemId: ItemId, comments: Comment[] }) {}
+    constructor(public payload: { itemId: ItemId, comments?: Comment[],
+        offset: number, alreadyLoaded?: boolean }) {}
 }
 
 export class ActionLoadItemCommentsError implements Action {

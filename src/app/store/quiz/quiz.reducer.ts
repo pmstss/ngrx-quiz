@@ -81,9 +81,16 @@ const reducers = {
 
     [QuizActionTypes.LOAD_ITEM_COMMENTS_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         const payload = (action as ActionLoadItemCommentsSuccess).payload;
+        if (payload.alreadyLoaded) {
+            return state;
+        }
+
+        let comments = state.comments.get(payload.itemId);
+        comments = !comments ? [] : [...comments];
+        payload.comments.forEach((comment: Comment, idx: number) => comments[payload.offset + idx] = comment);
         return {
             ...state,
-            comments: new Map(state.comments).set(payload.itemId, payload.comments)
+            comments: new Map(state.comments).set(payload.itemId, comments)
         };
     },
 

@@ -17,12 +17,17 @@
         <app-comment-form [collapsed]="!commentsEditor" (message)="onMessage($event)"></app-comment-form>
 
         <div class="comments px-2 py-3">
-            <app-comment-message *ngFor="let comment of comments" [comment]="comment" @animComment></app-comment-message>
-            <p class="no-comments" *ngIf="!comments?.length">No comments yet.</p>
+            <nb-list nbInfiniteList listenWindowScroll [threshold]="10" (bottomThreshold)="loadNext()">
+                <nb-list-item *ngFor="let comment of comments">
+                    <app-comment-message [comment]="comment" @animComment></app-comment-message>
+                    <p class="no-comments" *ngIf="!comments?.length">No comments yet.</p>
+                </nb-list-item>
+            </nb-list>
+            <div class="w-100 comments-loading" [nbSpinner]="loadingComments$ | async" nbSpinnerStatus="danger"></div>
         </div>
     </div>
 </div>
 
 <ng-template #loading>
-    Loading comments...
+    <div class="w-100 my-3 comments-loading" [nbSpinner]="true"></div>
 </ng-template>

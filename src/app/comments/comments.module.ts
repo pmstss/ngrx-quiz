@@ -5,13 +5,17 @@ import { QuillModule } from 'ngx-quill';
 import { CommentMessageComponent } from './components/comment-message/comment-message.component';
 import { CommentFormComponent } from './components/comment-form/comment-form.component';
 import { CommentsComponent } from './components/comments/comments.component';
+import { NbListModule, NbSpinnerModule } from '@nebular/theme';
+import { SharedModule } from '../shared';
 
 @NgModule({
     declarations: [CommentFormComponent, CommentMessageComponent, CommentsComponent],
     imports: [
-        CommonModule,
         FormsModule,
-        QuillModule
+        NbListModule,
+        NbSpinnerModule,
+        QuillModule,
+        SharedModule
     ],
     exports: [CommentsComponent]
 })

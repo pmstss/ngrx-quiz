@@ -60,12 +60,21 @@ export class QuizEffects {
         ofType(QuizActionTypes.LOAD_ITEM_COMMENTS),
         withLatestFrom(this.appStore),
         switchMap(([, appState]: [Action, AppState]) => {
-            const itemId = selectQuizActiveItemId(appState);
+            const item = selectQuizActiveItem(appState);
             const comments = selectItemComments(appState);
-            return typeof comments !== 'undefined' ? of(new ActionLoadItemCommentsSuccess({
-                itemId, comments
-            })) : this.quizService.loadComments(itemId).pipe(
-                map(comments => new ActionLoadItemCommentsSuccess({ itemId, comments })),
+            const offset = comments && comments.length || 0;
+            const loaded = typeof comments !== 'undefined' && (comments[offset] || offset >= item.numberOfComments);
+
+            return loaded ? of(new ActionLoadItemCommentsSuccess({
+                offset,
+                itemId: item.id,
+                alreadyLoaded: true
+            })) : this.quizService.loadComments(item.id, offset).pipe(
+                map(comments => new ActionLoadItemCommentsSuccess({
+                    offset,
+                    comments,
+                    itemId: item.id
+                })),
                 catchError(error => of(new ActionLoadItemCommentsError(error)))
             );
         })

@@ -1,12 +1,16 @@
 import { Component, Input, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { trigger, useAnimation, transition } from '@angular/animations';
-import { Observable, BehaviorSubject, of, Subscription, combineLatest } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Observable, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
+import { Store, Action } from '@ngrx/store';
+import { Actions } from '@ngrx/effects';
 import { Comment } from 'ngrx-quiz-common';
 import { fadeIn } from 'ng-animate';
-import { AppState, selectItemComments, selectActiveItemAnswered,
-    ActionLoadItemComments, ActionPostItemComment, selectQuizStep } from '../../../store';
-import { filter, map, take } from 'rxjs/operators';
+import { AppState, selectItemComments, selectActiveItemAnswered, selectQuizStep,
+    ActionLoadItemComments, ActionLoadItemCommentsSuccess, ActionLoadItemCommentsError,
+    ActionPostItemComment,
+    selectItemCommentsTotal,
+    selectItemCommentsLoadedSize} from '../../../store';
+import { filter, map, take, switchMap, first } from 'rxjs/operators';
 import { DialogService } from 'src/app/dialog';
 
 @Component({
@@ -23,18 +27,19 @@ export class CommentsComponent implements OnInit {
     @Input() numberOfComments: number = 0;
 
     private stepSubscription: Subscription;
-    private commentsExpanded = new BehaviorSubject<boolean>(false);
 
-    commentsExpanded$: Observable<boolean> = this.commentsExpanded.asObservable();
     comments$: Observable<Comment[]>;
+    loadingComments$ = new BehaviorSubject<boolean>(false);
+    commentsExpanded$ = new BehaviorSubject<boolean>(false);
     commentsEditor = false;
 
-    constructor(private appStore: Store<AppState>, private dialogService: DialogService) {
+    constructor(private appStore: Store<AppState>, private actions$: Actions,
+                private dialogService: DialogService) {
     }
 
     ngOnInit() {
         this.stepSubscription = this.appStore.select(selectQuizStep)
-            .subscribe(() => this.commentsExpanded.next(false));
+            .subscribe(() => this.commentsExpanded$.next(false));
 
         this.comments$ = combineLatest(
             this.commentsExpanded$.pipe(filter(x => !!x)),
@@ -49,20 +54,44 @@ export class CommentsComponent implements OnInit {
             take(1)
         ).subscribe((answered) => {
             if (!answered) {
-                this.dialogService.alert({
+                return this.dialogService.alert({
                     title: 'Information',
                     message: 'Please answer first to see comments'
                 });
+            }
+
+            this.commentsExpanded$.next(true);
+            this.appStore.dispatch(new ActionLoadItemComments());
+        });
+    }
+
+    loadNext() {
+        this.loadingComments$.pipe(
+            first(),
+            filter(x => !x),
+            switchMap(() => combineLatest(
+                this.appStore.select(selectItemCommentsLoadedSize),
+                this.appStore.select(selectItemCommentsTotal)
+            )),
+            first()
+        ).subscribe(([loadedSize, total]: [number, number]) => {
+            if (loadedSize >= total) {
                 return;
             }
 
-            this.commentsExpanded.next(true);
+            this.loadingComments$.next(true);
+            this.actions$.pipe(
+                filter((action: Action) => action instanceof ActionLoadItemCommentsSuccess
+                    || action instanceof ActionLoadItemCommentsError),
+                first()
+            ).subscribe(null, null, () => this.loadingComments$.next(false));
+
             this.appStore.dispatch(new ActionLoadItemComments());
         });
     }
 
     hideComments() {
-        this.commentsExpanded.next(false);
+        this.commentsExpanded$.next(false);
     }
 
     onMessage(message) {

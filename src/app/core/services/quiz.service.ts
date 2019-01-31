@@ -55,7 +55,7 @@ export class QuizService {
     }
 
     submitAnswer(quizId: QuizId, itemId: ItemId, choiceIds: Set<ChoiceId>): Observable<ItemAnswerStatus> {
-        return this.apiService.post<QuizItemAnswer>(`/items/answers/${itemId}`, {
+        return this.apiService.post<QuizItemAnswer>(`/items/answers/${encodeURIComponent(itemId)}`, {
             quizId,
             choiceIds: [...choiceIds]
         }).pipe(
@@ -68,19 +68,20 @@ export class QuizService {
     }
 
     resetQuiz(quizId: QuizId): Observable<void> {
-        return this.apiService.post<void>(`/quizes/reset/${quizId}`, {});
+        return this.apiService.post<void>(`/quizes/reset/${encodeURIComponent(quizId)}`, {});
     }
 
     loadTopScores(quizId: QuizId): Observable<TopScore[]> {
-        return this.apiService.get<TopScore[]>(`/quizes/top/${quizId}`);
+        return this.apiService.get<TopScore[]>(`/quizes/top/${encodeURIComponent(quizId)}`);
     }
 
-    loadComments(itemId: ItemId): Observable<Comment[]> {
-        return this.apiService.get<Comment[]>(`/comments/item/${itemId}`);
+    loadComments(itemId: ItemId, offset: number): Observable<Comment[]> {
+        return this.apiService.get<Comment[]>(
+            `/comments/item/${encodeURIComponent(itemId)}?offset=${encodeURIComponent(offset.toString(10))}`);
     }
 
     postComment(itemId: ItemId, text: string): Observable<Comment> {
-        return this.apiService.post<Comment>(`/comments/item/${itemId}`, {
+        return this.apiService.post<Comment>(`/comments/item/${encodeURIComponent(itemId)}`, {
             text
         });
     }
