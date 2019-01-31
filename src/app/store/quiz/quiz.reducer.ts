@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { ChoiceId, QuizItemChoiceAnswer } from 'ngrx-quiz-common';
+import { ChoiceId, QuizItemChoiceAnswer, Comment } from 'ngrx-quiz-common';
 import { QuizActionTypes, ActionLoadItem, ActionToggleChoice, ActionLoadQuizSuccess,
     ActionLoadItemSuccess, ActionSubmitAnswerSuccess,
     ActionLoadItemCommentsSuccess, ActionPostItemCommentSuccess } from './quiz.actions';
@@ -90,9 +90,11 @@ const reducers = {
     [QuizActionTypes.POST_ITEM_COMMENT_SUCCESS]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         const payload = (action as ActionPostItemCommentSuccess).payload;
         const comments = state.comments.get(payload.itemId);
+        const item = state.items.get(payload.itemId);
         return {
             ...state,
-            comments: new Map(state.comments).set(payload.itemId, [payload.comment, ...comments])
+            comments: new Map(state.comments).set(payload.itemId, [payload.comment, ...comments]),
+            items: new Map(state.items).set(payload.itemId, { ...item, numberOfComments: item.numberOfComments + 1 })
         };
     },
 
