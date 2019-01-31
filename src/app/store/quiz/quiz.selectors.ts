@@ -71,6 +71,16 @@ export const selectItemComments = createSelector<AppState, QuizStateNormalized, 
     (state: QuizStateNormalized, itemId: ItemId): Comment[] => state ? state.comments.get(itemId) : null
 );
 
+export const selectItemCommentsLoadedSize = createSelector<AppState, Comment[], number>(
+    selectItemComments,
+    (comments: Comment[]) => comments && comments.length || 0
+);
+
+export const selectItemCommentsTotal = createSelector<AppState, QuizItem, number>(
+    selectQuizActiveItem,
+    (quizItem: QuizItem) => quizItem && quizItem.numberOfComments || 0
+);
+
 // TODO ### ngrx 7 parameterized selector for answered?
 export const selectQuizNextStep =
         createSelector<AppState, ItemId[], number, number, boolean, AnswerStatuses, number>(
