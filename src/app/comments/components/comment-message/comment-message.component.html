@@ -6,5 +6,7 @@
         {{ comment.userName }}
         <time>{{ comment.date  | date:'medium' }}</time>
     </div>
-    <div class="text">{{ comment.text }} id: {{ comment.id }}</div>
+    <div class="text">
+        <quill-editor theme="bubble" [readOnly]="true" [ngModel]="comment.text"></quill-editor>
+    </div>
 </div>
