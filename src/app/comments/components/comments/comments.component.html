@@ -1,6 +1,6 @@
 <div class="d-flex" [ngClass]="(commentsExpanded$ | async) ? 'justify-content-between' : 'justify-content-around'">
     <span class="btn btn-xs btn-outline-secondary" *ngIf="!(commentsExpanded$ | async)" (click)="showComments()">
-        Show Comments ({{numberOfComments}})
+        {{numberOfComments > 0 ? 'Show Comments' : 'Comments'}} ({{numberOfComments}})
     </span>
 
     <span class="btn btn-xs btn-outline-secondary mr-3" *ngIf="(commentsExpanded$ | async)" (click)="hideComments()">
@@ -23,7 +23,7 @@
                     <p class="no-comments" *ngIf="!comments?.length">No comments yet.</p>
                 </nb-list-item>
             </nb-list>
-            <div class="w-100 comments-loading" [nbSpinner]="loadingComments$ | async" nbSpinnerStatus="danger"></div>
+            <div class="w-100 comments-loading" [nbSpinner]="loadingComments$ | async"></div>
         </div>
     </div>
 </div>
