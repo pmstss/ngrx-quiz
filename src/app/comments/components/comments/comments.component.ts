@@ -73,7 +73,7 @@ export class CommentsComponent implements OnInit {
                 this.appStore.select(selectItemCommentsLoadedSize),
                 this.appStore.select(selectItemCommentsTotal)
             )),
-            first()
+            take(1) // TODO why first() fails sometimes, i. e. why stream is finished empty?
         ).subscribe(([loadedSize, total]: [number, number]) => {
             if (loadedSize >= total) {
                 return;
