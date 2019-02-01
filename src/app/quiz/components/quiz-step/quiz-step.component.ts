@@ -1,14 +1,15 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { trigger, transition, useAnimation } from '@angular/animations';
+import { trigger, transition, useAnimation, state, style } from '@angular/animations';
 import { Subscription, Observable, of, from } from 'rxjs';
-import { map, filter, switchMap, delay, concatMap, tap, distinctUntilChanged } from 'rxjs/operators';
+import { map, filter, switchMap, delay, concatMap, tap, distinctUntilChanged, share } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { bounceInLeft, fadeIn } from 'ng-animate';
+import { fadeIn } from 'ng-animate';
+import { bounceInLeft } from './animations';
 import {
     AppState, QuizState, QuizItemStatus, QuizItemChoiceStatus, ActionSubmitAnswer, ActionLoadItem,
     selectQuizState, selectActiveItemStatus } from '../../../store';
-import { AutoUnsubscribe, QuizService } from '../../../core';
+import { AutoUnsubscribe } from '../../../core';
 
 const DELAY_CHOICES_QUEUE = 150;
 
@@ -18,12 +19,19 @@ const DELAY_CHOICES_QUEUE = 150;
     styleUrls: ['./quiz-step.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
-        trigger('animCard', [transition('* => *', useAnimation(fadeIn, {
-            params: { timing: 0.6, delay: 0 }
-        }))]),
-        trigger('animChoice', [transition(':enter', useAnimation(bounceInLeft, {
-            params: { timing: 0.5, delay: 0, a: '-80%' }
-        }))])
+        trigger('animCard', [
+            transition('* => *', useAnimation(fadeIn, {
+                params: { timing: 1, delay: 0 }
+            }))
+        ]),
+        trigger('animChoice', [
+            state('void', style({
+                transform: 'translate3d(-110%, 0, 0)'
+            })),
+            transition('void => in', useAnimation(bounceInLeft, {
+                params: { timing: 1.5, delay: 0.4, a: '-110%' }
+            }))
+        ])
     ]
 })
 export class QuizStepComponent implements OnInit {
@@ -72,7 +80,7 @@ export class QuizStepComponent implements OnInit {
     }
 
     choiceAnimationDone(event: any) {
-        if (event.fromState === 'void') {
+        if (event.fromState === 'void' && event.toState === 'in') {
             this.choicesAnimationCounter++;
         }
     }

@@ -15,7 +15,7 @@
                     <div class="choices-animated-aux"
                             [ngClass]="choicesAnimationCounter !== itemStatus.choicesStatus.length ? 'd-block' : 'd-none'">
                         <div *ngFor="let choice of (choices$ | async); trackBy: trackChoice"
-                                @animChoice (@animChoice.done)="choiceAnimationDone($event)">
+                                [@animChoice]="'in'" (@animChoice.done)="choiceAnimationDone($event)">
                             <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
                         </div>
                     </div>
