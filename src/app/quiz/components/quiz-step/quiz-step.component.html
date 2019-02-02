@@ -1,6 +1,7 @@
-<div class="container" *ngIf="itemStatus$ | async as itemStatus else loading">
-    <div *ngIf="quizState$ | async as quizState">
-        <nb-card [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')" [@animCard]="quizState.step">
+<div class="container" *ngIf="quizState$ | async as quizState else loading" >
+    <div *ngIf="itemStatus$ | async as itemStatus else loading">
+        <nb-card [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')"
+                [@animCard]="(itemLoading$ | async) ? 'void' : 'in'">
             <nb-card-header class="d-flex justify-content-between">
                 <span>
                     Question {{quizState.step}} from {{quizState.totalQuestions}}
@@ -10,7 +11,7 @@
             </nb-card-header>
 
             <nb-card-body>
-                <quill-editor theme="bubble" [readOnly]="true" [ngModel]="itemStatus.question"></quill-editor>
+                <quill-editor theme="bubble" [readOnly]="true" [ngModel]="(itemStatusDelayed$ | async)?.question"></quill-editor>
                 <div class="mt-4 choices">
                     <div class="choices-animated-aux"
                             [ngClass]="choicesAnimationCounter !== itemStatus.choicesStatus.length ? 'd-block' : 'd-none'">
