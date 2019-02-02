@@ -37,8 +37,6 @@ const selectQuizAnswers = createSelector<AppState, QuizStateNormalized, AnswerSt
 const selectQuizFinished = createSelector<AppState, number, AnswerStatuses, boolean>(
     selectQuizTotalQuestions,
     selectQuizAnswers,
-    // (total: number, answers: QuizAnswers) => answers &&
-    //     total === [...answers.values()].filter(a => a.submitted).length
     (total: number, answers: AnswerStatuses) => {
         if (!answers) {
             return false;
