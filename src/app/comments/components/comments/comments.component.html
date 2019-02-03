@@ -17,7 +17,7 @@
         <app-comment-form [collapsed]="!commentsEditor" (message)="onMessage($event)"></app-comment-form>
 
         <div class="comments px-2 py-3">
-            <nb-list nbInfiniteList listenWindowScroll [threshold]="10" (bottomThreshold)="loadNext()">
+            <nb-list nbInfiniteList listenWindowScroll [threshold]="80" (bottomThreshold)="loadNext()">
                 <nb-list-item *ngFor="let comment of comments">
                     <app-comment-message [comment]="comment" @animComment></app-comment-message>
                     <p class="no-comments" *ngIf="!comments?.length">No comments yet.</p>
