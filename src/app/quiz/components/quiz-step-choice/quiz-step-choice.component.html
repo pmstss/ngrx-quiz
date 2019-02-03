@@ -12,5 +12,5 @@
     </span>
 </div>
 <div *ngIf="choice.explanation" class="alert" [ngClass]="{'text-success': choice.correct, 'text-danger': choice.wrong}">
-  {{choice.explanation}}
+    <quill-editor theme="bubble" [readOnly]="true" [ngModel]="choice.explanation"></quill-editor>
 </div>
