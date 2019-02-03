@@ -76,14 +76,18 @@
         }
 
         .ql-editor {
-            font-size: 1.25rem !important;
             max-height: 30vh;
+            font-family: nb-theme(font-main);
+            font-size: 1rem;
+        }
+
+        .ql-container.ql-disabled .ql-editor {
+            padding: 0;
         }
 
         .quiz-admin .ql-editor {
             font-size: 1rem !important;
             color: nb-theme(color-fg-heading);
-            /*min-height: 100px;*/
         }
 
         .quiz-admin .ql-editor.ql-blank::before {
