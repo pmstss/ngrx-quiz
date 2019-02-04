@@ -21,7 +21,8 @@ export class AppComponent implements OnInit {
         this.messageService.messages$.subscribe((msg) => {
             this.toastrService.show(msg.message, msg.title, {
                 status: msg.status,
-                duration: msg.duration
+                duration: msg.duration,
+                preventDuplicates: true
             });
         });
 
