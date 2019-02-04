@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { QuizId, ItemId, ChoiceId, QuizMeta, QuizMetaListItem, QuizItem,
-    QuizItemChoiceAnswer, QuizSession, TopScore, Comment, QuizItemAnswer } from 'ngrx-quiz-common';
+    QuizItemChoiceAnswer, QuizSession, TopScore, Comment, QuizItemAnswer, QuizScore } from 'ngrx-quiz-common';
 import { ItemAnswerStatus, AnswersState } from '../../store';
 import { ApiService } from '../api/api.service';
 
@@ -84,5 +84,9 @@ export class QuizService {
         return this.apiService.post<Comment>(`/comments/item/${encodeURIComponent(itemId)}`, {
             text
         });
+    }
+
+    getQuizScore(quizId: QuizId): Observable<QuizScore> {
+        return this.apiService.get<QuizScore>(`/scores/quiz/${encodeURIComponent(quizId)}`);
     }
 }
