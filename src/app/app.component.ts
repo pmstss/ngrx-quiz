@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { NbToastrService } from '@nebular/theme';
-import { NbTokenService, NbAuthToken, NbAuthJWTToken } from '@nebular/auth';
-import { MessageService } from './core/services/message.service';
-import { AppState, ActionTokenChanged } from './store';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { NbTokenService, NbAuthToken, NbAuthJWTToken } from '@nebular/auth';
+import { AppState, ActionTokenChanged } from './store';
 
 @Component({
     selector: 'app-root',
@@ -12,20 +10,11 @@ import { Router } from '@angular/router';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-    constructor(private appStore: Store<AppState>, private messageService: MessageService,
-                private toastrService: NbToastrService, private nbTokenService: NbTokenService,
+    constructor(private appStore: Store<AppState>, private nbTokenService: NbTokenService,
                 private router: Router, private tokenService: NbTokenService) {
     }
 
     ngOnInit() {
-        this.messageService.messages$.subscribe((msg) => {
-            this.toastrService.show(msg.message, msg.title, {
-                status: msg.status,
-                duration: msg.duration,
-                preventDuplicates: true
-            });
-        });
-
         this.nbTokenService.tokenChange().subscribe((nbAuthToken: NbAuthToken) => {
             this.appStore.dispatch(new ActionTokenChanged({
                 token: nbAuthToken.getValue(),

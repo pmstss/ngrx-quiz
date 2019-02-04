@@ -1,5 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NbGlobalLogicalPosition, NbToastrModule } from '@nebular/theme';
 import { ApiService } from './api/api.service';
 import { QuizService } from './services/quiz.service';
 import { MessageService } from './services/message.service';
@@ -9,7 +10,9 @@ import { CredentialsInterceptor } from './services/credentials-interceptor';
 
 @NgModule({
     declarations: [],
-    imports: [],
+    imports: [
+        NbToastrModule.forRoot({ position: NbGlobalLogicalPosition.BOTTOM_END })
+    ],
     providers: [
         ApiService, QuizService, MessageService,
         {

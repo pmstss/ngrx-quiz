@@ -2,18 +2,32 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { NbToastStatus } from '@nebular/theme/components/toastr/model';
 import { NbToastrConfig } from '@nebular/theme/components/toastr/toastr-config';
+import { NbToastrService } from '@nebular/theme';
 
 export type Message = Partial<NbToastrConfig> & {
     message: string,
     title: string;
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MessageService {
     private static MAX_MESSAGE_LENGTH = 200;
     private static MAX_TITLE_LENGTH = 50;
 
     private subject = new Subject<Message>();
+
+    constructor(private toastrService: NbToastrService) {
+        this.subject.subscribe((msg) => {
+            this.toastrService.show(msg.message, msg.title, {
+                status: msg.status,
+                duration: msg.duration,
+                preventDuplicates: true
+            });
+        });
+
+    }
 
     private static truncate(str: string, maxLength: number) {
         // tslint:disable-next-line prefer-template

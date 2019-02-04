@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeService, NbThemeModule, NbLayoutModule, NbToastrModule,
-        NbGlobalLogicalPosition, NbMenuModule, NbContextMenuModule, NbDialogModule } from '@nebular/theme';
+import { NbThemeService, NbThemeModule, NbLayoutModule, NbMenuModule, NbContextMenuModule,
+    NbDialogModule } from '@nebular/theme';
 import { BASE_URL_TOKEN, BASE_URL } from './consts';
 import { CoreModule } from './core';
 import { SharedModule } from './shared';
@@ -25,7 +25,6 @@ import { AuthModule } from './auth';
         BrowserAnimationsModule,
         NbThemeModule.forRoot({ name: 'cosmic' }),
         NbLayoutModule,
-        NbToastrModule.forRoot({ position: NbGlobalLogicalPosition.BOTTOM_END }),
         NbMenuModule.forRoot(),
         NbDialogModule.forRoot(),
         NbContextMenuModule,
