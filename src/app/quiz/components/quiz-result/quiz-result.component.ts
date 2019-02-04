@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState, selectQuizState, QuizState, ActionResetQuiz } from '../../../store';
 import { map, switchMap } from 'rxjs/operators';
-import { QuizId, QuizScore } from 'ngrx-quiz-common';
+import { Store } from '@ngrx/store';
+import { QuizScore } from 'ngrx-quiz-common';
+import { AppState, selectQuizState, QuizState, ActionResetQuiz } from '../../../store';
 import { QuizService } from '../../../core';
 
 interface QuizScoreMeta {
@@ -21,7 +21,9 @@ interface QuizStateScore extends QuizState {
 
 @Component({
     selector: 'app-quiz-result',
-    templateUrl: './quiz-result.component.html'
+    styleUrls: ['./quiz-result.component.scss'],
+    templateUrl: './quiz-result.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizResultComponent implements OnInit {
     quizStateScore$: Observable<QuizStateScore>;
