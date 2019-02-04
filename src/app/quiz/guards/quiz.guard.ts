@@ -4,7 +4,6 @@ import { Observable, of } from 'rxjs';
 import { map, take, concatMap, filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Actions } from '@ngrx/effects';
-import { QuizMeta } from 'ngrx-quiz-common';
 import { MessageService } from '../../core';
 import { AppState, ActionLoadQuiz, QuizActionTypes, selectQuizState, QuizState } from '../../store';
 
@@ -56,7 +55,7 @@ export class QuizGuard implements CanActivate {
                 return of(loaded);
             }),
             map((success: boolean): boolean | UrlTree => {
-                return success || this.router.parseUrl('/quizes');
+                return success || this.router.parseUrl('/');
             })
         );
     }

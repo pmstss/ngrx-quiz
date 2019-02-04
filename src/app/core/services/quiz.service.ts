@@ -25,7 +25,7 @@ export class QuizService {
             catchError((err) => {
                 // TODO ### centralized handling?
                 if (err.status === 404) {
-                    this.router.navigateByUrl('/quizes');
+                    this.router.navigateByUrl('/');
                 } else {
                     return throwError(err);
                 }

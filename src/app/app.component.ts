@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
                 if (e.key === 'oauthToken' && e.newValue) {
                     this.tokenService.set(new NbAuthJWTToken(e.newValue, 'email'));
                     localStorage.removeItem('oauthToken');
-                    this.router.navigateByUrl('/quizes');
+                    this.router.navigateByUrl('/');
                 }
             },
             false

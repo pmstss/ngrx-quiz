@@ -13,13 +13,13 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
                 outlet: 'header'
             },
             {
-                path: 'auth',
-                loadChildren: '../auth-ui/auth-ui.module#AuthUIModule'
-            },
-            {
-                path: 'quizes',
+                path: '',
                 loadChildren: '../quiz-list/quiz-list.module#QuizListModule',
                 canActivate: [AuthGuard]
+            },
+            {
+                path: 'auth',
+                loadChildren: '../auth-ui/auth-ui.module#AuthUIModule'
             },
             {
                 path: 'quiz',
@@ -35,11 +35,11 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
                 path: 'admin',
                 loadChildren: '../admin/admin.module#AdminModule',
                 canActivate: [AdminAuthGuard]
-            }/*,
+            },
             {
                 path: '**',
-                redirectTo: '/quizes'
-            }*/],
+                redirectTo: ''
+            }],
             {
                 // enableTracing: true // TODO ### for debug
             }
