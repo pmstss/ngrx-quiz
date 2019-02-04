@@ -72,7 +72,7 @@ export class QuizService {
     }
 
     loadTopScores(quizId: QuizId): Observable<TopScore[]> {
-        return this.apiService.get<TopScore[]>(`/quizes/top/${encodeURIComponent(quizId)}`);
+        return this.apiService.get<TopScore[]>(`/scores/top/${encodeURIComponent(quizId)}`);
     }
 
     loadComments(itemId: ItemId, offset: number): Observable<Comment[]> {
