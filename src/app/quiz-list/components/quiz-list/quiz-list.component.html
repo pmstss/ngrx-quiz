@@ -8,15 +8,14 @@
                 {{quiz.finished ? 'Finished' : (quiz.started ? 'In progress' : '')}}
             </span>
         </nb-card-header>
-        <nb-card-body>
+        <nb-card-body class="pb-2">
             <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quiz.description"></quill-editor>
-
-            <div class="d-flex justify-content-end">
-                <a class="btn btn-outline-primary" routerLink="/quiz/{{quiz.shortName}}">
-                    View details
-                </a>
-            </div>
         </nb-card-body>
+        <nb-card-footer class="pt-0 pb-2 d-flex justify-content-end">
+            <a class="btn btn-outline-primary" routerLink="/quiz/{{quiz.shortName}}">
+                View details
+            </a>
+        </nb-card-footer>
     </nb-card>
 </div>
 

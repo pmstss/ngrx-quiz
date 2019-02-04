@@ -1,3 +1,11 @@
-.card-header {
-    font-weight: bold;
+@import '../../../../themes';
+
+@include nb-install-component() {
+    .card-header {
+        font-weight: bold;
+    }
+
+    nb-card-footer {
+        border-top-color: transparent;
+    }
 }
