@@ -11,7 +11,7 @@ import { AppState, selectItemComments, selectActiveItemAnswered, selectQuizStep,
     selectItemCommentsTotal,
     selectItemCommentsLoadedSize} from '../../../store';
 import { filter, map, take, switchMap, first } from 'rxjs/operators';
-import { DialogService } from 'src/app/dialog';
+import { DialogService } from '../../../dialog';
 
 @Component({
     selector: 'app-comments',
