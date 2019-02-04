@@ -26,7 +26,6 @@ export class HeaderComponent implements OnInit {
         this.user$ = this.appStore.select(selectUser);
 
         this.nbMenuService.onItemClick().pipe(
-            tap(tmp => console.log(tmp)),
             filter(({ tag, item: { data } }) => tag === 'user-context-menu' && data && data.id === 'profile')
         ).subscribe(item => alert('Profile click!'));
     }
