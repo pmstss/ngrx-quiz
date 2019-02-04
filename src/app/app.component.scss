@@ -49,6 +49,20 @@
             font-size: 2em;
         }
 
+        /*** Nebular toast ***/
+
+        nb-toast {
+            position: relative;
+        }
+
+        nb-toast::after {
+            position: absolute;
+            content: 'X';
+            display: block;
+            top: 0.25rem;
+            right: 1rem;
+        }
+
         /*** Nebular overrides for Bootstrap ***/
 
         .navbar-dark .navbar-nav .nav-link {
