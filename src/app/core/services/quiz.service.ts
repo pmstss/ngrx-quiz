@@ -89,4 +89,8 @@ export class QuizService {
     getQuizScore(quizId: QuizId): Observable<QuizScore> {
         return this.apiService.get<QuizScore>(`/scores/quiz/${encodeURIComponent(quizId)}`);
     }
+
+    getQuizScoreDistribution(quizId: QuizId): Observable<number[]> {
+        return this.apiService.get<number[]>(`/scores/quiz-stats/${encodeURIComponent(quizId)}`);
+    }
 }

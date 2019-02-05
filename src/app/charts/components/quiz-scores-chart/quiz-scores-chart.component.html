@@ -1,0 +1,8 @@
+<div class="chart-container my-3" *ngIf="(chartOpts$ | async) as chartOpts else loading">
+    <lib-ngx-chartist class="h-100 d-block" #chart [data]="chartOpts.data" [options]="chartOpts.options" type="Bar">
+    </lib-ngx-chartist>
+</div>
+
+<ng-template #loading>
+    Loading chart...
+</ng-template>

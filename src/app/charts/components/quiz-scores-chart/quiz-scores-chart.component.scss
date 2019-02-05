@@ -1,0 +1,20 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+    display: block;
+
+    .chart-container {
+        height: 300px;
+    }
+
+    /deep/ {
+        .ct-grids .ct-grid {
+            stroke: nb-theme(color-fg);
+            opacity: 0.5;
+        }
+
+        .ct-labels .ct-label {
+            color: nb-theme(color-fg);
+        }
+    }
+}
