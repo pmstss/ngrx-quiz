@@ -9,13 +9,13 @@ export const nbAuthOptions: NbAuthOptions = {
                 {
                     url: '/assets/oauth-google.html',
                     target: '_blank',
-                    icon: 'icon-quiz-google',
+                    icon: 'icon-social-google',
                     title: 'Google'
                 },
                 {
                     url: '/assets/oauth-github.html',
                     target: '_blank',
-                    icon: 'icon-quiz-github',
+                    icon: 'icon-social-github',
                     title: 'Github'
                 }
             ]

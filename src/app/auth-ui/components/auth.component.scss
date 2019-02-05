@@ -93,6 +93,38 @@
 
                     &.with-icon {
                         font-size: 2rem;
+
+                        &.icon-social-google, &.icon-social-github {
+                            background-repeat: no-repeat;
+                            border-radius: 0.5rem;
+                            padding-left: 50px;
+                            padding-right: 20px;
+                            font-size: 1.25rem;
+                            background-color: white;
+                            opacity: 0.85;
+                            color: #7575a0;
+                            height: 42px;
+                            display: inline-block;
+                            line-height: 42px;
+                            transform: scale(1);
+
+                            &:hover {
+                                opacity: 1;
+                                transform: scale(1.05);
+                                transition: transform 0.1s ease-in;
+                            }
+                        }
+
+                        &.icon-social-google {
+                            background-image: url(/assets/google.svg);
+                            background-position: 0;
+                        }
+
+                        &.icon-social-github {
+                            background-image: url(/assets/github.svg);
+                            background-size: 30px 30px;
+                            background-position: 7px 7px;
+                        }
                     }
                 }
             }
