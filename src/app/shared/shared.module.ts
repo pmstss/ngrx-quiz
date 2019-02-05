@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { NbSpinnerModule, NbUserModule, NbContextMenuModule, NbPopoverModule } from '@nebular/theme';
+import { NbSpinnerModule, NbUserModule, NbContextMenuModule, NbPopoverModule, NbCardModule } from '@nebular/theme';
 import { HeaderComponent } from './components/header/header.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { BackLinkComponent } from './components/back-link/back-link.component';
@@ -16,12 +16,13 @@ import { ThemeSwitcherListComponent } from './components/themes-switcher-list/th
     imports: [
         CommonModule,
         RouterModule,
+        NbCardModule,
         NbSpinnerModule,
         NbPopoverModule,
         NbUserModule,
         NbContextMenuModule
     ],
     entryComponents: [ThemeSwitcherListComponent],
-    exports: [CommonModule, HeaderComponent, LoaderComponent, BackLinkComponent]
+    exports: [CommonModule, NbCardModule, HeaderComponent, LoaderComponent, BackLinkComponent]
 })
 export class SharedModule { }
