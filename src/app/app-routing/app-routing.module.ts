@@ -23,7 +23,12 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
             },
             {
                 path: 'quiz',
-                loadChildren: '../quiz/quiz.module#QuizModule',
+                loadChildren: '../quiz/quiz-routing.module#QuizRoutingModule',
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'result',
+                loadChildren: '../result/quiz-result.module#QuizResultModule',
                 canActivate: [AuthGuard]
             },
             {
@@ -41,7 +46,7 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
                 redirectTo: ''
             }],
             {
-                // enableTracing: true // TODO ### for debug
+                enableTracing: true // for debug
             }
         )
     ],

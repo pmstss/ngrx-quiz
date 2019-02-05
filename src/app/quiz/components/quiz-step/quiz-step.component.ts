@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { trigger, transition, useAnimation, state, style } from '@angular/animations';
 import { Subscription, Observable, of, from, BehaviorSubject } from 'rxjs';
 import { map, filter, switchMap, delay, concatMap, distinctUntilChanged,
-    debounceTime, mergeMap, take } from 'rxjs/operators';
+    debounceTime, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { fadeIn, fadeOut } from 'ng-animate';
 import { bounceInLeft } from './animations';

@@ -21,7 +21,7 @@
                 {{quizState.started ? 'Continue quiz' : 'Start quiz!'}}
             </a>
 
-            <a *ngIf="quizState.finished" class="btn btn-lg btn-outline-info" routerLink="/quiz/{{quizState.shortName}}/result">
+            <a *ngIf="quizState.finished" class="btn btn-lg btn-outline-info" routerLink="/result/{{quizState.shortName}}">
                 Results
             </a>
         </div>

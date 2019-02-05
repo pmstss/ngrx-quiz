@@ -3,6 +3,10 @@
 @include nb-install-component() {
     display: block;
 
+    h5 {
+        color: inherit;
+    }
+
     .chart-container {
         height: 300px;
     }

@@ -1,5 +1,7 @@
 @import '../../../../themes';
 
 @include nb-install-component() {
-
+    .text-fg {
+        color: nb-theme(color-fg-heading);
+    }
 }

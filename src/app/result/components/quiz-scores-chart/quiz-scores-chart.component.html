@@ -1,3 +1,5 @@
+
+<h5>All users score statistics</h5>
 <div class="chart-container my-3" *ngIf="(chartOpts$ | async) as chartOpts else loading">
     <lib-ngx-chartist class="h-100 d-block" #chart [data]="chartOpts.data" [options]="chartOpts.options" type="Bar">
     </lib-ngx-chartist>
