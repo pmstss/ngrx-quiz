@@ -2,6 +2,7 @@
 
 @import '~@nebular/theme/styles/globals';
 @import '~@nebular/bootstrap/styles/globals';
+@import '~@ngx-share/button/themes/default/default-theme';
 
 @include nb-install() {
   @include nb-theme-global();
