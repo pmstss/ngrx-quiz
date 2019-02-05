@@ -4,4 +4,8 @@
     .text-fg {
         color: nb-theme(color-fg-heading);
     }
+
+    /deep/ .sb-wrapper {
+        background-color: transparent;
+    }
 }

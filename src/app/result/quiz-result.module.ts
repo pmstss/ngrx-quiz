@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgxChartistModule } from 'ngx-chartist';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ShareButtonsModule } from '@ngx-share/buttons';
 import { SharedModule } from '../shared';
 import { QuizModule, QuizGuard, QuizFinishedGuard } from '../quiz';
@@ -21,6 +22,7 @@ import { QuizScoresChartComponent } from './components/quiz-scores-chart/quiz-sc
         }]),
         QuizModule,
         NgxChartistModule,
+        FontAwesomeModule,
         ShareButtonsModule
     ],
     exports: []

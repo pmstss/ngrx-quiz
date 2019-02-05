@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { QuizScore } from 'ngrx-quiz-common';
 import { AppState, selectQuizState, QuizState, ActionResetQuiz } from '../../../store';
 import { QuizService } from '../../../core';
+import './social-icons';
 
 interface QuizScoreMeta {
     scoreAbsolute: number;

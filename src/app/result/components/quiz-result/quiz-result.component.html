@@ -6,12 +6,16 @@
         </p>
         <hr class="my-4"/>
         <p class="lead text-fg">
-            Your score is better than score of {{quizStateScore.scoreMeta.betterAbsolute }} ({{quizStateScore.scoreMeta.betterPercent | percent: '1.0-2' }}) participants!<br/>
-            Don't forget to share this outstanding result with your friends:
-            <share-buttons show="11"></share-buttons>
+            Your score is better than score of {{quizStateScore.scoreMeta.betterAbsolute }} ({{quizStateScore.scoreMeta.betterPercent | percent: '1.0-2' }}) participants!
+            <br/><br/>
+            Don't forget to share this outstanding result with your friends!<br/>
+            <share-buttons class="mt-2" theme="outline" [showIcon]="true" [showText]="true" size="-5"
+                [include]="['telegram', 'whatsapp', 'linkedin', 'twitter', 'reddit', 'facebook', 'google', 'vk', 'email']">
+            </share-buttons>
         </p>
         <app-quiz-scores-chart></app-quiz-scores-chart>
-        <div class="text-center">
+        <hr class="my-2 mb-4"/>
+        <div class="text-right">
             <a class="btn btn-outline-primary btn-lg" routerLink="./" (click)="reset()">Take quiz again</a>
         </div>
     </div>
