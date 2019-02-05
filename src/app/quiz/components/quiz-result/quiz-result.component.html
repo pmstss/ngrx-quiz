@@ -7,6 +7,7 @@
         <hr class="my-4"/>
         <p>
             Your score is better than score of {{quizStateScore.scoreMeta.betterAbsolute }} ({{quizStateScore.scoreMeta.betterPercent | percent: '1.0-2' }}) participants!
+            <app-quiz-scores-chart></app-quiz-scores-chart>
         </p>
         <div class="text-center">
             <a class="btn btn-outline-primary btn-lg" routerLink="./" (click)="reset()">Take quiz again</a>

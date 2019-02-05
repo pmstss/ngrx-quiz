@@ -5,6 +5,7 @@ import { QuillModule } from 'ngx-quill';
 import { NbCardModule } from '@nebular/theme';
 import { SharedModule } from '../shared';
 import { CommentsModule } from '../comments';
+import { ChartsModule } from '../charts';
 import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
 import { QuizStepChoiceComponent } from './components/quiz-step-choice/quiz-step-choice.component';
 import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
@@ -34,7 +35,8 @@ import { QuizGuard } from './guards/quiz.guard';
         QuillModule,
         NbCardModule,
         CommentsModule,
-        SharedModule
+        SharedModule,
+        ChartsModule
     ],
     providers: [QuizGuard, QuizFinishedGuard]
 })
