@@ -24,7 +24,7 @@ import { QuizGuard } from './guards/quiz.guard';
             }, {
                 path: ':name/result',
                 component: QuizResultComponent,
-                canActivate: [QuizFinishedGuard, QuizGuard]
+                canActivate: [QuizGuard, QuizFinishedGuard]
             }, {
                 path: ':name/:step',
                 component: QuizStepComponent,
