@@ -8,4 +8,27 @@
     nb-card-footer {
         border-top-color: transparent;
     }
+
+    @keyframes searchActiveColorAnimation {
+        from {
+            color: nb-theme(color-warning);
+        }
+
+        to {
+            color: nb-theme(color-danger);
+        }
+    }
+
+    /deep/ {
+        .nb-search {
+            color: nb-theme(color-success);
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
+
+        .search-active .nb-search {
+            animation-name: searchActiveColorAnimation;
+        }
+    }
 }

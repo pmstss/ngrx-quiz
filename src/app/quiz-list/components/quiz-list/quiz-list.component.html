@@ -1,5 +1,5 @@
 <div class="container" *ngIf="quizList$ | async as quizList else loading">
-    <div class="my-3 d-flex align-items-center">
+    <div class="my-3 d-flex align-items-center" [ngClass]="{'search-active': !!(searchQuery$ | async)}">
         <span class="text-center flex-grow-1">There are {{quizList.length}} quizes available</span>
         <nb-search type="rotate-layout"></nb-search>
     </div>
