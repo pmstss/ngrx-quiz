@@ -1,0 +1,7 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+    button {
+        color: nb-theme(search-btn-open-fg);
+    }
+}

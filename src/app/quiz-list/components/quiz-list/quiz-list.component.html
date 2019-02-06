@@ -7,7 +7,7 @@
             There are {{quizList.length}} quizes match search query "{{searchQuery}}"
             <a routerLink="./" (click)="resetQuery()">Reset search</a>
         </span>
-        <nb-search #nbSearch type="rotate-layout"></nb-search>
+        <custom-nb-search #nbSearch type="rotate-layout"></custom-nb-search>
     </div>
 
     <nb-card *ngFor="let quiz of quizList" class="my-3" [accent]="quiz.finished ? 'success' : (quiz.started ? 'warning' : 'info')">
