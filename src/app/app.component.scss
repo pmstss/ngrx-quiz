@@ -130,5 +130,13 @@
         .ql-container.ql-snow {
             height: auto;
         }
+
+        /*** NbSearch ***/
+
+        nb-layout.rotate-layout.with-search {
+            .scrollable-container {
+                transform: perspective(2000px) translate3d(0, 5vh, 0) rotate3d(1, 0, 0, 30deg) scale(0.9) !important;
+            }
+        }
     }
 }

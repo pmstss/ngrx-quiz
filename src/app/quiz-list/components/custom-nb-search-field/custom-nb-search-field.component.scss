@@ -3,13 +3,15 @@
 @include nb-install-component() {
     .search {
         background: nb-theme(search-bg);
+        height: 20vh !important;
 
         button {
             color: nb-theme(search-btn-close-fg);
         }
 
         span {
-            color: nb-theme(search-btn-close-fg);
+            color: nb-theme(color-fg-heading);
+            font-weight: normal;
         }
 
         input {
