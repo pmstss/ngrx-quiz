@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NbCardModule } from '@nebular/theme';
+import { NbCardModule, NbSearchModule } from '@nebular/theme';
 import { QuillModule } from 'ngx-quill';
 import { CoreModule } from '../core';
 import { SharedModule } from '../shared';
@@ -19,6 +19,7 @@ import { QuizListComponent } from './components/quiz-list/quiz-list.component';
             }
         ]),
         NbCardModule,
+        NbSearchModule,
         QuillModule,
         SharedModule
     ],

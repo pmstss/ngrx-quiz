@@ -1,5 +1,8 @@
 <div class="container" *ngIf="quizList$ | async as quizList else loading">
-    <div class="my-3 text-center">There are {{quizList.length}} quizes available</div>
+    <div class="my-3 d-flex align-items-center">
+        <span class="text-center flex-grow-1">There are {{quizList.length}} quizes available</span>
+        <nb-search type="rotate-layout"></nb-search>
+    </div>
 
     <nb-card *ngFor="let quiz of quizList" class="my-3" [accent]="quiz.finished ? 'success' : (quiz.started ? 'warning' : 'info')">
         <nb-card-header class="d-flex justify-content-between">
