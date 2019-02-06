@@ -41,7 +41,7 @@ export class QuizScoresChartComponent implements OnInit {
             switchMap((quizState: QuizState) => this.quizService.getQuizScoreDistribution(quizState.id)),
             map((counters: number[]): IChartistSettingsType => {
                 this.chartOpts.data.series = [counters];
-                this.chartOpts.data.labels = counters.map((c, i) => i + 1);
+                this.chartOpts.data.labels = counters.map((c, i) => i);
                 // if (this.chartRef) {
                 //     this.chartRef.chart.eventEmitter.emit('optionsChanged');
                 // }
