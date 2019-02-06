@@ -46,7 +46,7 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
                 redirectTo: ''
             }],
             {
-                enableTracing: true // for debug
+                // enableTracing: true // for debug
             }
         )
     ],
