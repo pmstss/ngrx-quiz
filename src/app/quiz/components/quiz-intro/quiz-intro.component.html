@@ -1,17 +1,13 @@
 <div class="container" *ngIf="quizState$ | async as quizState else loading">
     <app-back-link routerLink="/">Back to quiz list</app-back-link>
-
-    <div class="jumbotron my-3" *ngIf="quizState else loading">
-        <h1>Welcome to {{quizState.name}}!</h1>
-        <p class="lead">
-            <!--quill-editor theme="bubble" [readOnly]="true" [ngModel]="quizState.description"></quill-editor-->
-        </p>
-        <hr class="my-4"/>
-        <p>
+    <nb-card>
+        <nb-card-header>
+            <h2 class="m-3">Welcome to {{quizState.name}}!</h2>
+        </nb-card-header>
+        <nb-card-body class="m-3">
             <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quizState.descriptionFull"></quill-editor>
-        </p>
-
-        <div class="text-center mt-4">
+        </nb-card-body>
+        <nb-card-footer class="text-center">
             <a *ngIf="quizState.started" class="btn btn-lg mr-3" routerLink="./" (click)="reset()"
                     [ngClass]="quizState.finished ? 'btn-outline-secondary' : 'btn-outline-warning'">
                 {{quizState.finished ? 'Take quiz again' : 'Restart quiz'}}
@@ -24,8 +20,8 @@
             <a *ngIf="quizState.finished" class="btn btn-lg btn-outline-info" routerLink="/result/{{quizState.shortName}}">
                 Results
             </a>
-        </div>
-    </div>
+        </nb-card-footer>
+    </nb-card>
 </div>
 
 <ng-template #loading>
