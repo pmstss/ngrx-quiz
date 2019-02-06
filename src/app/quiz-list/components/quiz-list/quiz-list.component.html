@@ -1,7 +1,13 @@
 <div class="container" *ngIf="quizList$ | async as quizList else loading">
     <div class="my-3 d-flex align-items-center" [ngClass]="{'search-active': !!(searchQuery$ | async)}">
-        <span class="text-center flex-grow-1">There are {{quizList.length}} quizes available</span>
-        <nb-search type="rotate-layout"></nb-search>
+        <span *ngIf="!(searchQuery$ | async)" class="text-center flex-grow-1">
+            There are {{quizList.length}} quizes available
+        </span>
+        <span *ngIf="searchQuery$ | async as searchQuery" class="text-center flex-grow-1">
+            There are {{quizList.length}} quizes match search query "{{searchQuery}}"
+            <a routerLink="./" (click)="resetQuery()">Reset search</a>
+        </span>
+        <nb-search #nbSearch type="rotate-layout"></nb-search>
     </div>
 
     <nb-card *ngFor="let quiz of quizList" class="my-3" [accent]="quiz.finished ? 'success' : (quiz.started ? 'warning' : 'info')">

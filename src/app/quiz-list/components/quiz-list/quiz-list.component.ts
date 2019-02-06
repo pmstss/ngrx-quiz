@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Observable, Subscription, combineLatest } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Observable, Subscription, combineLatest, BehaviorSubject, merge } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { NbSearchService } from '@nebular/theme';
 import { QuizMetaListItem } from 'ngrx-quiz-common';
 import { QuizService, AutoUnsubscribe } from '../../../core';
-import { NbSearchService } from '@nebular/theme';
-import { map, startWith } from 'rxjs/operators';
 
 interface SearchQuery {
     term: string;
@@ -19,17 +19,22 @@ interface SearchQuery {
 })
 export class QuizListComponent implements OnInit {
     @AutoUnsubscribe private searchSubscription: Subscription;
+    @ViewChild('nbSearch') searchCmp: any;
 
     quizList$: Observable<QuizMetaListItem[]>;
+    private searchQueryControlSubject = new BehaviorSubject<string>('');
     searchQuery$: Observable<string>;
 
     constructor(private quizService: QuizService, private searchService: NbSearchService) {
     }
 
     ngOnInit() {
-        this.searchQuery$ = this.searchService.onSearchSubmit().pipe(
-            startWith({ term: '', tag: null }),
-            map((q: SearchQuery) => q.term)
+        this.searchQuery$ = merge(
+            this.searchQueryControlSubject,
+            this.searchService.onSearchSubmit().pipe(
+                startWith({ term: '', tag: null }),
+                map((q: SearchQuery) => q.term)
+            )
         );
 
         this.quizList$ = combineLatest(
@@ -41,5 +46,9 @@ export class QuizListComponent implements OnInit {
                     quiz.descriptionFull.includes(query)
             ))
         );
+    }
+
+    resetQuery() {
+        this.searchQueryControlSubject.next('');
     }
 }
