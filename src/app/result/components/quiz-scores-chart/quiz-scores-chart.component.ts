@@ -13,7 +13,6 @@ import { selectQuizState, QuizState, AppState } from '../../../store';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizScoresChartComponent implements OnInit {
-    // @ViewChild('chart') chartRef: NgxChartistComponent;
     chartOpts$: Observable<IChartistSettingsType>;
 
     private chartOpts: IChartistSettingsType = {
@@ -27,8 +26,10 @@ export class QuizScoresChartComponent implements OnInit {
                 onlyInteger: true
             },
             axisY: {
-                scaleMinSpace: 10,
-                onlyInteger: true
+                low: 0,
+                high: 1,
+                scaleMinSpace: 50,
+                labelInterpolationFnc: (value: number) => `${(value * 100).toFixed(0)}%`
             }
         }
     };
@@ -40,6 +41,8 @@ export class QuizScoresChartComponent implements OnInit {
         this.chartOpts$ = this.appStore.select(selectQuizState).pipe(
             switchMap((quizState: QuizState) => this.quizService.getQuizScoreDistribution(quizState.id)),
             map((counters: number[]): IChartistSettingsType => {
+                const max = counters.reduce((m, c) => Math.max(m, c), 0);
+                this.chartOpts.options.axisY.high = Math.min(max * 1.2, 1);
                 this.chartOpts.data.series = [counters];
                 this.chartOpts.data.labels = counters.map((c, i) => i);
                 // if (this.chartRef) {
