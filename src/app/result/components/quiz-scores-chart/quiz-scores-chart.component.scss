@@ -9,6 +9,29 @@
 
     .chart-container {
         height: 300px;
+        position: relative;
+        margin-left: 0.5rem;
+
+        &::after, &::before {
+            display: inline-block;
+            font-size: 0.9rem;
+            position: absolute;
+        }
+
+        &::after {
+            content: 'Number of correct answers';
+            bottom: -0.5rem;
+            transform: translateX(-50%);
+            left: 50%;
+        }
+
+        &::before {
+            content: 'Percent of users';
+            transform: rotate(-90deg) translateX(-40%);
+            transform-origin: 0 0;
+            top: 50%;
+            left: -0.5rem;
+        }
     }
 
     /deep/ {
