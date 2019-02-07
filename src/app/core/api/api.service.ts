@@ -10,7 +10,7 @@ import { CustomError } from './custom-error';
 export class ApiService {
     private apiUrl: string;
 
-    constructor(private http: HttpClient, @Inject(BASE_URL_TOKEN) baseUrl) {
+    constructor(private http: HttpClient, @Inject(BASE_URL_TOKEN) private baseUrl) {
         this.apiUrl = `${baseUrl}/api`;
     }
 
@@ -30,6 +30,13 @@ export class ApiService {
 
     post<T>(url: string, data: any): Observable<T> {
         return this.http.post<ApiResponse<T>>(`${this.apiUrl}${url}`, data).pipe(
+            switchMap(this.throwIfNotSuccess),
+            map(res => res.data)
+        );
+    }
+
+    postBase<T>(url: string, data: any): Observable<T> {
+        return this.http.post<ApiResponse<T>>(`${this.baseUrl}${url}`, data).pipe(
             switchMap(this.throwIfNotSuccess),
             map(res => res.data)
         );
