@@ -5,11 +5,12 @@ import { switchMap, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { User } from 'ngrx-quiz-common';
 import { AppState, selectUser } from '../../store';
-import { DialogService } from '../../dialog';
+import { AuthDialogService } from '../services/auth-dialog.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(private router: Router, private appStore: Store<AppState>, private dialogService: DialogService) {
+    constructor(private router: Router, private appStore: Store<AppState>,
+                private authDialogService: AuthDialogService) {
     }
 
     canActivate(): Observable<boolean | UrlTree> {
@@ -19,8 +20,8 @@ export class AuthGuard implements CanActivate {
                     return of(true);
                 }
 
-                return this.dialogService.alert('Please log in first').pipe(
-                    map((res: boolean) => res && this.router.parseUrl('/auth/login'))
+                return this.authDialogService.pleaseLogin().pipe(
+                    map((res: any) => !!res.anonymous)
                 );
             })
         );
