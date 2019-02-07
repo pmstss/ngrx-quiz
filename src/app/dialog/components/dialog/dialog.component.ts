@@ -26,7 +26,7 @@ export class DialogComponent {
         callback: () => {}
     }];
 
-    constructor(public dialogRef: NbDialogRef<any>) {}
+    constructor(private dialogRef: NbDialogRef<any>) {}
 
     close() {
         this.dialogRef.close();

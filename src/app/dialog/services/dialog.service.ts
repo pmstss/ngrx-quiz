@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ButtonConfig, DialogComponent } from '../components/dialog/dialog.component';
 import { Observable, Observer } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { NbDialogService } from '@nebular/theme';
+import { ButtonConfig, DialogComponent } from '../components/dialog/dialog.component';
 
 export type DialogOptions = {
     message: string,
