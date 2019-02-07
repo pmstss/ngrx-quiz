@@ -52,24 +52,32 @@ export class DialogService {
         });
     }
 
-    alert(options: DialogOptions | string): Promise<boolean> {
+    alert(options: DialogOptions | string): Observable<boolean> {
         const opts = typeof options === 'string' ? {
             message: options
         } : options;
 
-        return new Promise((resolve) => {
-            this.dialogService.open(DialogComponent, {
+        return Observable.create((observer: Observer<boolean>) => {
+            const ref = this.dialogService.open(DialogComponent, {
                 context: Object.assign(
                     {
                         title: 'Info',
                         buttons: [{
                             label: 'Ok',
                             clazz: 'btn-primary',
-                            callback: () => resolve(true)
+                            callback: () => {
+                                observer.next(true);
+                                observer.complete();
+                            }
                         }]
                     },
                     opts
                 )
+            });
+
+            ref.onClose.pipe(take(1)).subscribe(() => {
+                observer.next(false);
+                observer.complete();
             });
         });
     }
