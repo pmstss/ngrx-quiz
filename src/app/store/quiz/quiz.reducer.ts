@@ -26,7 +26,8 @@ const reducers = {
     [QuizActionTypes.LOAD_QUIZ]: (state: QuizStateNormalized, action: Action): QuizStateNormalized => {
         return {
             ...state,
-            ...initialQuizState
+            ...initialQuizState,
+            itemIds: []
         };
     },
 
