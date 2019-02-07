@@ -3,16 +3,17 @@
         <i class="nb-close-circled"></i>
     </button>
     <div class="form-wrapper">
-        <form class="form" (keyup.enter)="submitSearch(searchInput.value)">
+        <form class="form" (keyup)="submitSearch(searchInput.value)" (keyup.enter)="submitSearch(searchInput.value + '\n')">
             <div class="form-content">
               <input class="search-input"
                   #searchInput
                   autocomplete="off"
+                  [value]="value"
                   [attr.placeholder]="placeholder"
                   tabindex="-1"
                   (blur)="focusInput()"/>
             </div>
-            <span class="info">HELLO! {{ hint }}</span>
+            <span class="info">{{ hint }}</span>
         </form>
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 // dirty import of not exported component
 import { NbSearchFieldComponent } from '../../../../../node_modules/@nebular/theme/components/search/search.component';
 
@@ -20,5 +20,9 @@ import { NbSearchFieldComponent } from '../../../../../node_modules/@nebular/the
     templateUrl: './custom-nb-search-field.component.html'
 })
 export class CustomNbSearchFieldComponent extends NbSearchFieldComponent {
+    @Input() value: string;
 
+    ngOnChanges() {
+        this.focusInput();
+    }
 }

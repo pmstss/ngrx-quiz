@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 // dirty import of not exported component
 import { NbSearchComponent } from '../../../../../node_modules/@nebular/theme/components/search/search.component';
 
@@ -13,4 +13,13 @@ import { NbSearchComponent } from '../../../../../node_modules/@nebular/theme/co
     templateUrl: './custom-nb-search.component.html'
 })
 export class CustomNbSearchComponent extends NbSearchComponent {
+    @Input() value: string;
+
+    search(term: string) {
+        // private member access hack
+        this['searchService'].submitSearch(term.trim(), this.tag);
+        if (term.endsWith('\n')) {
+            this.hideSearch();
+        }
+    }
 }
