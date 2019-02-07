@@ -1,4 +1,12 @@
-.nb-close {
-    font-size: 2em;
-    cursor: pointer;
+@import '../../../../themes';
+
+@include nb-install-component() {
+    nb-card {
+        min-width: 300px;
+    }
+
+    .nb-close {
+        font-size: 2em;
+        cursor: pointer;
+    }
 }
