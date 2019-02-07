@@ -15,7 +15,7 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
             {
                 path: '',
                 loadChildren: '../quiz-list/quiz-list.module#QuizListModule',
-                canActivate: [AuthGuard]
+                canActivate: [/*AuthGuard*/]
             },
             {
                 path: 'auth',
