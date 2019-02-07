@@ -57,10 +57,11 @@
 
         nb-toast::after {
             position: absolute;
-            content: 'X';
             display: block;
-            top: 0.25rem;
+            content: '×';
+            top: 0;
             right: 1rem;
+            font-size: 1.5rem;
         }
 
         /*** Nebular overrides for Bootstrap ***/
