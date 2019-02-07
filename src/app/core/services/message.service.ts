@@ -51,6 +51,15 @@ export class MessageService {
         });
     }
 
+    success(message: string, title: string = 'Congratulations!') {
+        this.publish({
+            title,
+            message,
+            status: NbToastStatus.SUCCESS,
+            duration: 5000
+        });
+    }
+
     warn(message: string, title: string = 'Warning') {
         console.warn(message);
         this.publish({
