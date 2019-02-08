@@ -1,26 +1,42 @@
 <nb-card>
-  <nb-card-header class="d-flex align-items-center">
-      Please log in to continue
-      <i class="icon nb-close ml-auto" (click)="close()"></i>
-  </nb-card-header>
+    <nb-card-header class="d-flex align-items-center">
+        Please log in to continue
+        <i class="icon nb-close ml-auto" (click)="close()"></i>
+    </nb-card-header>
 
-  <nb-card-body>
-      As logged in user you can:
-      <ul>
-          <li>participate in quiz questions discussion on quiz finish</li>
-          <li>perpetuate your name in Top Scores</li>
-          <li>...and even create you own quiz! (<i>very soon ;)</i>)</li>
-      </ul>
-      Login is possible both with local and GitHub or Google account.<br>
-      Entering captcha is required if you choose to continue as anonymous.
-  </nb-card-body>
+    <nb-card-body *ngIf="!showCaptcha">
+        As logged in user you can:
+        <ul>
+            <li>participate in quiz questions discussion on quiz finish</li>
+            <li>perpetuate your name in Top Scores</li>
+            <li>...and even create you own quiz! (<i>very soon ;)</i>)</li>
+        </ul>
+        Login is possible both with local and GitHub or Google account.<br>
+        Entering captcha is required if you choose to continue as anonymous.
+    </nb-card-body>
 
-  <nb-card-footer class="d-flex justify-content-end">
-      <button class="btn btn-outline-danger" (click)="anonymous()">
-          Continue as anonymous
-      </button>
-      <button class="btn btn-success ml-3" (click)="login()">
-          Proceed with login
-      </button>
-  </nb-card-footer>
+    <nb-card-body *ngIf="showCaptcha" class="d-flex justify-content-center">
+        <re-captcha [siteKey]="captchaKey"
+            (resolved)="handleSuccess($event)" theme="light">
+        </re-captcha>
+    </nb-card-body>
+
+    <nb-card-footer *ngIf="!showCaptcha" class="d-flex justify-content-end">
+        <button class="btn btn-outline-danger" (click)="anonymous()">
+            Anonymous
+        </button>
+        <button class="btn btn-success ml-3" (click)="login()">
+            Login
+        </button>
+    </nb-card-footer>
+
+    <nb-card-footer *ngIf="showCaptcha" class="d-flex justify-content-end">
+        <button class="btn" (click)="cancelCaptcha()">
+            Cancel
+        </button>
+        <button class="btn btn-primary ml-3" [disabled]="!captchaToken" (click)="anonymousLogin()">
+            Submit
+        </button>
+    </nb-card-footer>
+
 </nb-card>

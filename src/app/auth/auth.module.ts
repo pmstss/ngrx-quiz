@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpRequest } from '@angular/common/http';
 import { NbAuthModule, NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
+import { RecaptchaModule } from 'ng-recaptcha';
 import { BASE_URL } from '../consts';
 import { SharedModule } from '../shared';
 import { InverseAuthGuard } from './guards/inverse-auth.guard';
@@ -17,6 +18,7 @@ import { AnonymousAuthService } from './services/anonymous-auth.service';
     entryComponents: [AuthDialogComponent],
     imports: [
         SharedModule,
+        RecaptchaModule,
         NbAuthModule.forRoot(nbAuthOptions)
     ],
     providers: [AnonymousAuthService, AuthDialogService, AuthGuard, InverseAuthGuard, AdminAuthGuard,
