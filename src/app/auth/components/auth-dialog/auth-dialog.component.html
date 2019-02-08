@@ -16,7 +16,7 @@
     </nb-card-body>
 
     <nb-card-body *ngIf="showCaptcha" class="d-flex justify-content-center">
-        <re-captcha [siteKey]="captchaKey"
+        <re-captcha #captcha [siteKey]="captchaKey"
             (resolved)="handleSuccess($event)" theme="light">
         </re-captcha>
     </nb-card-body>

@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbDialogRef } from '@nebular/theme';
-import { NbTokenService, NbPasswordAuthStrategy } from '@nebular/auth';
 import { CAPTCHA_KEY } from '../../../consts';
 import { MessageService } from '../../../core';
 import { AnonymousAuthService } from '../../services/anonymous-auth.service';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
     selector: 'app-auth-dialog',
@@ -14,6 +14,8 @@ import { AnonymousAuthService } from '../../services/anonymous-auth.service';
 export class AuthDialogComponent {
     captchaKey = CAPTCHA_KEY;
     showCaptcha: boolean = false;
+
+    @ViewChild('captcha') private captchaRef: RecaptchaComponent;
     private captchaToken: string;
 
     constructor(private dialogRef: NbDialogRef<any>, private router: Router,
@@ -29,11 +31,8 @@ export class AuthDialogComponent {
 
     anonymousLogin() {
         this.authService.anonymousLogin(this.captchaToken).subscribe(
-            () => {
-                this.close({ anonymous: true });
-                this.messageService.success('Hello, anonymous!', 'Auth');
-            },
-            () => this.messageService.error('Something went wrong')
+            () => this.close({ anonymous: true }),
+            () => this.captchaRef.reset()
         );
     }
 
