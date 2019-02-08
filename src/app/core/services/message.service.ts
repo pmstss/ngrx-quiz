@@ -42,16 +42,16 @@ export class MessageService {
         });
     }
 
-    error(msg: Message) {
-        console.error(msg.message);
+    error(msg: string | Message, title: string = 'Error') {
+        console.error(msg);
         this.publish({
-            ...msg,
+            ...(typeof msg === 'object' ? msg : { title, message: msg }),
             status: NbToastStatus.DANGER,
             duration: 0
         });
     }
 
-    success(message: string, title: string = 'Congratulations!') {
+    success(message: string, title: string = 'Success') {
         this.publish({
             title,
             message,
