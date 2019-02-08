@@ -40,6 +40,7 @@
     "font-awesome": "^4.7.0",
     "nebular-icons": "^1.1.0",
     "ng-animate": "^0.3.4",
+    "ng-recaptcha": "^4.2.1",
     "ngrx-quiz-common": "0.0.5",
     "ngx-chartist": "^1.0.3",
     "ngx-quill": "~4.6.3",
