@@ -1,5 +1,5 @@
 import { createFeatureSelector } from '@ngrx/store';
-import { QuizState, QuizStateNormalized } from './quiz/quiz.state';
+import { QuizStateNormalized } from './quiz/quiz.state';
 import { AuthState } from './auth/auth.state';
 import { TokenState } from './token/token.state';
 
