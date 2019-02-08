@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, VERSION } from '@angular/core';
 
 @Component({
     selector: 'app-about-version',
@@ -7,6 +7,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutVersionComponent implements OnInit {
+    ngVersion = VERSION;
+
     constructor() { }
 
     ngOnInit() {
