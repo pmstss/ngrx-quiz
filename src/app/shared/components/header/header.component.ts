@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap, filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { NbMenuService, NbMenuItem } from '@nebular/theme';
 import { User } from 'ngrx-quiz-common';
@@ -23,7 +23,12 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.user$ = this.appStore.select(selectUser);
+        this.user$ = this.appStore.select(selectUser).pipe(
+            map(user => {
+                console.log(user);
+                return user && user.anonymous ? null : user;
+            })
+        );
 
         this.nbMenuService.onItemClick().pipe(
             filter(({ tag, item: { data } }) => tag === 'user-context-menu' && data && data.id === 'profile')

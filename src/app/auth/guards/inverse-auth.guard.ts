@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState, selectUser } from '../../store';
@@ -11,6 +11,6 @@ export class InverseAuthGuard implements CanActivate {
     }
 
     canActivate(): Observable<boolean> {
-        return this.appStore.select(selectUser).pipe(map(v => !v));
+        return this.appStore.select(selectUser).pipe(map(u => !u || u.anonymous));
     }
 }
