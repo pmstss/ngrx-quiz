@@ -15,7 +15,7 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
             {
                 path: '',
                 loadChildren: '../quiz-list/quiz-list.module#QuizListModule',
-                canActivate: [/*AuthGuard*/]
+                canActivate: []
             },
             {
                 path: 'auth',
@@ -35,6 +35,10 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
                 path: 'top',
                 loadChildren: '../rating/rating.module#RatingModule',
                 canActivate: [AuthGuard]
+            },
+            {
+                path: 'about',
+                loadChildren: '../about/about.module#AboutModule'
             },
             {
                 path: 'admin',

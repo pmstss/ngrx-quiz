@@ -1,0 +1,11 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+    nb-card {
+        height: 100%;
+    }
+
+    .tab-content {
+        display: block;
+    }
+}
