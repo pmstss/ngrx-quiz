@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
                 }
 
                 return this.authDialogService.pleaseLogin().pipe(
-                    map((res: any) => !!res.anonymous)
+                    map((res: any) => res && res.anonymous)
                 );
             })
         );
