@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NbTabsetModule } from '@nebular/theme';
+import { NbRouteTabsetModule } from '@nebular/theme';
 import { SharedModule } from '../shared';
 import { AboutComponent } from './components/about/about.component';
 import { AboutProjectComponent } from './components/about-project/about-project.component';
@@ -11,10 +11,26 @@ import { AboutVersionComponent } from './components/about-version/about-version.
     declarations: [AboutComponent, AboutProjectComponent, AboutAuthorComponent, AboutVersionComponent],
     imports: [
         SharedModule,
-        NbTabsetModule,
+        NbRouteTabsetModule,
         RouterModule.forChild([{
             path: '',
-            component: AboutComponent
+            component: AboutComponent,
+            children: [
+                {
+                    path: 'project',
+                    component: AboutProjectComponent
+                }, {
+                    path: 'author',
+                    component: AboutAuthorComponent
+                }, {
+                    path: 'version',
+                    component: AboutVersionComponent
+                },
+                {
+                    path: '**',
+                    redirectTo: 'project'
+                }
+            ]
         }])
     ]
 })
