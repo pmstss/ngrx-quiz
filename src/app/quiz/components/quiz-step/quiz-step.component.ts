@@ -12,7 +12,8 @@ import { AppState, QuizState, QuizItemStatus, QuizItemChoiceStatus, ActionSubmit
 import { AutoUnsubscribe } from '../../../core';
 
 const DELAY_CHOICES_QUEUE = 200;
-const DELAY_ITEM_LOAD_MIN = 350; // a bit less than fadeOut
+const FADE_OUT_DURATION = 400;
+const DELAY_ITEM_LOAD_MIN = FADE_OUT_DURATION * 0.9;
 
 @Component({
     selector: 'app-quiz-step',
@@ -28,7 +29,7 @@ const DELAY_ITEM_LOAD_MIN = 350; // a bit less than fadeOut
                 params: { timing: 0.6, delay: 0 }
             })),
             transition('in => void', useAnimation(fadeOut, {
-                params: { timing: 0.4, delay: 0 }
+                params: { timing: FADE_OUT_DURATION / 1000, delay: 0 }
             }))
         ]),
         trigger('animChoice', [
@@ -57,7 +58,7 @@ export class QuizStepComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.quizState$ = this.appStore.select(selectQuizState);
+        this.quizState$ = this.appStore.select(selectQuizState).pipe(debounceTime(FADE_OUT_DURATION));
 
         this.routeSubscription = this.route.params.pipe(
             map((params: Params) => +params.step),
