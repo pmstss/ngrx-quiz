@@ -57,7 +57,7 @@ export class CommentsComponent implements OnInit {
                 return this.dialogService.alert({
                     title: 'Information',
                     message: 'Please answer first to see comments'
-                });
+                }).subscribe(() => null);
             }
 
             this.commentsExpanded$.next(true);
