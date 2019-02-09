@@ -4,7 +4,7 @@
       'text-danger': choice.wrong,
       'text-warning': choice.semiCorrect,
       'choice--answered': answered
-    }" (click)="toggleChoice(choice.id)">
+    }" (click)="toggleChoice(choice.id)" [@myShake]="getAnimationState(choice)">
     <i class="fa mx-3" [ngClass]="{'fa-check': !choice.wrong, 'fa-times': choice.wrong}"></i>
     <span>{{choice.text}}</span>
     <span *ngIf="answered" class="ml-auto mr-3">
