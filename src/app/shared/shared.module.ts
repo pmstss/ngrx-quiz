@@ -23,6 +23,6 @@ import { ThemeSwitcherListComponent } from './components/themes-switcher-list/th
         NbContextMenuModule
     ],
     entryComponents: [ThemeSwitcherListComponent],
-    exports: [CommonModule, NbCardModule, HeaderComponent, LoaderComponent, BackLinkComponent]
+    exports: [CommonModule, NbCardModule, NbSpinnerModule, HeaderComponent, LoaderComponent, BackLinkComponent]
 })
 export class SharedModule { }
