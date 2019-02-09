@@ -3,7 +3,7 @@
     <div *ngIf="itemStatus$ | async as itemStatus else loading">
         <nb-card class="my-3" [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')"
                 [@animCard]="(itemLoading$ | async) ? 'void' : 'in'">
-            <nb-card-header class="d-flex justify-content-between">
+            <nb-card-header class="px-4 d-flex justify-content-between">
                 <span>
                     Question {{quizState.step}} from {{quizState.totalQuestions}}
                     (left: {{quizState.totalQuestions - quizState.answers.size}})
@@ -11,7 +11,7 @@
                 <span>Score: {{quizState.score}}</span>
             </nb-card-header>
 
-            <nb-card-body>
+            <nb-card-body class="px-4">
                 <quill-editor theme="bubble" [readOnly]="true" [ngModel]="(itemStatusDelayed$ | async)?.question"></quill-editor>
                 <div class="mt-4 choices">
                     <div class="choices-animated-aux"
@@ -23,14 +23,14 @@
                     </div>
 
                     <div [ngStyle]="{visibility: choicesAnimationCounter ===  itemStatus.choicesStatus.length ? 'visible' : 'hidden'}">
-                        <div *ngFor="let choice of itemStatus.choicesStatus">
+                        <div *ngFor="let choice of itemStatus.choicesStatus; trackBy: trackChoice">
                             <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
                         </div>
                     </div>
                 </div>
             </nb-card-body>
 
-            <nb-card-footer class="d-flex">
+            <nb-card-footer class="px-4 d-flex">
                 <a *ngIf="!itemStatus.answered" class="btn btn-outline-secondary btn-lg ml-auto"
                         routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
                     Skip
