@@ -43,6 +43,8 @@ const DELAY_ITEM_LOAD_MIN = 350; // a bit less than fadeOut
 })
 export class QuizStepComponent implements OnInit {
     @AutoUnsubscribe private routeSubscription: Subscription;
+    @AutoUnsubscribe private quizStepSubscription: Subscription;
+    @AutoUnsubscribe private activeItemSubscription: Subscription;
     quizState$: Observable<QuizState>;
     itemLoading$ = new BehaviorSubject<boolean>(true);
     itemStatus$: Observable<QuizItemStatus>;
@@ -64,11 +66,12 @@ export class QuizStepComponent implements OnInit {
             this.appStore.dispatch(new ActionLoadItem({ step }));
         });
 
-        this.appStore.select(selectQuizStep).subscribe(() => {
+        this.quizStepSubscription = this.appStore.select(selectQuizStep).subscribe(() => {
             this.choicesAnimationCounter = 0;
             this.itemLoading$.next(true);
         });
-        this.appStore.select(selectQuizActiveItem).pipe(
+
+        this.activeItemSubscription = this.appStore.select(selectQuizActiveItem).pipe(
             filter(x => !!x),
             // debouncing item loading to have time for fadeOut card animation
             debounceTime(DELAY_ITEM_LOAD_MIN)
