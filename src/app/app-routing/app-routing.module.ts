@@ -23,8 +23,7 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
             },
             {
                 path: 'quiz',
-                loadChildren: '../quiz/quiz-routing.module#QuizRoutingModule',
-                canActivate: [AuthGuard]
+                loadChildren: '../quiz/quiz-routing.module#QuizRoutingModule'
             },
             {
                 path: 'result',

@@ -4,6 +4,7 @@ import { QuizModule } from './quiz.module';
 import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
 import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
 import { QuizGuard } from './guards/quiz.guard';
+import { AuthGuard } from '../auth';
 
 @NgModule({
     declarations: [],
@@ -16,7 +17,7 @@ import { QuizGuard } from './guards/quiz.guard';
             }, {
                 path: ':name/:step',
                 component: QuizStepComponent,
-                canActivate: [QuizGuard]
+                canActivate: [AuthGuard, QuizGuard]
             }]
         }]),
         QuizModule
