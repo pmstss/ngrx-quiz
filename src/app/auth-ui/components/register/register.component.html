@@ -33,7 +33,7 @@
            [attr.aria-invalid]="fullName.invalid && fullName.touched ? true : null">
     <ng-container *ngIf="fullName.invalid && fullName.touched">
       <p class="error-message" *ngIf="fullName.errors?.required">
-        Full name is required!
+        Full name is required.
       </p>
       <p class="error-message" *ngIf="fullName.errors?.minlength || fullName.errors?.maxlength">
         Full name should contains
@@ -59,10 +59,10 @@
            [attr.aria-invalid]="email.invalid && email.touched ? true : null">
     <ng-container *ngIf="email.invalid && email.touched">
       <p class="error-message" *ngIf="email.errors?.required">
-        Email is required!
+        Email is required.
       </p>
       <p class="error-message" *ngIf="email.errors?.pattern">
-        Email should be the real one!
+        Email doesn't look like real one
       </p>
     </ng-container>
   </div>
@@ -84,7 +84,7 @@
            [attr.aria-invalid]="password.invalid && password.touched ? true : null">
     <ng-container *ngIf="password.invalid && password.touched">
       <p class="error-message" *ngIf="password.errors?.required">
-        Password is required!
+        Password is required.
       </p>
       <p class="error-message" *ngIf="password.errors?.minlength || password.errors?.maxlength">
         Password should contains
@@ -108,29 +108,27 @@
            [status]="email.dirty ? (email.invalid || password.value != rePass.value  ? 'danger' : 'success') : ''"
            [required]="getConfigValue('forms.validation.password.required')"
            [attr.aria-invalid]="rePass.invalid && rePass.touched ? true : null">
-    <ng-container *ngIf="rePass.invalid && rePass.touched">
+    <ng-container *ngIf="rePass.touched">
       <p class="error-message" *ngIf="rePass.errors?.required">
-        Password confirmation is required!
+        Password confirmation is required.
       </p>
-      <p class="error-message" *ngIf="password.value != rePass.value && !rePass.errors?.required">
+      <p class="error-message" *ngIf="password.value != rePass.value">
         Password does not match the confirm password.
       </p>
     </ng-container>
   </div>
 
-  <div class="form-control-group accept-group" *ngIf="getConfigValue('forms.register.terms')">
+  <!--div class="form-control-group accept-group" *ngIf="getConfigValue('forms.register.terms')">
     <nb-checkbox name="terms" [(ngModel)]="user.terms" [required]="getConfigValue('forms.register.terms')">
       Agree to <a href="#" target="_blank"><strong>Terms & Conditions</strong></a>
     </nb-checkbox>
-  </div>
+  </div-->
 
-  <button nbButton
-          fullWidth
-          status="success"
-          [disabled]="submitted || !form.valid"
-          [class.btn-pulse]="submitted">
-    Register
-  </button>
+  <div class="text-right">
+    <button class="btn btn-success" [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted">
+        Register
+    </button>
+  </div>
 </form>
 
 <section *ngIf="socialLinks && socialLinks.length > 0" class="links" aria-label="Social sign in">

@@ -33,10 +33,10 @@
            [attr.aria-invalid]="email.invalid && email.touched ? true : null">
     <ng-container *ngIf="email.invalid && email.touched">
       <p class="error-message" *ngIf="email.errors?.required">
-        Email is required!
+        Email is required.
       </p>
       <p class="error-message" *ngIf="email.errors?.pattern">
-        Email should be the real one!
+        Email doesn't look like real one
       </p>
     </ng-container>
   </div>
@@ -58,7 +58,7 @@
            [attr.aria-invalid]="password.invalid && password.touched ? true : null">
     <ng-container *ngIf="password.invalid && password.touched ">
       <p class="error-message" *ngIf="password.errors?.required">
-        Password is required!
+        Password is required.
       </p>
       <p class="error-message" *ngIf="password.errors?.minlength || password.errors?.maxlength">
         Password should contains
@@ -71,16 +71,14 @@
 
   <div class="form-control-group accept-group">
     <nb-checkbox name="rememberMe" [(ngModel)]="user.rememberMe" *ngIf="rememberMe">Remember me</nb-checkbox>
-    <a class="forgot-password" routerLink="../request-password">Forgot Password?</a>
+    <a class="text-warning" routerLink="../request-password">Forgot Password?</a>
   </div>
 
-  <button nbButton
-          fullWidth
-          status="success"
-          [disabled]="submitted || !form.valid"
-          [class.btn-pulse]="submitted">
-    Log In
-  </button>
+  <div class="text-right">
+    <button class="btn btn-success" [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted">
+      Log In
+    </button>
+  </div>
 </form>
 
 <section *ngIf="socialLinks && socialLinks.length > 0" class="links" aria-label="Social sign in">
