@@ -127,7 +127,7 @@
   </div>
 
   <div class="d-flex justify-content-between align-items-center">
-    <re-captcha #captcha [ngModel]="user.captcha" name="captcha" required theme="dark"></re-captcha>
+    <re-captcha #captcha [(ngModel)]="user.captcha" name="captcha" required theme="dark"></re-captcha>
     <button class="btn btn-success" [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted">
         Register
     </button>

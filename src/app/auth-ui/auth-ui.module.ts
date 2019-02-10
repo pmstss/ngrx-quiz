@@ -49,8 +49,8 @@ import { CAPTCHA_KEY } from '../consts';
                         canActivate: [AuthGuard]
                     },
                     {
-                        path: 'reset-password',
-                        component: NbResetPasswordComponent,
+                        path: 'request-password',
+                        component: CustomNbRequestPasswordComponent,
                         canActivate: [InverseAuthGuard]
                     }
                 ]
