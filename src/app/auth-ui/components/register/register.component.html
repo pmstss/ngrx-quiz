@@ -54,12 +54,20 @@
            pattern=".+@.+..+"
            placeholder="Email address"
            fullWidth
+           [minlength]="getConfigValue('forms.validation.email.minLength')"
+           [maxlength]="getConfigValue('forms.validation.email.maxLength')"
            [status]="email.dirty ? (email.invalid  ? 'danger' : 'success') : ''"
            [required]="getConfigValue('forms.validation.email.required')"
            [attr.aria-invalid]="email.invalid && email.touched ? true : null">
     <ng-container *ngIf="email.invalid && email.touched">
       <p class="error-message" *ngIf="email.errors?.required">
         Email is required.
+      </p>
+      <p class="error-message" *ngIf="!email.errors?.pattern && (email.errors?.minlength || email.errors?.maxlength)">
+          Email should contains
+          from {{getConfigValue('forms.validation.email.minLength')}}
+          to {{getConfigValue('forms.validation.email.maxLength')}}
+          characters
       </p>
       <p class="error-message" *ngIf="email.errors?.pattern">
         Email doesn't look like real one
@@ -118,13 +126,8 @@
     </ng-container>
   </div>
 
-  <!--div class="form-control-group accept-group" *ngIf="getConfigValue('forms.register.terms')">
-    <nb-checkbox name="terms" [(ngModel)]="user.terms" [required]="getConfigValue('forms.register.terms')">
-      Agree to <a href="#" target="_blank"><strong>Terms & Conditions</strong></a>
-    </nb-checkbox>
-  </div-->
-
-  <div class="text-right">
+  <div class="d-flex justify-content-between align-items-center">
+    <re-captcha #captcha [ngModel]="user.captcha" name="captcha" required theme="dark"></re-captcha>
     <button class="btn btn-success" [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted">
         Register
     </button>
