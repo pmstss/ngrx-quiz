@@ -19,6 +19,13 @@ export const nbAuthOptions: NbAuthOptions = {
                     title: 'Github'
                 }
             ]
+        },
+        validation: {
+            password: {
+                required: true,
+                minLength: 8,
+                maxLength: 64
+            }
         }
     },
 
@@ -81,14 +88,7 @@ export const nbAuthOptions: NbAuthOptions = {
                 defaultErrors: ['Something went wrong, please try again.'],
                 defaultMessages: ['Your token has been successfully refreshed.']
             },
-            resetPass: false,
-            validation: {
-                password: {
-                    required: true,
-                    minLength: 8,
-                    maxLength: 64
-                }
-            }
+            resetPass: false
         })
     ]
 };
