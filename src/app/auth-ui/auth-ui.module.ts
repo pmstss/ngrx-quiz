@@ -1,19 +1,28 @@
 import { NgModule } from '@angular/core';
-import { NbLoginComponent, NbRegisterComponent,
-    NbLogoutComponent, NbResetPasswordComponent, NbAuthModule } from '@nebular/auth';
-import { CustomNbAuthComponent } from './components/auth.component';
-import { NbCardModule } from '@nebular/theme';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { NbLogoutComponent, NbResetPasswordComponent, NbAuthModule } from '@nebular/auth';
+import { NbCardModule, NbCheckboxModule, NbAlertModule, NbInputModule } from '@nebular/theme';
+import { CustomNbAuthComponent } from './components/auth.component';
+import { CustomNbRegisterComponent } from './components/register/register.component';
+import { CustomNbLoginComponent } from './components/login/login.component';
+import { CustomNbLogoutComponent } from './components/logout/logout.component';
+import { CustomNbRequestPasswordComponent } from './components/request-password/request-password.component';
 import { InverseAuthGuard } from '../auth/guards/inverse-auth.guard';
 import { AuthGuard } from '../auth/guards/auth.guard';
 
 @NgModule({
-    declarations: [CustomNbAuthComponent],
+    declarations: [CustomNbLoginComponent, CustomNbRegisterComponent, CustomNbAuthComponent,
+        CustomNbLogoutComponent, CustomNbRequestPasswordComponent],
     imports: [
         CommonModule,
+        FormsModule,
         NbCardModule,
         NbAuthModule,
+        NbAlertModule,
+        NbCheckboxModule,
+        NbInputModule,
         RouterModule.forChild([
             {
                 path: '',
@@ -21,17 +30,17 @@ import { AuthGuard } from '../auth/guards/auth.guard';
                 children: [
                     {
                         path: 'login',
-                        component: NbLoginComponent,
+                        component: CustomNbLoginComponent,
                         canActivate: [InverseAuthGuard]
                     },
                     {
                         path: 'register',
-                        component: NbRegisterComponent,
+                        component: CustomNbRegisterComponent,
                         canActivate: [InverseAuthGuard]
                     },
                     {
                         path: 'logout',
-                        component: NbLogoutComponent,
+                        component: CustomNbLogoutComponent,
                         canActivate: [AuthGuard]
                     },
                     {
