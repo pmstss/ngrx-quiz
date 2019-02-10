@@ -21,6 +21,16 @@ export const nbAuthOptions: NbAuthOptions = {
             ]
         },
         validation: {
+            email: {
+                required: true,
+                minLength: 6,
+                maxLength: 64
+            },
+            fullName: {
+                required: true,
+                minLength: 5,
+                maxLength: 64
+            },
             password: {
                 required: true,
                 minLength: 8,
