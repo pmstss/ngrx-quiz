@@ -24,10 +24,7 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit() {
         this.user$ = this.appStore.select(selectUser).pipe(
-            map(user => {
-                console.log(user);
-                return user && user.anonymous ? null : user;
-            })
+            map(user => user && user.anonymous ? null : user)
         );
 
         this.nbMenuService.onItemClick().pipe(
