@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NbResetPasswordComponent, NbAuthModule } from '@nebular/auth';
+import { NbAuthModule } from '@nebular/auth';
 import { RecaptchaModule, RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { NbCardModule, NbCheckboxModule, NbAlertModule, NbInputModule } from '@nebular/theme';
@@ -14,10 +14,11 @@ import { CustomNbRequestPasswordComponent } from './components/request-password/
 import { InverseAuthGuard } from '../auth/guards/inverse-auth.guard';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { CAPTCHA_KEY } from '../consts';
+import { CustomNbResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 @NgModule({
     declarations: [CustomNbLoginComponent, CustomNbRegisterComponent, CustomNbAuthComponent,
-        CustomNbLogoutComponent, CustomNbRequestPasswordComponent],
+        CustomNbLogoutComponent, CustomNbRequestPasswordComponent, CustomNbResetPasswordComponent],
     imports: [
         CommonModule,
         FormsModule,
@@ -51,6 +52,11 @@ import { CAPTCHA_KEY } from '../consts';
                     {
                         path: 'request-password',
                         component: CustomNbRequestPasswordComponent,
+                        canActivate: [InverseAuthGuard]
+                    },
+                    {
+                        path: 'reset-password',
+                        component: CustomNbResetPasswordComponent,
                         canActivate: [InverseAuthGuard]
                     }
                 ]
