@@ -6,16 +6,16 @@ import { NbAuthModule } from '@nebular/auth';
 import { RecaptchaModule, RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { NbCardModule, NbCheckboxModule, NbAlertModule, NbInputModule } from '@nebular/theme';
+import { CAPTCHA_KEY } from '../consts';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { InverseAuthGuard } from '../auth/guards/inverse-auth.guard';
 import { CustomNbAuthComponent } from './components/auth.component';
+import { AuthTitleComponent } from './components/auth-title/auth-title.component';
 import { CustomNbRegisterComponent } from './components/register/register.component';
 import { CustomNbLoginComponent } from './components/login/login.component';
 import { CustomNbLogoutComponent } from './components/logout/logout.component';
 import { CustomNbRequestPasswordComponent } from './components/request-password/request-password.component';
-import { InverseAuthGuard } from '../auth/guards/inverse-auth.guard';
-import { AuthGuard } from '../auth/guards/auth.guard';
-import { CAPTCHA_KEY } from '../consts';
 import { CustomNbResetPasswordComponent } from './components/reset-password/reset-password.component';
-import { AuthTitleComponent } from './components/auth-title/auth-title.component';
 
 @NgModule({
     declarations: [CustomNbLoginComponent, CustomNbRegisterComponent, CustomNbAuthComponent,
@@ -63,7 +63,7 @@ import { AuthTitleComponent } from './components/auth-title/auth-title.component
                             },
                             {
                                 path: '',
-                                component: CustomNbRegisterComponent,
+                                component: CustomNbRegisterComponent
                             }
                         ]
                     },
