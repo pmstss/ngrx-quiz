@@ -4,7 +4,7 @@ import { BASE_URL } from '../../consts';
 export const nbAuthOptions: NbAuthOptions = {
     forms: {
         login: {
-            redirectDelay: 0,
+            redirectDelay: 1000,
             socialLinks: <NbAuthSocialLink[]>[
                 {
                     url: '/assets/oauth-google.html',
@@ -19,6 +19,18 @@ export const nbAuthOptions: NbAuthOptions = {
                     title: 'Github'
                 }
             ]
+        },
+        requestPassword: {
+            redirectDelay: 1000
+        },
+        resetPassword: {
+            redirectDelay: 1000
+        },
+        register: {
+            redirectDelay: 1000
+        },
+        logout: {
+            redirectDelay: 1000
         },
         validation: {
             email: {
@@ -84,8 +96,25 @@ export const nbAuthOptions: NbAuthOptions = {
                 defaultMessages: ['You have been successfully registered.']
             },
             requestPass: {
-                endpoint: '/reset',
-                method: 'post'
+                endpoint: '/request-password',
+                method: 'post',
+                redirect: {
+                    success: '/',
+                    failure: null
+                },
+                defaultErrors: ['Something went wrong, please try again.'],
+                defaultMessages: ['Reset password instructions have been sent to your email.']
+            },
+            resetPass: {
+                endpoint: '/reset-password',
+                method: 'put',
+                redirect: {
+                    success: '/',
+                    failure: null
+                },
+                resetPasswordTokenKey: 'token',
+                defaultErrors: ['Something went wrong, please try again.'],
+                defaultMessages: ['Your password has been successfully changed.']
             },
             refreshToken: {
                 endpoint: '/refresh-token',
@@ -97,8 +126,7 @@ export const nbAuthOptions: NbAuthOptions = {
                 },
                 defaultErrors: ['Something went wrong, please try again.'],
                 defaultMessages: ['Your token has been successfully refreshed.']
-            },
-            resetPass: false
+            }
         })
     ]
 };
