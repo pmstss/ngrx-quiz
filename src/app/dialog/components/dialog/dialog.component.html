@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card [@dialogAnimation]="closed ? 'closed' : ''" (@dialogAnimation.done)="done($event)">
     <nb-card-header class="d-flex align-items-center">
         {{title}}
         <i class="icon nb-close ml-auto" (click)="close()"></i>

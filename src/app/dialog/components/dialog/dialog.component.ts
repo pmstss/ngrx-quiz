@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { trigger, transition, useAnimation } from '@angular/animations';
 import { NbDialogRef } from '@nebular/theme';
+import { jackInTheBox, hinge } from 'ng-animate';
 
 export class ButtonConfig {
     label = 'Yes';
@@ -7,14 +9,24 @@ export class ButtonConfig {
     callback = () => {};
 }
 
+const ANIMATION_DURATION = 1000;
+
 @Component({
     selector: 'modal-content',
     templateUrl: './dialog.component.html',
-    styleUrls: ['./dialog.component.scss']
+    styleUrls: ['./dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('dialogAnimation', [
+            transition(':enter', useAnimation(jackInTheBox)),
+            transition('* => closed', useAnimation(hinge))
+        ])
+    ]
 })
 export class DialogComponent {
     title: string = 'Confirm';
     message: string = 'Are you sure?';
+    closed = false;
 
     buttons: ButtonConfig[] = [{
         label: 'Yes',
@@ -29,11 +41,16 @@ export class DialogComponent {
     constructor(private dialogRef: NbDialogRef<any>) {}
 
     close() {
-        this.dialogRef.close();
+        this.closed = true;
+        setTimeout(() => this.dialogRef.close(), ANIMATION_DURATION);
     }
 
     buttonClick(button: ButtonConfig) {
         button.callback();
-        this.dialogRef.close();
+        this.close();
+    }
+
+    done($event) {
+        console.log($event);
     }
 }
