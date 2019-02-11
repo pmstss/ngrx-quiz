@@ -53,6 +53,7 @@ export class QuizStepComponent implements OnInit {
     choices$: Observable<QuizItemChoiceStatus[]>;
 
     choicesAnimationCounter: number = 0;
+    submitted: boolean = false;
 
     constructor(private route: ActivatedRoute, private appStore: Store<AppState>) {
     }
@@ -70,6 +71,7 @@ export class QuizStepComponent implements OnInit {
         this.quizStepSubscription = this.appStore.select(selectQuizStep).subscribe(() => {
             this.choicesAnimationCounter = 0;
             this.itemLoading$.next(true);
+            this.submitted = false;
         });
 
         this.activeItemSubscription = this.appStore.select(selectQuizActiveItem).pipe(
@@ -114,6 +116,7 @@ export class QuizStepComponent implements OnInit {
     }
 
     submit() {
+        this.submitted = true;
         this.appStore.dispatch(new ActionSubmitAnswer());
     }
 

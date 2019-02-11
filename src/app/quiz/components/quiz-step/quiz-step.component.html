@@ -36,7 +36,7 @@
                     Skip
                 </a>
                 <button *ngIf="!itemStatus.answered" class="btn btn-outline-primary btn-lg ml-4"
-                        (click)="submit()">
+                        (click)="submit()" [nbSpinner]="submitted" nbSpinnerMessage="" [disabled]="submitted">
                     Submit
                 </button>
                 <a *ngIf="itemStatus.answered && !quizState.finished" class="btn btn-outline-info btn-lg ml-auto"
