@@ -5,6 +5,10 @@
     display: flex;
     flex-direction: column;
 
+    nb-layout-footer span {
+        color: nb-theme(color-fg-heading);
+    }
+
     /deep/  {
         .btn {
             cursor: pointer !important;
@@ -28,7 +32,16 @@
         }
 
         .ng-dirty {
-            border-color: nb-theme(color-warning);
+            border-color: nb-theme(color-info);
+        }
+
+        .icon-github {
+            background-image: url(/assets/github.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
         }
 
         /*** Nebular ***/
