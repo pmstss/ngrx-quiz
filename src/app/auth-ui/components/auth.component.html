@@ -1,12 +1,16 @@
 <nb-card>
-    <nb-card-header>
+    <nb-card-header class="d-flex justify-content-between align-items-center">
         <nav class="navigation">
-        <a href="#" (click)="back()" class="link" aria-label="Back"><i class="icon nb-arrow-thin-left"></i></a>
+            <a href="#" (click)="back()" class="link" aria-label="Back"><i class="icon nb-arrow-thin-left"></i></a>
         </nav>
+        <div>
+            <router-outlet name="title"></router-outlet>
+        </div>
+        <div></div>
     </nb-card-header>
     <nb-card-body>
         <div class="nb-auth-block">
-        <router-outlet></router-outlet>
+            <router-outlet></router-outlet>
         </div>
     </nb-card-body>
 </nb-card>

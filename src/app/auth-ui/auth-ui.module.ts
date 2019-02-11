@@ -15,10 +15,11 @@ import { InverseAuthGuard } from '../auth/guards/inverse-auth.guard';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { CAPTCHA_KEY } from '../consts';
 import { CustomNbResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { AuthTitleComponent } from './components/auth-title/auth-title.component';
 
 @NgModule({
     declarations: [CustomNbLoginComponent, CustomNbRegisterComponent, CustomNbAuthComponent,
-        CustomNbLogoutComponent, CustomNbRequestPasswordComponent, CustomNbResetPasswordComponent],
+        CustomNbLogoutComponent, CustomNbRequestPasswordComponent, CustomNbResetPasswordComponent, AuthTitleComponent],
     imports: [
         CommonModule,
         FormsModule,
@@ -36,28 +37,83 @@ import { CustomNbResetPasswordComponent } from './components/reset-password/rese
                 children: [
                     {
                         path: 'login',
-                        component: CustomNbLoginComponent,
-                        canActivate: [InverseAuthGuard]
+                        canActivate: [InverseAuthGuard],
+                        children: [
+                            {
+                                path: '',
+                                component: AuthTitleComponent,
+                                outlet: 'title',
+                                data: { title: 'Login' }
+                            },
+                            {
+                                path: '',
+                                component: CustomNbLoginComponent
+                            }
+                        ]
                     },
                     {
                         path: 'register',
-                        component: CustomNbRegisterComponent,
-                        canActivate: [InverseAuthGuard]
+                        canActivate: [InverseAuthGuard],
+                        children: [
+                            {
+                                path: '',
+                                component: AuthTitleComponent,
+                                outlet: 'title',
+                                data: { title: 'Register' }
+                            },
+                            {
+                                path: '',
+                                component: CustomNbRegisterComponent,
+                            }
+                        ]
                     },
                     {
                         path: 'logout',
-                        component: CustomNbLogoutComponent,
-                        canActivate: [AuthGuard]
+                        canActivate: [AuthGuard],
+                        children: [
+                            {
+                                path: '',
+                                component: AuthTitleComponent,
+                                outlet: 'title',
+                                data: { title: 'Logout' }
+                            },
+                            {
+                                path: '',
+                                component: CustomNbLogoutComponent
+                            }
+                        ]
                     },
                     {
                         path: 'request-password',
-                        component: CustomNbRequestPasswordComponent,
-                        canActivate: [InverseAuthGuard]
+                        canActivate: [InverseAuthGuard],
+                        children: [
+                            {
+                                path: '',
+                                component: AuthTitleComponent,
+                                outlet: 'title',
+                                data: { title: 'Forgot Password' }
+                            },
+                            {
+                                path: '',
+                                component: CustomNbRequestPasswordComponent
+                            }
+                        ]
                     },
                     {
                         path: 'reset-password',
-                        component: CustomNbResetPasswordComponent,
-                        canActivate: [InverseAuthGuard]
+                        canActivate: [InverseAuthGuard],
+                        children: [
+                            {
+                                path: '',
+                                component: AuthTitleComponent,
+                                outlet: 'title',
+                                data: { title: 'Change password' }
+                            },
+                            {
+                                path: '',
+                                component: CustomNbResetPasswordComponent
+                            }
+                        ]
                     }
                 ]
             }
