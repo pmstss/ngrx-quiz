@@ -12,7 +12,7 @@
             </nb-card-header>
 
             <nb-card-body class="px-4">
-                <quill-editor theme="bubble" [readOnly]="true" [ngModel]="(itemStatusDelayed$ | async)?.question"></quill-editor>
+                <quill-editor class="d-block" theme="bubble" [readOnly]="true" [ngModel]="(itemStatusDelayed$ | async)?.question"></quill-editor>
                 <div class="mt-4 choices">
                     <div class="choices-animated-aux"
                             [ngClass]="choicesAnimationCounter !== itemStatus.choicesStatus.length ? 'd-block' : 'd-none'">
