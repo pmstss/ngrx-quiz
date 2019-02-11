@@ -68,7 +68,9 @@
   </div>
 
   <div class="d-flex justify-content-between align-items-center">
-    <re-captcha #captcha [(ngModel)]="user.captchaToken" name="captcha" required theme="dark"></re-captcha>
+    <div>
+      <re-captcha #captcha *ngIf="!submitted" [(ngModel)]="user.captchaToken" name="captcha" required theme="dark"></re-captcha>
+    </div>
     <button class="btn btn-success" [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted">
         Log In
     </button>
@@ -94,6 +96,6 @@
 </section>
 
 <section class="another-action" aria-label="Register">
-    Don't have an account? <a class="text-link" routerLink="../register">Register</a><br/>
-    Forgot Password? <a class="text-warning" routerLink="../request-password">Request Password</a>
+    <p>Don't have an account? <a class="text-link" routerLink="../register">Register</a></p>
+    <p>Forgot Password? <a class="text-warning" routerLink="../request-password">Request Password</a></p>
 </section>
