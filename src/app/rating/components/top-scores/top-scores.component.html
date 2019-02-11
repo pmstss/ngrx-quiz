@@ -23,7 +23,7 @@
                 <th scope="row">{{index + 1}}</th>
                 <td>{{topScore.userName}}</td>
                 <td>{{topScore.score | percent: '1.0-2'}}</td>
-                <td>{{topScore.date | date : 'mediumDate'}}</td>
+                <td>{{topScore.createdAt | date : 'mediumDate'}}</td>
             </tr>
         </tbody>
     </table>
