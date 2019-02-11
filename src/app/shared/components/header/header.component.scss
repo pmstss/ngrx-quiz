@@ -4,7 +4,22 @@
     width: 100%;
 
     .navbar-brand {
-        color: white;
+        color: nb-theme(header-fg);
+    }
+
+    .nav-link {
+        position: relative;
+    }
+
+    .nav-link.active::after {
+        position: absolute;
+        border: 2px solid nb-theme(color-info);
+        content: '';
+        width: 100%;
+        height: 4px;
+        border-radius: 2px;
+        left: 0;
+        bottom: -5px;
     }
 
     nb-user {

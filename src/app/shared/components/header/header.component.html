@@ -2,16 +2,18 @@
   <a class="navbar-brand" routerLink="/">ngrx-quiz</a>
   <ul class="navbar-nav flex-row w-100">
         <li class="nav-item">
-            <a class="nav-link" routerLink="/">Home</a>
+            <a class="nav-link" routerLink="/quizes">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" routerLink="/top">Top Scores</a>
+            <a class="nav-link d-flex" routerLink="/top" routerLinkActive="active">
+                Top<span class="d-none d-md-block">&nbsp;Scores</span>
+            </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" routerLink="/about">About</a>
+            <a class="nav-link" routerLink="/about" routerLinkActive="active">About</a>
         </li>
         <li class="nav-item" *ngIf="(user$ | async)?.admin">
-            <a class="nav-link" routerLink="/admin">Admin</a>
+            <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin</a>
         </li>
 
         <li class="nav-item ml-auto">
@@ -25,7 +27,7 @@
 
         <ng-template #login>
             <li class="nav-item ml-4">
-                <a class="nav-link" routerLink="/auth/login">Login</a>
+                <a class="nav-link" routerLink="/auth/login" routerLinkActive="active">Login</a>
             </li>
         </ng-template>
   </ul>
