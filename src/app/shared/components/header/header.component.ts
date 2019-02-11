@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { NbMenuService, NbMenuItem } from '@nebular/theme';
 import { User } from 'ngrx-quiz-common';
 import { AppState, selectUser } from '../../../store';
+import { DialogService } from '../../../dialog';
 
 @Component({
     selector: 'app-header',
@@ -19,7 +20,8 @@ export class HeaderComponent implements OnInit {
         { title: 'Logout', link: '/auth/logout' }
     ];
 
-    constructor(private appStore: Store<AppState>, private nbMenuService: NbMenuService) {
+    constructor(private appStore: Store<AppState>, private dialogService: DialogService,
+                private nbMenuService: NbMenuService) {
     }
 
     ngOnInit() {
@@ -29,6 +31,12 @@ export class HeaderComponent implements OnInit {
 
         this.nbMenuService.onItemClick().pipe(
             filter(({ tag, item: { data } }) => tag === 'user-context-menu' && data && data.id === 'profile')
-        ).subscribe(item => alert('Profile click!'));
+        ).subscribe(() => {
+            // TODO ### profile component
+            return this.dialogService.alert({
+                title: 'Oops',
+                message: 'Profile functionality is under construction'
+            }).subscribe(() => null);
+        });
     }
 }
