@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { QuizId, ItemId, QuizItem, QuizMetaBasic, QuizMetaAdmin, QuizItemAdmin } from 'ngrx-quiz-common';
+import { QuizId, ItemId, QuizMetaAdmin, QuizItemAdmin } from 'ngrx-quiz-common';
 import { ApiService } from '../../core';
 
 @Injectable()
@@ -16,12 +16,20 @@ export class QuizAdminService {
         return this.apiService.post<{}>('/admin/quizes', quizMeta);
     }
 
-    updateQuiz(quizMeta: QuizMetaBasic) {
+    updateQuiz(quizMeta: QuizMetaAdmin) {
         return this.apiService.put<{}>(`/admin/quizes/${quizMeta.id}`, quizMeta);
     }
 
-    deleteQuiz(quizId: QuizId): Observable<{}> {
-        return this.apiService.delete<{}>(`/admin/quizes/${quizId}`);
+    deleteQuiz(quizId: QuizId): Observable<void> {
+        return this.apiService.delete<void>(`/admin/quizes/${quizId}`);
+    }
+
+    publishQuiz(quizId: QuizId): Observable<void> {
+        return this.apiService.post<void>(`/admin/quizes/publish/${quizId}`, null);
+    }
+
+    unpublishQuiz(quizId: QuizId): Observable<void> {
+        return this.apiService.delete<void>(`/admin/quizes/unpublish/${quizId}`);
     }
 
     loadItem(itemId: ItemId): Observable<QuizItemAdmin> {

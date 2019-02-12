@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
+import { NbToastrService } from '@nebular/theme';
 import { QuizMetaListItem } from 'ngrx-quiz-common';
 import { QuizService } from '../../../core';
 
@@ -12,7 +13,7 @@ import { QuizService } from '../../../core';
 export class QuizListComponent implements OnInit {
     quizList$: Observable<QuizMetaListItem[]>;
 
-    constructor(private quizService: QuizService) {
+    constructor(private quizService: QuizService, private toastrService: NbToastrService) {
     }
 
     ngOnInit() {

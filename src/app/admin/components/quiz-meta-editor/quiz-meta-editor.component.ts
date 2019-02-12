@@ -82,4 +82,32 @@ export class QuizMetaEditorComponent implements OnInit {
                 }
             });
     }
+
+    publish(quizMeta: QuizMetaAdmin) {
+        this.dialogService.confirm('Do you really want to publish this quiz?')
+            .subscribe((comfirmed) => {
+                if (!comfirmed) {
+                    return;
+                }
+
+                this.quizAdminService.publishQuiz(quizMeta.id).subscribe(() => {
+                    this.toastrService.show(`Quiz "${quizMeta.shortName}", id: ${quizMeta.id}`, 'Quiz published');
+                    this.navigateToQuizList();
+                });
+            });
+    }
+
+    unpublish(quizMeta: QuizMetaAdmin) {
+        this.dialogService.confirm('Do you really want to unpublish this quiz?')
+            .subscribe((comfirmed) => {
+                if (!comfirmed) {
+                    return;
+                }
+
+                this.quizAdminService.unpublishQuiz(quizMeta.id).subscribe(() => {
+                    this.toastrService.show(`Quiz "${quizMeta.shortName}", id: ${quizMeta.id}`, 'Quiz unpublished');
+                    this.navigateToQuizList();
+                });
+            });
+    }
 }
