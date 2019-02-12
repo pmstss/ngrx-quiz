@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { QuizId, ItemId, QuizMetaAdmin, QuizItemAdmin } from 'ngrx-quiz-common';
+import { QuizId, ItemId, QuizMetaAdmin, QuizItemAdmin, QuizMetaListItem } from 'ngrx-quiz-common';
 import { ApiService } from '../../core';
 
 @Injectable()
 export class QuizAdminService {
     constructor(private apiService: ApiService) {
+    }
+
+    loadQuizList(): Observable<QuizMetaListItem[]> {
+        return this.apiService.get<QuizMetaListItem[]>('/admin/quizes');
     }
 
     loadQuiz(quizId: QuizId): Observable<QuizMetaAdmin> {
