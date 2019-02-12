@@ -109,8 +109,8 @@ export const nbAuthOptions: NbAuthOptions = {
                 endpoint: '/reset-password',
                 method: 'put',
                 redirect: {
-                    success: '/',
-                    failure: null
+                    success: '/login',
+                    failure: '/request-password'
                 },
                 resetPasswordTokenKey: 'token',
                 defaultErrors: ['Something went wrong, please try again.'],
