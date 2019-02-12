@@ -3,7 +3,7 @@
         <form *ngIf="item" #form="ngForm" class="w-100">
             <div class="d-flex align-items-center justify-content-between">
                 <app-back-link url="..">Back to item list</app-back-link>
-                <a class="btn btn-xs btn-outline-info ml-auto btn-new" routerLink="../new">Add New Item</a>
+                <a *ngIf="!isNew()" class="btn btn-xs btn-outline-info ml-auto btn-new" routerLink="../new">Add New Item</a>
                 <button class="btn btn-outline-primary ml-3"
                         [disabled]="form.pristine || form.invalid" (click)="save()">Save</button>
             </div>
