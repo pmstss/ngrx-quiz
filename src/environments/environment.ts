@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false
+    production: false,
+    apiUrl: 'http://localhost:3333',
+    captchaKey: '6LefD5AUAAAAAEYVU1mon3rx015k0tb_WI-yo7Ou',
+    oauthGoogleUrl: '/assets/oauth-google-local.html',
+    oauthGithubUrl: '/assets/oauth-github-local.html'
 };
 
 // TODO ### temp workaround for @ngrx/store-devtools

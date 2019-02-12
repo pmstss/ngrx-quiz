@@ -1,5 +1,6 @@
 import { NbPasswordAuthStrategy, NbAuthJWTToken, NbAuthOptions, NbAuthSocialLink } from '@nebular/auth';
 import { BASE_URL } from '../../consts';
+import { environment } from '../../../environments/environment';
 
 export const nbAuthOptions: NbAuthOptions = {
     forms: {
@@ -7,13 +8,13 @@ export const nbAuthOptions: NbAuthOptions = {
             redirectDelay: 1000,
             socialLinks: <NbAuthSocialLink[]>[
                 {
-                    url: '/assets/oauth-google.html',
+                    url: environment.oauthGoogleUrl,
                     target: '_blank',
                     icon: 'icon-social-google',
                     title: 'Google'
                 },
                 {
-                    url: '/assets/oauth-github.html',
+                    url: environment.oauthGithubUrl,
                     target: '_blank',
                     icon: 'icon-social-github',
                     title: 'Github'

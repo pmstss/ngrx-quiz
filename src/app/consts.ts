@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
+import { environment } from '../environments/environment';
 
-export const CAPTCHA_KEY = '6LefD5AUAAAAAEYVU1mon3rx015k0tb_WI-yo7Ou';
 export const BASE_URL_TOKEN = new InjectionToken('BASE_URL');
-export const BASE_URL = 'http://localhost:3333';
+export const BASE_URL = environment.apiUrl;
+export const CAPTCHA_KEY = environment.captchaKey;
