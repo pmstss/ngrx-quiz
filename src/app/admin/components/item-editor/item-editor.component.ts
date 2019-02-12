@@ -53,11 +53,15 @@ export class ItemEditorComponent implements OnInit {
         return this.item && !this.item.id;
     }
 
+    private navigateToItemsList() {
+        this.router.navigate(['..'], { relativeTo: this.route });
+    }
+
     save() {
         if (this.isNew()) {
             this.quizAdminService.createItem(this.quizId, this.item).subscribe((quizItem) => {
                 this.toastrService.show(`Item id: ${quizItem.id}`, 'Item created!');
-                this.router.navigate([`/admin/quiz/${this.quizId}/items/${quizItem.id}`]);
+                this.navigateToItemsList();
                 this.form.form.markAsPristine();
             });
         } else {
@@ -78,11 +82,11 @@ export class ItemEditorComponent implements OnInit {
 
                 if (this.isNew()) {
                     this.toastrService.show('Unsaved item removed', 'Item removed');
-                    this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
+                    this.navigateToItemsList();
                 } else {
                     this.quizAdminService.deleteItem(this.item.id).subscribe(() => {
                         this.toastrService.show(`Item id: ${this.item.id}`, 'Item removed');
-                        this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
+                        this.navigateToItemsList();
                     });
                 }
             });

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
-import { QuizMetaAdmin } from 'ngrx-quiz-common';
+import { QuizMetaAdmin, QuizId } from 'ngrx-quiz-common';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 import { quillToolbarConfig } from '../quill-config';
 import { DialogService } from '../../../dialog';
@@ -38,6 +38,14 @@ export class QuizMetaEditorComponent implements OnInit {
         return quizMeta && !quizMeta.id;
     }
 
+    private navigateToQuizList() {
+        return this.router.navigate(['../..'], { relativeTo: this.route });
+    }
+
+    private navigateToQuiz(quizId: QuizId) {
+        return this.router.navigate([`../${quizId}`], { relativeTo: this.route });
+    }
+
     save(quizMeta: QuizMetaAdmin) {
         const meta = { ...quizMeta };
         delete meta.items;
@@ -45,7 +53,7 @@ export class QuizMetaEditorComponent implements OnInit {
         if (this.isNew(quizMeta)) {
             this.quizAdminService.createQuiz(meta).subscribe((qm: QuizMetaAdmin) => {
                 this.toastrService.show(`Quiz "${qm.shortName}", id: ${qm.id}`, 'Quiz created!');
-                this.router.navigate([`/admin/quiz/${qm.id}`]);
+                this.navigateToQuiz(qm.id);
             });
         } else {
             this.quizAdminService.updateQuiz(meta).subscribe((qm: QuizMetaAdmin) => {
@@ -65,11 +73,11 @@ export class QuizMetaEditorComponent implements OnInit {
 
                 if (this.isNew(quizMeta)) {
                     this.toastrService.show('Unsaved quiz removed', 'Quiz removed');
-                    this.router.navigate(['/admin/quizes']);
+                    this.navigateToQuizList();
                 } else {
                     this.quizAdminService.deleteQuiz(quizMeta.id).subscribe(() => {
                         this.toastrService.show(`Quiz "${quizMeta.shortName}", id: ${quizMeta.id}`, 'Quiz removed');
-                        this.router.navigate(['/admin/quizes']);
+                        this.navigateToQuizList();
                     });
                 }
             });
