@@ -80,8 +80,8 @@ export class ItemEditorComponent implements OnInit {
                     this.toastrService.show('Unsaved item removed', 'Item removed');
                     this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
                 } else {
-                    this.quizAdminService.deleteItem(this.item.id).subscribe((quizItem: QuizItemAdmin) => {
-                        this.toastrService.show(`Item id: ${quizItem.id}`, 'Item removed');
+                    this.quizAdminService.deleteItem(this.item.id).subscribe(() => {
+                        this.toastrService.show(`Item id: ${this.item.id}`, 'Item removed');
                         this.router.navigate([`/admin/quiz/${this.quizId}/items`]);
                     });
                 }
