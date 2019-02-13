@@ -29,4 +29,10 @@
     nb-user {
         cursor: pointer;
     }
+
+    @include media-breakpoint-down(is) {
+        /deep/ .user-container .info-container {
+            display: none;
+        }
+    }
 }
