@@ -1,3 +1,8 @@
+/*
+ * Project: ngrx-quiz (https://github.com/pmstss/ngrx-quiz)
+ * Copyright 2019 Viachaslau Tyshkavets
+ * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
+ */
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpRequest } from '@angular/common/http';
 import { NbAuthModule, NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';

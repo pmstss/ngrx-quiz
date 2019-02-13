@@ -1,3 +1,8 @@
+/*
+ * Project: ngrx-quiz (https://github.com/pmstss/ngrx-quiz)
+ * Copyright 2019 Viachaslau Tyshkavets
+ * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
+ */
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NbCardModule, NbInputModule, NbTooltipModule, NbCheckboxModule } from '@nebular/theme';

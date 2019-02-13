@@ -1,3 +1,8 @@
+/*
+ * Project: ngrx-quiz (https://github.com/pmstss/ngrx-quiz)
+ * Copyright 2019 Viachaslau Tyshkavets
+ * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
+ */
 import { Inject, Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable, of, BehaviorSubject, throwError } from 'rxjs';

@@ -1,3 +1,8 @@
+/*
+ * Project: ngrx-quiz (https://github.com/pmstss/ngrx-quiz)
+ * Copyright 2019 Viachaslau Tyshkavets
+ * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
+ */
 import { animation, animate, style, keyframes } from '@angular/animations';
 
 // based on https://github.com/jiayihu/ng-animate/blob/master/projects/ng-animate/src/lib/bouncing.ts

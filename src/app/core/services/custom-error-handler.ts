@@ -1,3 +1,8 @@
+/*
+ * Project: ngrx-quiz (https://github.com/pmstss/ngrx-quiz)
+ * Copyright 2019 Viachaslau Tyshkavets
+ * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
+ */
 import { ErrorHandler, Injectable, NgZone } from '@angular/core';
 import { MessageService } from './message.service';
 import { NbToastStatus } from '@nebular/theme/components/toastr/model';

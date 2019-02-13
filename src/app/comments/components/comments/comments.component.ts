@@ -1,3 +1,8 @@
+/*
+ * Project: ngrx-quiz (https://github.com/pmstss/ngrx-quiz)
+ * Copyright 2019 Viachaslau Tyshkavets
+ * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
+ */
 import { Component, Input, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { trigger, useAnimation, transition } from '@angular/animations';
 import { Observable, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
