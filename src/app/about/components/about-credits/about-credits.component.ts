@@ -6,12 +6,12 @@
 import { Component, OnInit, ChangeDetectionStrategy, VERSION } from '@angular/core';
 
 @Component({
-    selector: 'app-about-version',
-    templateUrl: './about-version.component.html',
-    styleUrls: ['./about-version.component.scss'],
+    selector: 'app-about-credits',
+    templateUrl: './about-credits.component.html',
+    styleUrls: ['./about-credits.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AboutVersionComponent implements OnInit {
+export class AboutCreditsComponent implements OnInit {
     ngVersion = VERSION;
 
     constructor() { }

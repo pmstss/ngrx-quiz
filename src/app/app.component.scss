@@ -9,6 +9,12 @@
         color: nb-theme(color-fg-heading);
     }
 
+    @include media-breakpoint-down(is) {
+        /deep/ nb-layout-header > nav.fixed {
+          padding: 0 !important;
+        }
+    }
+
     /deep/  {
         .btn {
             cursor: pointer !important;

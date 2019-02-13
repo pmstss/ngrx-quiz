@@ -10,10 +10,10 @@ import { SharedModule } from '../shared';
 import { AboutComponent } from './components/about/about.component';
 import { AboutProjectComponent } from './components/about-project/about-project.component';
 import { AboutAuthorComponent } from './components/about-author/about-author.component';
-import { AboutVersionComponent } from './components/about-version/about-version.component';
+import { AboutCreditsComponent } from './components/about-credits/about-credits.component';
 
 @NgModule({
-    declarations: [AboutComponent, AboutProjectComponent, AboutAuthorComponent, AboutVersionComponent],
+    declarations: [AboutComponent, AboutProjectComponent, AboutAuthorComponent, AboutCreditsComponent],
     imports: [
         SharedModule,
         NbRouteTabsetModule,
@@ -28,8 +28,8 @@ import { AboutVersionComponent } from './components/about-version/about-version.
                     path: 'author',
                     component: AboutAuthorComponent
                 }, {
-                    path: 'version',
-                    component: AboutVersionComponent
+                    path: 'credits',
+                    component: AboutCreditsComponent
                 },
                 {
                     path: '**',

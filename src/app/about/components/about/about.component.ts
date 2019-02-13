@@ -26,8 +26,8 @@ export class AboutComponent implements OnInit {
             responsive: true
         },
         {
-            title: 'Version',
-            route: '/about/version',
+            title: 'Credits',
+            route: '/about/credits',
             icon: 'nb-heart',
             responsive: true
         }
