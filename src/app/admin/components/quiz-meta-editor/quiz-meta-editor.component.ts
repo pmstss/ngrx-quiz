@@ -7,7 +7,7 @@ import { Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRe
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { from, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
 import { QuizMetaAdmin, QuizId } from 'ngrx-quiz-common';
 import { QuizAdminService } from '../../services/quiz-admin.service';
@@ -55,18 +55,17 @@ export class QuizMetaEditorComponent implements OnInit {
         const meta = { ...quizMeta };
         delete meta.items;
 
-        if (this.isNew(quizMeta)) {
-            this.quizAdminService.createQuiz(meta).subscribe((qm: QuizMetaAdmin) => {
-                this.toastrService.show(`Quiz "${qm.shortName}", id: ${qm.id}`, 'Quiz created!');
-                this.navigateToQuiz(qm.id);
-            });
-        } else {
-            this.quizAdminService.updateQuiz(meta).subscribe((qm: QuizMetaAdmin) => {
-                this.toastrService.show(`Quiz "${qm.shortName}", id: ${qm.id}`, 'Quiz updated!');
-                this.form.form.markAsPristine();
-                this.changeDetectorRef.detectChanges();
-            });
-        }
+        const quiz$ = this.isNew(quizMeta) ? this.quizAdminService.createQuiz(meta).pipe(tap((qm: QuizMetaAdmin) => {
+            this.toastrService.show(`Quiz "${qm.shortName}", id: ${qm.id}`, 'Quiz created!');
+            this.navigateToQuiz(qm.id);
+        })) : this.quizAdminService.updateQuiz(meta).pipe(tap((qm: QuizMetaAdmin) => {
+            this.toastrService.show(`Quiz "${qm.shortName}", id: ${qm.id}`, 'Quiz updated!');
+        }));
+
+        quiz$.subscribe(() => {
+            this.form.form.markAsPristine();
+            this.changeDetectorRef.detectChanges();
+        });
     }
 
     remove(quizMeta: QuizMetaAdmin) {
