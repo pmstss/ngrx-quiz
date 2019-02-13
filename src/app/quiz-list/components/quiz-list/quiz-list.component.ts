@@ -4,11 +4,13 @@
  * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
  */
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { trigger, transition, useAnimation } from '@angular/animations';
 import { Observable, Subscription, combineLatest, BehaviorSubject, merge } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { NbSearchService } from '@nebular/theme';
 import { QuizMetaListItem } from 'ngrx-quiz-common';
 import { QuizService, AutoUnsubscribe } from '../../../core';
+import { flipInX } from 'ng-animate';
 
 interface SearchQuery {
     term: string;
@@ -20,7 +22,12 @@ interface SearchQuery {
     selector: 'app-quiz-list',
     templateUrl: './quiz-list.component.html',
     styleUrls: ['./quiz-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('itemAnimation', [
+            transition(':enter', useAnimation(flipInX))
+        ])
+    ]
 })
 export class QuizListComponent implements OnInit {
     @AutoUnsubscribe private searchSubscription: Subscription;

@@ -16,6 +16,10 @@
     }
 
     /deep/  {
+        nb-layout-column {
+            overflow: hidden;   /* for animations */
+        }
+
         .btn {
             cursor: pointer !important;
         }

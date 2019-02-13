@@ -10,7 +10,7 @@
         <custom-nb-search #nbSearch type="rotate-layout" [value]="searchQuery$ | async"></custom-nb-search>
     </div>
 
-    <nb-card *ngFor="let quiz of quizList" class="my-3" [accent]="quiz.finished ? 'success' : (quiz.started ? 'warning' : 'info')">
+    <nb-card *ngFor="let quiz of quizList" class="my-3" [accent]="quiz.finished ? 'success' : (quiz.started ? 'warning' : 'info')" @itemAnimation>
         <nb-card-header class="d-flex justify-content-between">
             {{quiz.name}}
             <span class="ml-2" [ngClass]="quiz.finished ? 'text-success' : (quiz.started ? 'text-warning' : '')">
