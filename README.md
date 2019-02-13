@@ -23,11 +23,12 @@ Open Source MEAN-based quiz platform.
 * [Angular 7](https://github.com/angular/angular) lovely framework
 * [Typescript](https://github.com/Microsoft/TypeScript) types power
 * [RxJS 6](https://github.com/ReactiveX/rxjs) reactive power
-* [nrgx](https://github.com/ngrx/platform) keeping app state under control in redux way
+* [nrgx 7](https://github.com/ngrx/platform) keeping app state under control in redux way
 * [Akveo Nebular](https://github.com/akveo/nebular) amazing UI and auth components
 * [ng-animate](https://github.com/jiayihu/ng-animate) crazy animations
 * [Bootstrap 4](https://github.com/twbs/bootstrap) minimizer for custom CSS code amount
-* [TSLint](https://github.com/palantir/tslint) code-style clean keeper
+* [TSLint](https://github.com/palantir/tslint) code style clean keeper
+* [ngrx-quiz-api](https://github.com/pmstss/ngrx-quiz-api) server side of this project
 
 ### Special cryptomessage for Akveo Nebular team ;)
 Inspired by puzzle at [akveo.com](https://www.akveo.com)
