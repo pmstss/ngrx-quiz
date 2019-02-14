@@ -1,11 +1,11 @@
 <div class="container">
-    <div class="text-center mt-4">
-        <label for="quizSelect">Select quiz</label>
-        <select id="quizSelect" class="ml-4" #quizSelect (change)="selectQuiz(quizSelect.value)">
-            <option *ngFor="let quiz of quizList$ | async" [value]="quiz.id">
+    <div class="text-center mt-4" *ngIf="quizList$ | async as quizList">
+        <nb-select *ngIf="quizId$ | async as quizId" [fullWidth]="false" placeholder="Select quiz"
+                (selectedChange)="selectQuiz($event)" [selected]="quizId">
+            <nb-option *ngFor="let quiz of quizList" [value]="quiz.id">
                 {{quiz.shortName}}
-            </option>
-        </select>
+            </nb-option>
+        </nb-select>
     </div>
 
     <h2 class="text-center text-success my-4" *ngIf="quiz$ | async as quiz">Top scores for "{{quiz.name}}" </h2>

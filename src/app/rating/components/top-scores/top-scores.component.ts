@@ -37,8 +37,7 @@ export class TopScoresComponent implements OnInit {
             switchMap(params => params.quizId ? of(params.quizId) : this.quizList$.pipe(
                 map(res => res && res[0] && res[0].id)
             )),
-            filter(x => !!x),
-            distinctUntilChanged()
+            filter(x => !!x)
         );
 
         this.quiz$ = combineLatest(this.quizList$, this.quizId$).pipe(

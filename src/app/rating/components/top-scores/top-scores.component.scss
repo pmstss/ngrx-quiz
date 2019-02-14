@@ -1,4 +1,9 @@
 @import '../../../../themes';
 
 @include nb-install-component() {
+    nb-select {
+        display: inline-block;
+        min-width: 300px;
+        max-width: 100%;
+    }
 }

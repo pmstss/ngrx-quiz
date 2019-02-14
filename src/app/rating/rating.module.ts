@@ -5,6 +5,7 @@
  */
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { NbSelectModule } from '@nebular/theme';
 import { TopScoresComponent } from './components/top-scores/top-scores.component';
 import { SharedModule } from '../shared';
 
@@ -12,6 +13,7 @@ import { SharedModule } from '../shared';
     declarations: [TopScoresComponent],
     imports: [
         SharedModule,
+        NbSelectModule,
         RouterModule.forChild([{
             path: '',
             children: [
