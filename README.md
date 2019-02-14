@@ -11,6 +11,7 @@ Open Source MEAN-based quiz platform.
 * multiple quizes that can be run simultaneously
 * explanation of answers
 * comments on answers
+* themes switching without reloading
 * animations
 * social login, recaptcha, anonymous users
 * security with refreshable JWT access tokens
