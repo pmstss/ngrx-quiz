@@ -9,9 +9,9 @@ import { trigger, useAnimation, transition } from '@angular/animations';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
+import { slideInUp, slideInDown } from 'ng-animate';
 import { QuizMetaAdmin, QuizItemAdmin, ItemId, QuizId } from 'ngrx-quiz-common';
 import { QuizAdminService } from '../../services/quiz-admin.service';
-import { slideInUp, slideInDown } from 'ng-animate';
 
 const UP_DOWN_DURATION = 350;
 
@@ -49,41 +49,43 @@ export class QuizItemsListComponent implements OnInit {
         this.cdr.detectChanges();
     }
 
-    moveItemUp(quizMeta: QuizMetaAdmin, item: QuizItemAdmin): void {
-        const idx = quizMeta.items.indexOf(item);
-        if (idx > 0) {
-            const itemUp = item;
-            const itemDown = quizMeta.items[idx - 1];
-            this.setUpDownFlags(itemUp, itemDown);
-            quizMeta.items.splice(idx - 1, 2, itemUp, itemDown);
-            setTimeout(
-                () => {
-                    this.clearUpDownFlags(itemUp, itemDown);
-                    this.saveItemsOrder(quizMeta.id, itemUp.id, itemDown.id);
-                },
-                UP_DOWN_DURATION + 200
-            );
+    moveItemUp(quizMeta: QuizMetaAdmin, idx: number): void {
+        if (idx === 0) {
+            return;
         }
+
+        const itemUp = quizMeta.items[idx];
+        const itemDown = quizMeta.items[idx - 1];
+        this.setUpDownFlags(itemUp, itemDown);
+        quizMeta.items.splice(idx - 1, 2, itemUp, itemDown);
+        setTimeout(
+            () => {
+                this.clearUpDownFlags(itemUp, itemDown);
+                this.saveOrder(quizMeta.id, itemUp.id, itemDown.id);
+            },
+            UP_DOWN_DURATION + 200
+        );
     }
 
-    moveItemDown(quizMeta: QuizMetaAdmin, item: QuizItemAdmin): void {
-        const idx = quizMeta.items.indexOf(item);
-        if (idx < quizMeta.items.length - 1) {
-            const itemUp = quizMeta.items[idx + 1];
-            const itemDown = item;
-            this.setUpDownFlags(itemUp, itemDown);
-            quizMeta.items.splice(idx, 2, itemUp, itemDown);
-            setTimeout(
-                () => {
-                    this.clearUpDownFlags(itemUp, itemDown);
-                    this.saveItemsOrder(quizMeta.id, itemUp.id, itemDown.id);
-                },
-                UP_DOWN_DURATION + 200
-            );
+    moveItemDown(quizMeta: QuizMetaAdmin, idx: number): void {
+        if (idx >= quizMeta.items.length - 1) {
+            return;
         }
+
+        const itemUp = quizMeta.items[idx + 1];
+        const itemDown = quizMeta.items[idx];
+        this.setUpDownFlags(itemUp, itemDown);
+        quizMeta.items.splice(idx, 2, itemUp, itemDown);
+        setTimeout(
+            () => {
+                this.clearUpDownFlags(itemUp, itemDown);
+                this.saveOrder(quizMeta.id, itemUp.id, itemDown.id);
+            },
+            UP_DOWN_DURATION + 200
+        );
     }
 
-    private saveItemsOrder(quizId: QuizId, itemIdUp: ItemId, itemIdDown: ItemId): void {
+    private saveOrder(quizId: QuizId, itemIdUp: ItemId, itemIdDown: ItemId): void {
         this.quizAdminService.updateQuizItemsOrder(
             quizId,
             itemIdUp,
