@@ -57,7 +57,7 @@ export class QuizAdminService {
         return this.apiService.delete<void>(`/admin/items/${itemId}`);
     }
 
-    updateQuizItemsOrder(quizId: QuizId, itemIds: ItemId[]) {
-        return this.apiService.put<{}>(`/admin/items/order/${quizId}`, { itemIds });
+    updateQuizItemsOrder(quizId: QuizId, itemIdUp: ItemId, itemIdDown: ItemId) {
+        return this.apiService.put<{}>(`/admin/items/order/${quizId}`, { itemIdUp, itemIdDown });
     }
 }

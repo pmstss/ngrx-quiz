@@ -8,7 +8,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
-import { QuizMetaAdmin, QuizItemAdmin } from 'ngrx-quiz-common';
+import { QuizMetaAdmin, QuizItemAdmin, ItemId, QuizId } from 'ngrx-quiz-common';
 import { QuizAdminService } from '../../services/quiz-admin.service';
 
 @Component({
@@ -33,23 +33,24 @@ export class QuizItemsListComponent implements OnInit {
     moveItemUp(quizMeta: QuizMetaAdmin, item: QuizItemAdmin): void {
         const idx = quizMeta.items.indexOf(item);
         if (idx > 0) {
+            this.saveItemsOrder(quizMeta.id, item.id, quizMeta.items[idx - 1].id);
             quizMeta.items.splice(idx - 1, 2, item, quizMeta.items[idx - 1]);
-            this.saveItemsOrder(quizMeta);
         }
     }
 
     moveItemDown(quizMeta: QuizMetaAdmin, item: QuizItemAdmin): void {
         const idx = quizMeta.items.indexOf(item);
         if (idx < quizMeta.items.length - 1) {
+            this.saveItemsOrder(quizMeta.id, quizMeta.items[idx + 1].id, item.id);
             quizMeta.items.splice(idx, 2, quizMeta.items[idx + 1], item);
-            this.saveItemsOrder(quizMeta);
         }
     }
 
-    private saveItemsOrder(quizMeta: QuizMetaAdmin): void {
+    private saveItemsOrder(quizId: QuizId, itemIdUp: ItemId, itemIdDown: ItemId): void {
         this.quizAdminService.updateQuizItemsOrder(
-            quizMeta.id,
-            quizMeta.items.map(item => item.id)
+            quizId,
+            itemIdUp,
+            itemIdDown
         ).subscribe(() => {
             this.toastrService.show('Items order has been changed successfully', 'Quiz updated!');
         });
