@@ -5,7 +5,8 @@
         <a class="btn btn-outline-primary" routerLink="./new">Add New Item</a>
     </div>
 
-    <nb-card *ngFor="let item of quizMeta.items; let i = index" class="card" accent="primary">
+    <nb-card *ngFor="let item of quizMeta.items; let i = index; trackBy: trackById" class="card" accent="primary"
+            [@itemAnimation]="item.up ? 'up' : item.down ? 'down' : 'none'">
         <nb-card-header class="d-flex align-items-center px-4 py-2">
             <span>Question {{i + 1}}</span>
             <i class="icon nb-arrow-up ml-auto"
