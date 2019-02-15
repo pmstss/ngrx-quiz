@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, combineLatest } from 'rxjs';
 import { TopScore, QuizMetaListItem, QuizId } from 'ngrx-quiz-common';
 import { QuizService } from '../../../core';
-import { switchMap, map, filter, tap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
+import { switchMap, map, filter, shareReplay } from 'rxjs/operators';
 
 @Component({
     selector: 'app-top-scores',

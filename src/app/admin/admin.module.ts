@@ -6,7 +6,8 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NbCardModule, NbInputModule, NbTooltipModule, NbCheckboxModule } from '@nebular/theme';
-import { QuillModule } from 'ngx-quill';
+import { SharedModule } from '../shared';
+import { WysiwygModule } from '../wysiwyg';
 import { AdminComponent } from './components/admin.component';
 import { ItemEditorComponent } from './components/item-editor/item-editor.component';
 import { QuizMetaEditorComponent } from './components/quiz-meta-editor/quiz-meta-editor.component';
@@ -14,18 +15,17 @@ import { QuizAdminService } from './services/quiz-admin.service';
 import { QuizListComponent } from './components/quiz-list/quiz-list.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { QuizItemsListComponent } from './components/quiz-items-list/quiz-items-list.component';
-import { SharedModule } from '../shared';
 
 @NgModule({
     imports: [
         FormsModule,
-        AdminRoutingModule,
-        SharedModule,
-        QuillModule,
         NbCardModule,
         NbInputModule,
         NbTooltipModule,
-        NbCheckboxModule
+        NbCheckboxModule,
+        AdminRoutingModule,
+        SharedModule,
+        WysiwygModule
     ],
     declarations: [
         AdminComponent,

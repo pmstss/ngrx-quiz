@@ -6,8 +6,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { QuillModule } from 'ngx-quill';
 import { NbCardModule } from '@nebular/theme';
+import { WysiwygModule } from '../wysiwyg';
 import { SharedModule } from '../shared';
 import { CommentsModule } from '../comments';
 import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
@@ -21,10 +21,10 @@ import { QuizGuard } from './guards/quiz.guard';
     imports: [
         RouterModule,
         FormsModule,
-        QuillModule,
         NbCardModule,
-        CommentsModule,
-        SharedModule
+        SharedModule,
+        WysiwygModule,
+        CommentsModule
     ],
     providers: [QuizGuard, QuizFinishedGuard],
     exports: [SharedModule]

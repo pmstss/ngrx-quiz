@@ -33,7 +33,8 @@
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.bubble.css",
-              "node_modules/quill/dist/quill.snow.css"
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/highlight.js/styles/atom-one-dark.css"
             ],
             "scripts": []
           },

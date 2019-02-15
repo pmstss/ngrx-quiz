@@ -66,6 +66,7 @@
     "core-js": "2.6.4",
     "express": "^4.16.4",
     "font-awesome": "4.7.0",
+    "highlight.js": "^9.14.2",
     "nebular-icons": "1.1.0",
     "ng-animate": "0.3.4",
     "ng-recaptcha": "4.2.1",
