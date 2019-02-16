@@ -4,7 +4,7 @@
  * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
  */
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { trigger, transition, useAnimation } from '@angular/animations';
+import { trigger, transition, useAnimation, state, style } from '@angular/animations';
 import { NbDialogRef } from '@nebular/theme';
 import { jackInTheBox, hinge } from 'ng-animate';
 
@@ -24,7 +24,10 @@ const ANIMATION_DURATION = 1000;
     animations: [
         trigger('dialogAnimation', [
             transition(':enter', useAnimation(jackInTheBox)),
-            transition('* => closed', useAnimation(hinge))
+            transition('* => closed', useAnimation(hinge)),
+            state('closed', style({
+                opacity: 0
+            }))
         ])
     ]
 })
@@ -53,9 +56,5 @@ export class DialogComponent {
     buttonClick(button: ButtonConfig) {
         button.callback();
         this.close();
-    }
-
-    done($event) {
-        console.log($event);
     }
 }
