@@ -14,13 +14,17 @@ highlight.configure({
     languages: ['typescript']
 });
 
+export function highlightFn(text: string) {
+    return highlight.highlightAuto(text).value;
+}
+
 @NgModule({
     declarations: [],
     imports: [
         QuillModule.forRoot({
             modules: {
                 syntax: <any>{
-                    highlight: (text: string) => highlight.highlightAuto(text).value,
+                    highlight: highlightFn,
                     interval: 0
                 }
             }
