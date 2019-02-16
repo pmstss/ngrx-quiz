@@ -5,20 +5,34 @@
  */
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { useAnimation, transition, trigger, state, style } from '@angular/animations';
 import { NbDialogRef } from '@nebular/theme';
+import { RecaptchaComponent } from 'ng-recaptcha';
+import { jackInTheBox, hinge } from 'ng-animate';
 import { CAPTCHA_KEY } from '../../../consts';
 import { MessageService } from '../../../core';
 import { AnonymousAuthService } from '../../services/anonymous-auth.service';
-import { RecaptchaComponent } from 'ng-recaptcha';
+
+const ANIMATION_DURATION = 1000;
 
 @Component({
     selector: 'app-auth-dialog',
     templateUrl: './auth-dialog.component.html',
-    styleUrls: ['./auth-dialog.component.scss']
+    styleUrls: ['./auth-dialog.component.scss'],
+    animations: [
+        trigger('dialogAnimation', [
+            transition(':enter', useAnimation(jackInTheBox)),
+            transition('* => closed', useAnimation(hinge)),
+            state('closed', style({
+                opacity: 0
+            }))
+        ])
+    ]
 })
 export class AuthDialogComponent {
     captchaKey = CAPTCHA_KEY;
     showCaptcha: boolean = false;
+    closed: boolean = false;
 
     @ViewChild('captcha') private captchaRef: RecaptchaComponent;
     private captchaToken: string;
@@ -27,7 +41,8 @@ export class AuthDialogComponent {
                 private authService: AnonymousAuthService, private messageService: MessageService) {}
 
     close(res?: any) {
-        this.dialogRef.close(res);
+        this.closed = true;
+        setTimeout(() => this.dialogRef.close(res), ANIMATION_DURATION);
     }
 
     anonymous() {

@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card [@dialogAnimation]="closed ? 'closed' : ''">
     <nb-card-header class="d-flex align-items-center">
         Please log in to continue
         <i class="icon nb-close ml-auto" (click)="close()"></i>
@@ -39,5 +39,4 @@
             Submit
         </button>
     </nb-card-footer>
-
 </nb-card>
