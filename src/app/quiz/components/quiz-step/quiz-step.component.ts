@@ -7,14 +7,13 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { trigger, transition, useAnimation, state, style } from '@angular/animations';
 import { Subscription, Observable, of, from, BehaviorSubject } from 'rxjs';
-import { map, filter, switchMap, delay, concatMap, distinctUntilChanged,
-    debounceTime, take } from 'rxjs/operators';
+import { map, filter, switchMap, delay, concatMap, debounceTime, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { fadeIn, fadeOut } from 'ng-animate';
-import { bounceInLeft } from './animations';
+import { AutoUnsubscribe } from '../../../core';
 import { AppState, QuizState, QuizItemStatus, QuizItemChoiceStatus, ActionSubmitAnswer, ActionLoadItem,
     selectQuizState, selectActiveItemStatus, selectQuizStep, selectQuizActiveItem } from '../../../store';
-import { AutoUnsubscribe } from '../../../core';
+import { bounceInLeft } from './animations';
 
 const DELAY_CHOICES_QUEUE = 200;
 const FADE_OUT_DURATION = 400;
@@ -57,7 +56,6 @@ export class QuizStepComponent implements OnInit {
     itemStatusDelayed$: Observable<QuizItemStatus>;
     choices$: Observable<QuizItemChoiceStatus[]>;
 
-    choicesAnimationCounter: number = 0;
     submitted: boolean = false;
 
     constructor(private route: ActivatedRoute, private appStore: Store<AppState>) {
@@ -74,7 +72,6 @@ export class QuizStepComponent implements OnInit {
         });
 
         this.quizStepSubscription = this.appStore.select(selectQuizStep).subscribe(() => {
-            this.choicesAnimationCounter = 0;
             this.itemLoading$.next(true);
             this.submitted = false;
         });
@@ -108,27 +105,30 @@ export class QuizStepComponent implements OnInit {
     private initAnimatedChoicesObservable() {
         // transform choicesStatus array observable into sequence of growing arrays for
         // choices one by one appearing animation (in combination with proper trackBy)
+        let prevChoices: QuizItemChoiceStatus[] = [];
         return this.itemStatus$.pipe(
             map(status => status ? status.choicesStatus : []),
-            distinctUntilChanged(
-                (ch1, ch2) => ch1.length === ch2.length && ch1.every((ch, idx) => ch.id === ch2[idx].id)
-            ),
-            switchMap((choices: QuizItemChoiceStatus[]) => choices.length === 0 ? of([]) :
-                from(choices.map((ch, idx) => choices.slice(0, idx + 1)))
-                    .pipe(concatMap(ch => of(ch).pipe(delay(DELAY_CHOICES_QUEUE))))
-            )
+            switchMap((choices: QuizItemChoiceStatus[]) => {
+                let res: Observable<QuizItemChoiceStatus[]>;
+                if (choices.length === 0) {
+                    res = of([]);
+                } else if (choices.length !== prevChoices.length ||
+                        !choices.every((ch, idx) => ch.id === prevChoices[idx].id)) {
+                    res = from(choices.map((ch, idx) => choices.slice(0, idx + 1))).pipe(
+                        concatMap(ch => of(ch).pipe(delay(DELAY_CHOICES_QUEUE)))
+                    );
+                } else {
+                    res = of(choices);
+                }
+                prevChoices = choices;
+                return res;
+            })
         );
     }
 
     submit() {
         this.submitted = true;
         this.appStore.dispatch(new ActionSubmitAnswer());
-    }
-
-    choiceAnimationDone(event: any) {
-        if (event.fromState === 'void' && event.toState === 'in') {
-            this.choicesAnimationCounter++;
-        }
     }
 
     trackChoice(index: number, obj: any) {

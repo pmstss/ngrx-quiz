@@ -14,15 +14,17 @@
         margin-left: 0;
         padding-left: 0;
         position: relative;
-        border: 1px solid transparent; /* hack for .choices-animated-aux */
     }
 
-    .choices-animated-aux {
+    .choices-aux {
+        visibility: hidden;
+    }
+
+    .choices-animated {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        pointer-events: none;
     }
 
     nb-card-body {
