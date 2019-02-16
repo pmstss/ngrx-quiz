@@ -4,12 +4,15 @@
         <a class="btn btn-outline-primary" routerLink="./quiz/new">Create New Quiz</a>
     </div>
 
-    <nb-card *ngFor="let quiz of quizList; let i = index" [accent]="quiz.published ? 'info' : 'warning'">
-        <nb-card-header class="d-flex align-items-center justify-content-between px-4 py-2">
+    <nb-card *ngFor="let quiz of quizList; let i = index; trackBy: trackById" [accent]="quiz.published ? 'info' : 'warning'"
+            [@quizAnimation]="quiz.up ? 'up' : quiz.down ? 'down' : 'none'">
+        <nb-card-header class="d-flex align-items-center px-4 py-2">
             <span>{{quiz.name}} ({{quiz.shortName}})</span>
-            <span>
-                <a class="btn btn-xs btn-outline-primary ml-2" routerLink="./quiz/{{quiz.id}}">Edit</a>
-            </span>
+            <i class="icon nb-arrow-up ml-auto"
+                title="Move up" (click)="moveQuizUp(quizList, i)"></i>
+            <i class="icon nb-arrow-down ml-1"
+                title="Move down" (click)="moveQuizDown(quizList, i)"></i>
+            <a class="btn btn-xs btn-outline-primary ml-2" routerLink="./quiz/{{quiz.id}}">Edit</a>
         </nb-card-header>
         <nb-card-body>
             <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quiz.descriptionFull"></quill-editor>

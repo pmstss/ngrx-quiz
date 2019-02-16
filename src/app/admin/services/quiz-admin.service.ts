@@ -29,6 +29,10 @@ export class QuizAdminService {
         return this.apiService.put<{}>(`/admin/quizes/${quizMeta.id}`, quizMeta);
     }
 
+    updateQuizOrder(quizIdUp: ItemId, quizIdDown: ItemId) {
+        return this.apiService.put<{}>('/admin/quizes/order', { quizIdUp, quizIdDown });
+    }
+
     deleteQuiz(quizId: QuizId): Observable<void> {
         return this.apiService.delete<void>(`/admin/quizes/${quizId}`);
     }
