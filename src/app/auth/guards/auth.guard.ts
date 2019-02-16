@@ -4,7 +4,7 @@
  * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
  */
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
+import { CanActivate, UrlTree } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -14,8 +14,7 @@ import { AuthDialogService } from '../services/auth-dialog.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(private router: Router, private appStore: Store<AppState>,
-                private authDialogService: AuthDialogService) {
+    constructor(private appStore: Store<AppState>, private authDialogService: AuthDialogService) {
     }
 
     canActivate(): Observable<boolean | UrlTree> {
@@ -26,7 +25,7 @@ export class AuthGuard implements CanActivate {
                 }
 
                 return this.authDialogService.pleaseLogin().pipe(
-                    map((res: any) => res && res.anonymous)
+                    map((res: any) => !!(res && res.anonymous))
                 );
             })
         );
