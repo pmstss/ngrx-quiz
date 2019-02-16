@@ -37,8 +37,7 @@ import { AdminAuthGuard, AuthGuard } from '../auth';
             },
             {
                 path: 'top',
-                loadChildren: '../rating/rating.module#RatingModule',
-                canActivate: [AuthGuard]
+                loadChildren: '../rating/rating.module#RatingModule'
             },
             {
                 path: 'about',
