@@ -1,5 +1,5 @@
 <div class="container" *ngIf="quizState$ | async as quizState else loading" >
-    <app-back-link routerLink="/">Back to quiz list</app-back-link>
+    <app-back-link routerLink="/">Back to quiz list {{choicesAnimationCounter}}</app-back-link>
     <div *ngIf="itemStatus$ | async as itemStatus else loading">
         <nb-card class="my-3" [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')"
                 [@animCard]="(itemLoading$ | async) ? 'void' : 'in'">
@@ -12,7 +12,7 @@
             </nb-card-header>
 
             <nb-card-body class="px-4">
-                <quill-editor class="d-block" theme="bubble" [readOnly]="true" [ngModel]="(itemStatusDelayed$ | async)?.question"></quill-editor>
+                <quill-editor class="d-block" theme="bubble" [readOnly]="true" [ngModel]="itemStatus.question"></quill-editor>
                 <div class="mt-4 choices">
                     <div class="choices-animated-aux"
                             [ngClass]="choicesAnimationCounter !== itemStatus.choicesStatus.length ? 'd-block' : 'd-none'">

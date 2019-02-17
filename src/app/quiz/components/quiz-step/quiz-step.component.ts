@@ -18,7 +18,7 @@ import { AutoUnsubscribe } from '../../../core';
 
 const DELAY_CHOICES_QUEUE = 200;
 const FADE_OUT_DURATION = 400;
-const DELAY_ITEM_LOAD_MIN = FADE_OUT_DURATION * 0.9;
+const DELAY_ITEM_LOAD_MIN = FADE_OUT_DURATION * 1.2;
 
 @Component({
     selector: 'app-quiz-step',
@@ -54,7 +54,6 @@ export class QuizStepComponent implements OnInit {
     quizState$: Observable<QuizState>;
     itemLoading$ = new BehaviorSubject<boolean>(true);
     itemStatus$: Observable<QuizItemStatus>;
-    itemStatusDelayed$: Observable<QuizItemStatus>;
     choices$: Observable<QuizItemChoiceStatus[]>;
 
     choicesAnimationCounter: number = 0;
@@ -88,17 +87,8 @@ export class QuizStepComponent implements OnInit {
         });
 
         // changes itemStatus only on end of loading (i. e. does not keep "nulls" during loading)
-        this.itemStatusDelayed$ = this.itemLoading$.pipe(
-            filter(x => !x),
-            switchMap(() => this.appStore.select(selectActiveItemStatus).pipe(
-                filter(x => !!x),
-                take(1)
-            ))
-        );
-
         this.itemStatus$ = this.itemLoading$.pipe(
-            filter(x => !x),
-            switchMap(() => this.appStore.select(selectActiveItemStatus)),
+            switchMap(loading => loading ? of(null) : this.appStore.select(selectActiveItemStatus).pipe(delay(100))),
             filter(x => !!x)
         );
 
