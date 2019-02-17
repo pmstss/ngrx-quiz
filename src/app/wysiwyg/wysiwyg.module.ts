@@ -9,7 +9,6 @@ import highlight from 'highlight.js/lib/highlight';
 import typescript from 'highlight.js/lib/languages/typescript';
 
 highlight.registerLanguage('typescript', typescript);
-console.log(highlight);
 highlight.configure({
     languages: ['typescript']
 });
