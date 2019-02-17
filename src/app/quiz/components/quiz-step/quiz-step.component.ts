@@ -7,8 +7,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { trigger, transition, useAnimation, state, style } from '@angular/animations';
 import { Subscription, Observable, of, from, BehaviorSubject } from 'rxjs';
-import { map, filter, switchMap, delay, concatMap, distinctUntilChanged,
-    debounceTime, take } from 'rxjs/operators';
+import { map, filter, switchMap, delay, concatMap, debounceTime } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { fadeIn, fadeOut } from 'ng-animate';
 import { bounceInLeft } from './animations';
@@ -54,9 +53,9 @@ export class QuizStepComponent implements OnInit {
     quizState$: Observable<QuizState>;
     itemLoading$ = new BehaviorSubject<boolean>(true);
     itemStatus$: Observable<QuizItemStatus>;
+    private itemStatusAux$: Observable<QuizItemStatus>;
     choices$: Observable<QuizItemChoiceStatus[]>;
 
-    choicesAnimationCounter: number = 0;
     submitted: boolean = false;
 
     constructor(private route: ActivatedRoute, private appStore: Store<AppState>) {
@@ -73,7 +72,6 @@ export class QuizStepComponent implements OnInit {
         });
 
         this.quizStepSubscription = this.appStore.select(selectQuizStep).subscribe(() => {
-            this.choicesAnimationCounter = 0;
             this.itemLoading$.next(true);
             this.submitted = false;
         });
@@ -86,27 +84,43 @@ export class QuizStepComponent implements OnInit {
             this.itemLoading$.next(false);
         });
 
-        // changes itemStatus only on end of loading (i. e. does not keep "nulls" during loading)
-        this.itemStatus$ = this.itemLoading$.pipe(
-            switchMap(loading => loading ? of(null) : this.appStore.select(selectActiveItemStatus).pipe(delay(100))),
-            filter(x => !!x)
+        // with nulls - to reset choices
+        this.itemStatusAux$ = this.itemLoading$.pipe(
+            switchMap(loading => loading ? of(null) : this.appStore.select(selectActiveItemStatus))
         );
+
+        // changes itemStatus only on end of loading (i. e. does not keep "nulls" during loading)
+        this.itemStatus$ = this.itemStatusAux$.pipe(filter(x => !!x));
 
         this.choices$ = this.initAnimatedChoicesObservable();
     }
 
-    private initAnimatedChoicesObservable() {
+    private initAnimatedChoicesObservable(): Observable<QuizItemChoiceStatus[]> {
         // transform choicesStatus array observable into sequence of growing arrays for
         // choices one by one appearing animation (in combination with proper trackBy)
-        return this.itemStatus$.pipe(
+
+        let prevChoices: QuizItemChoiceStatus[] = [];
+        return this.itemStatusAux$.pipe(
             map(status => status ? status.choicesStatus : []),
-            distinctUntilChanged(
-                (ch1, ch2) => ch1.length === ch2.length && ch1.every((ch, idx) => ch.id === ch2[idx].id)
-            ),
-            switchMap((choices: QuizItemChoiceStatus[]) => choices.length === 0 ? of([]) :
-                from(choices.map((ch, idx) => choices.slice(0, idx + 1)))
-                    .pipe(concatMap(ch => of(ch).pipe(delay(DELAY_CHOICES_QUEUE))))
-            )
+            switchMap((choices: QuizItemChoiceStatus[]) => {
+                if (JSON.stringify(choices) === JSON.stringify(prevChoices)) {
+                    return of(choices);
+                }
+
+                let result: Observable<QuizItemChoiceStatus[]>;
+                if (choices.length === 0) {
+                    result = of([]);
+                } else if (choices.length !== prevChoices.length ||
+                        !choices.every((ch, idx) => ch.id === prevChoices[idx].id)) {
+                    result = from(choices.map((ch, idx) => choices.slice(0, idx + 1)))
+                        .pipe(concatMap(ch => of(ch).pipe(delay(DELAY_CHOICES_QUEUE))));
+                } else {
+                    result = of(choices);
+                }
+
+                prevChoices = choices;
+                return result;
+            })
         );
     }
 
@@ -115,13 +129,7 @@ export class QuizStepComponent implements OnInit {
         this.appStore.dispatch(new ActionSubmitAnswer());
     }
 
-    choiceAnimationDone(event: any) {
-        if (event.fromState === 'void' && event.toState === 'in') {
-            this.choicesAnimationCounter++;
-        }
-    }
-
-    trackChoice(index: number, obj: any) {
+    trackChoice(idx: number, obj: any) {
         return obj.id;
     }
 }
