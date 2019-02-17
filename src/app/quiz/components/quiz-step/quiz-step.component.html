@@ -51,14 +51,14 @@
 
         <app-comments [numberOfComments]="itemStatus.numberOfComments"></app-comments>
 
-        <div class="text-center">
+        <!--div class="text-center">
             <span *ngFor="let itemId of quizState.itemIds; let i = index">
                 <a *ngIf="quizState.step !== i + 1" routerLink="/quiz/{{quizState.shortName}}/{{i + 1}}">
                     {{i + 1}}
                 </a>
                 <span *ngIf="quizState.step === i + 1">{{i + 1}}</span>
             </span>
-        </div>
+        </div-->
     </div>
 </div>
 
