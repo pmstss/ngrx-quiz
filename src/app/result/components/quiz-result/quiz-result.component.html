@@ -1,5 +1,5 @@
-<div *ngIf="quizStateScore$ | async as quizStateScore else loading">
-    <div class="jumbotron">
+<div *ngIf="quizStateScore$ | async as quizStateScore else loading" class="container">
+    <div class="jumbotron py-4">
         <h1 class="display-4">You are awesome!</h1>
         <p class="lead text-fg">
             Your score is {{quizStateScore.scoreMeta.scoreAbsolute}} ({{quizStateScore.scoreMeta.scorePercent | percent: '1.0-2'}})
