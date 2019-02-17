@@ -20,7 +20,8 @@
         <nb-card-body class="pb-2">
             <quill-editor theme="bubble" [readOnly]="true" [ngModel]="quiz.description"></quill-editor>
         </nb-card-body>
-        <nb-card-footer class="pt-0 pb-2 d-flex justify-content-end">
+        <nb-card-footer class="pt-0 pb-2 d-flex justify-content-end align-items-center">
+            <span class="mr-3">Questions: {{quiz.totalQuestions}}</span>
             <a class="btn btn-outline-primary" routerLink="/quiz/{{quiz.shortName}}">
                 View details
             </a>
