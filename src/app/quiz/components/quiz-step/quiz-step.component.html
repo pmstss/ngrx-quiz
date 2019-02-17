@@ -14,13 +14,15 @@
             <nb-card-body class="px-4">
                 <quill-editor class="d-block" theme="bubble" [readOnly]="true" [ngModel]="(itemStatusDelayed$ | async)?.question"></quill-editor>
                 <div class="mt-4 choices">
-                    <div class="choices-animated">
-                        <div *ngFor="let choice of (choices$ | async); trackBy: trackChoice" [@animChoice]="'in'">
+                    <div class="choices-animated-aux"
+                            [ngClass]="choicesAnimationCounter !== itemStatus.choicesStatus.length ? 'd-block' : 'd-none'">
+                        <div *ngFor="let choice of (choices$ | async); trackBy: trackChoice"
+                                [@animChoice]="'in'" (@animChoice.done)="choiceAnimationDone($event)">
                             <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
                         </div>
                     </div>
 
-                    <div class="choices-aux"> <!-- to keep required height-->
+                    <div [ngStyle]="{visibility: choicesAnimationCounter ===  itemStatus.choicesStatus.length ? 'visible' : 'hidden'}">
                         <div *ngFor="let choice of itemStatus.choicesStatus; trackBy: trackChoice">
                             <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
                         </div>
