@@ -28,8 +28,9 @@
                 </div>
             </nb-card-body>
 
-            <nb-card-footer class="px-4 d-flex">
-                <a *ngIf="!itemStatus.answered" class="btn btn-outline-secondary btn-lg ml-auto"
+            <nb-card-footer class="px-4 d-flex justify-content-end">
+                <a *ngIf="!itemStatus.answered && (quizState.totalQuestions - quizState.answers.size > 0)"
+                        class="btn btn-outline-secondary btn-lg"
                         routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
                     Skip
                 </a>
