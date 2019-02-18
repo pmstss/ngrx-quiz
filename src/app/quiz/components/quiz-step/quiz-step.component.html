@@ -1,57 +1,58 @@
 <div class="container" *ngIf="quizState$ | async as quizState else loading" >
     <app-back-link routerLink="/">Back to quiz list</app-back-link>
     <div *ngIf="itemStatus$ | async as itemStatus else loading">
-        <nb-card class="my-3" [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')"
-                [@animCard]="(itemLoading$ | async) ? 'void' : 'in'">
-            <nb-card-header class="px-4 d-flex justify-content-between">
-                <span>
-                    Question {{quizState.step}} from {{quizState.totalQuestions}}
-                    (left: {{quizState.totalQuestions - quizState.answers.size}})
-                </span>
-                <span>Score: {{quizState.score}}</span>
-            </nb-card-header>
+        <div [@animCard]="(itemLoading$ | async) ? 'void' : 'in'">
+            <nb-card class="my-3" [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')">
+                <nb-card-header class="px-4 d-flex justify-content-between">
+                    <span>
+                        Question {{quizState.step}} from {{quizState.totalQuestions}}
+                        (left: {{quizState.totalQuestions - quizState.answers.size}})
+                    </span>
+                    <span>Score: {{quizState.score}}</span>
+                </nb-card-header>
 
-            <nb-card-body class="px-4">
-                <quill-editor class="d-block" theme="bubble" [readOnly]="true" [ngModel]="itemStatus.question"></quill-editor>
-                <div class="mt-4 choices">
-                    <div class="choices-animated">
-                        <div *ngFor="let choice of (choices$ | async); trackBy: trackChoice" [@animChoice]="'in'">
-                            <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"
-                                    [singleChoice]="itemStatus.singleChoice"></app-quiz-step-choice>
+                <nb-card-body class="px-4">
+                    <quill-editor class="d-block" theme="bubble" [readOnly]="true" [ngModel]="itemStatus.question"></quill-editor>
+                    <div class="mt-4 choices">
+                        <div class="choices-animated">
+                            <div *ngFor="let choice of (choices$ | async); trackBy: trackChoice" [@animChoice]="'in'">
+                                <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"
+                                        [singleChoice]="itemStatus.singleChoice"></app-quiz-step-choice>
+                            </div>
+                        </div>
+
+                        <div class="choices-aux"> <!-- just a height keeper for choices-animated block -->
+                            <div *ngFor="let choice of itemStatus.choicesStatus; trackBy: trackChoice">
+                                <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"
+                                        [singleChoice]="itemStatus.singleChoice"></app-quiz-step-choice>
+                            </div>
                         </div>
                     </div>
+                </nb-card-body>
 
-                    <div class="choices-aux"> <!-- just a height keeper for choices-animated block -->
-                        <div *ngFor="let choice of itemStatus.choicesStatus; trackBy: trackChoice">
-                            <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"
-                                    [singleChoice]="itemStatus.singleChoice"></app-quiz-step-choice>
-                        </div>
-                    </div>
-                </div>
-            </nb-card-body>
+                <nb-card-footer class="px-4 d-flex justify-content-end">
+                    <a *ngIf="!itemStatus.answered && (quizState.totalQuestions - quizState.answers.size > 0)"
+                            class="btn btn-outline-secondary btn-lg"
+                            routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
+                        Skip
+                    </a>
+                    <button *ngIf="!itemStatus.answered" class="btn btn-outline-primary btn-lg ml-4"
+                            (click)="submit()" [nbSpinner]="submitted" nbSpinnerMessage="" [disabled]="submitted">
+                        Submit
+                    </button>
+                    <a *ngIf="itemStatus.answered && !quizState.finished" class="btn btn-outline-info btn-lg ml-auto"
+                            routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
+                        Next
+                    </a>
+                    <a *ngIf="quizState.finished" class="btn btn-outline-info btn-lg ml-auto"
+                            routerLink="/result/{{quizState.shortName}}">
+                        Results
+                    </a>
+                </nb-card-footer>
+            </nb-card>
 
-            <nb-card-footer class="px-4 d-flex justify-content-end">
-                <a *ngIf="!itemStatus.answered && (quizState.totalQuestions - quizState.answers.size > 0)"
-                        class="btn btn-outline-secondary btn-lg"
-                        routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
-                    Skip
-                </a>
-                <button *ngIf="!itemStatus.answered" class="btn btn-outline-primary btn-lg ml-4"
-                        (click)="submit()" [nbSpinner]="submitted" nbSpinnerMessage="" [disabled]="submitted">
-                    Submit
-                </button>
-                <a *ngIf="itemStatus.answered && !quizState.finished" class="btn btn-outline-info btn-lg ml-auto"
-                        routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
-                    Next
-                </a>
-                <a *ngIf="quizState.finished" class="btn btn-outline-info btn-lg ml-auto"
-                        routerLink="/result/{{quizState.shortName}}">
-                    Results
-                </a>
-            </nb-card-footer>
-        </nb-card>
-
-        <app-comments [numberOfComments]="itemStatus.numberOfComments"></app-comments>
+            <app-comments [numberOfComments]="itemStatus.numberOfComments"></app-comments>
+        </div>
 
         <!--div class="text-center">
             <span *ngFor="let itemId of quizState.itemIds; let i = index">
