@@ -116,18 +116,24 @@ const reducers = {
         const answer = selectActiveItemAnswer(getRootState(state));
         const choiceId = (<ActionToggleChoice>action).payload.choiceId;
 
-        if (answer.submitted) {
+        if (answer.submitted || item.singleChoice && answer.choiceAnswers.get(choiceId).checked) {
             return { ...state };
+        }
+
+        const choiceAnswers = new Map(answer.choiceAnswers);
+        if (item.singleChoice) {
+            choiceAnswers.forEach((answer: QuizItemChoiceAnswer, key: ChoiceId) => {
+                answer.checked = key === choiceId;
+            });
+        } else {
+            choiceAnswers.get(choiceId).checked = !choiceAnswers.get(choiceId).checked;
         }
 
         return {
             ...state,
             answers: (new Map(state.answers)).set(item.id, {
                 ...answer,
-                choiceAnswers: (new Map(answer.choiceAnswers)).set(choiceId, {
-                    ...answer.choiceAnswers.get(choiceId),
-                    checked: !answer.choiceAnswers.get(choiceId).checked
-                })
+                choiceAnswers
             })
         };
     },

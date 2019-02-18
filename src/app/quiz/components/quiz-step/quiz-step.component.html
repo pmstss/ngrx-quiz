@@ -16,13 +16,15 @@
                 <div class="mt-4 choices">
                     <div class="choices-animated">
                         <div *ngFor="let choice of (choices$ | async); trackBy: trackChoice" [@animChoice]="'in'">
-                            <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
+                            <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"
+                                    [singleChoice]="itemStatus.singleChoice"></app-quiz-step-choice>
                         </div>
                     </div>
 
                     <div class="choices-aux"> <!-- just a height keeper for choices-animated block -->
                         <div *ngFor="let choice of itemStatus.choicesStatus; trackBy: trackChoice">
-                            <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"></app-quiz-step-choice>
+                            <app-quiz-step-choice [choice]="choice" [answered]="itemStatus.answered"
+                                    [singleChoice]="itemStatus.singleChoice"></app-quiz-step-choice>
                         </div>
                     </div>
                 </div>

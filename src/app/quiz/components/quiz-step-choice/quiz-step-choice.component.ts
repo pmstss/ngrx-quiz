@@ -24,6 +24,7 @@ import { trigger, transition, useAnimation } from '@angular/animations';
 })
 export class QuizStepChoiceComponent {
     @Input() answered: boolean;
+    @Input() singleChoice: boolean;
     @Input() choice: QuizItemChoiceStatus;
 
     constructor(private appStore: Store<AppState>) { }

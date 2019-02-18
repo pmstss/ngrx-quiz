@@ -5,7 +5,8 @@
       'text-warning': choice.semiCorrect,
       'choice--answered': answered
     }" (click)="toggleChoice(choice.id)" [@myShake]="getAnimationState(choice)">
-    <i class="fa mx-3" [ngClass]="{'fa-check': !choice.wrong, 'fa-times': choice.wrong}"></i>
+    <i *ngIf="!singleChoice || answered" class="fa mx-3" [ngClass]="{'fa-check': !choice.wrong , 'fa-times': choice.wrong}"></i>
+    <i *ngIf="singleChoice && !answered" class="fa mx-3" [ngClass]="{'fa-circle': true}"></i>
     <span>{{choice.text}}</span>
     <span *ngIf="answered" class="ml-auto mr-3">
         {{choice.popularity | percent : '1.0-2'}}

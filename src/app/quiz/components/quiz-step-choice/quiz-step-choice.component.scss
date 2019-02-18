@@ -21,6 +21,7 @@
 
         &.choice--answered {
             cursor: auto;
+            pointer-events: none;
         }
 
         &.text-success, &.text-danger, &.text-warning {
