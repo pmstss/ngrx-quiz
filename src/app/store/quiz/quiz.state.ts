@@ -58,3 +58,9 @@ export const initialQuizState: QuizStateProgress = {
     answers: new Map<ItemId, ItemAnswerStatus>(),
     comments: new Map<ItemId, Comment[]>()
 };
+
+// TODO ### refactor type names and hierarchy
+export interface StepStatus {
+    submitted: boolean;
+    correct: boolean;
+}

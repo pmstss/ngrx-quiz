@@ -6,7 +6,7 @@
 import { createSelector } from '@ngrx/store';
 import { QuizId, ItemId, QuizItem, Comment } from 'ngrx-quiz-common';
 import { QuizState, QuizStateNormalized, QuizItemStatus, QuizStateCalculated, ItemAnswerStatus,
-    AnswerStatuses, QuizItems } from './quiz.state';
+    AnswerStatuses, QuizItems, StepStatus } from './quiz.state';
 import { AppState, selectQuizStateNormalized } from '../app.state';
 
 export const selectQuizId = createSelector<AppState, QuizStateNormalized, QuizId>(
@@ -82,6 +82,18 @@ export const selectItemCommentsLoadedSize = createSelector<AppState, Comment[], 
 export const selectItemCommentsTotal = createSelector<AppState, QuizItem, number>(
     selectQuizActiveItem,
     (quizItem: QuizItem) => quizItem && quizItem.numberOfComments || 0
+);
+
+export const selectQuizStepStatuses = createSelector<AppState, ItemId[], AnswerStatuses, StepStatus[]>(
+    selectQuizItemIds,
+    selectQuizAnswers,
+    (itemIds: ItemId[], answers: AnswerStatuses) => itemIds.map((itemId: ItemId) => {
+        const answer = answers.get(itemId);
+        return {
+            submitted: answer && answer.submitted || false,
+            correct: answer && answer.correct || false,
+        };
+    })
 );
 
 export const selectQuizNextStep =
