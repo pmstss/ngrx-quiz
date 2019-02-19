@@ -1,0 +1,17 @@
+<div class="steps d-flex justify-content-between align-items-center" *ngIf="quizState$ | async as quizState">
+  <hr class="connector"/>
+  <ng-container *ngFor="let stepStatus of stepStatuses$ | async; let i = index; let last = last;">
+    <span class="step" routerLink="/quiz/{{quizState.shortName}}/{{i + 1}}" title="Step {{i + 1}}"
+        [ngClass]="{
+          'step--pre-active': quizState.step === i + 2,
+          'step--active': quizState.step === i + 1,
+          'step--correct': stepStatus.submitted && stepStatus.correct,
+          'step--wrong': stepStatus.submitted && !stepStatus.correct,
+          'step--new': !stepStatus.submitted
+        }">
+      <span class="step-circle d-flex justify-content-center align-items-center">
+        <span class="step-cirle-label">{{i + 1}}</span>
+      </span>
+    </span>
+  </ng-container>
+</div>

@@ -6,22 +6,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NbCardModule } from '@nebular/theme';
+import { NbStepperModule } from '@nebular/theme';
 import { WysiwygModule } from '../wysiwyg';
 import { SharedModule } from '../shared';
 import { CommentsModule } from '../comments';
 import { QuizStepComponent } from './components/quiz-step/quiz-step.component';
 import { QuizStepChoiceComponent } from './components/quiz-step-choice/quiz-step-choice.component';
 import { QuizIntroComponent } from './components/quiz-intro/quiz-intro.component';
+import { QuizStepperComponent } from './components/quiz-stepper/quiz-stepper.component';
 import { QuizFinishedGuard } from './guards/quiz-finished.guard';
 import { QuizGuard } from './guards/quiz.guard';
 
 @NgModule({
-    declarations: [QuizStepComponent, QuizIntroComponent, QuizStepChoiceComponent],
+    declarations: [QuizStepComponent, QuizIntroComponent, QuizStepChoiceComponent, QuizStepperComponent],
     imports: [
         RouterModule,
         FormsModule,
-        NbCardModule,
+        NbStepperModule,
         SharedModule,
         WysiwygModule,
         CommentsModule

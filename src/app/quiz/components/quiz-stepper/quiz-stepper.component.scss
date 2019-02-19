@@ -1,0 +1,99 @@
+@import '../../../../themes';
+
+@include nb-install-component() {
+    .steps {
+        position: relative;
+    }
+
+    hr.connector {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        margin: 0;
+        border-top: 2px solid nb-theme(color-bg-active);
+    }
+
+    .step {
+        position: relative;
+        height: 2rem;
+        width: 2rem;
+        // flex-shrink: 0;
+        outline: none !important;
+        transition: margin 0.5s ease-out, flex-shrink 0.5s ease-out;
+
+        &--pre-active {
+            flex-shrink: 0;
+        }
+
+        &--active {
+            flex-shrink: 0;
+            margin: 0 1rem;
+            width: calc(2rem + 4px);
+            height: calc(2rem + 4px);
+            border-radius: calc(1rem + 2px);
+            border: 2px solid nb-theme(color-info);
+            box-shadow: 0 0 11px 2px nb-theme(color-info);
+
+            .step-circle {
+                border-color: nb-theme(color-info);
+                // background-color: nb-theme(color-info);
+            }
+        }
+
+        &:first-of-type {
+            margin-left: 0  !important;
+        }
+
+        &:last-of-type {
+            margin-right: 0 !important;
+            flex-shrink: 0;
+        }
+
+
+        &--wrong {
+            .step-circle {
+                background-color: nb-theme(color-danger);
+                color: nb-theme(color-fg-heading);
+            }
+        }
+
+        &--correct {
+            .step-circle {
+                background-color: nb-theme(color-success);
+                color: nb-theme(color-fg-heading);
+            }
+        }
+
+        &--new {
+            .step-circle {
+                border: 2px solid nb-theme(color-bg-active);
+            }
+
+            &:hover:not(.step--active) .step-circle {
+                border-color: nb-theme(color-fg-text);
+            }
+
+        }
+
+        &:hover:not(.step--active) {
+            flex-shrink: 0;
+            margin: 0 2rem;
+        }
+    }
+
+    .step-circle {
+        position: absolute;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 1rem;
+        background-color: nb-theme(color-bg);
+        font-weight: 500;
+        cursor: pointer;
+        opacity: 0.7;
+
+        &:hover {
+            opacity: 1;
+            z-index: 1;
+        }
+    }
+}
