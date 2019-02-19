@@ -84,7 +84,6 @@ export const selectItemCommentsTotal = createSelector<AppState, QuizItem, number
     (quizItem: QuizItem) => quizItem && quizItem.numberOfComments || 0
 );
 
-// TODO ### ngrx 7 parameterized selector for answered?
 export const selectQuizNextStep =
         createSelector<AppState, ItemId[], number, number, boolean, AnswerStatuses, number>(
     selectQuizItemIds,
@@ -115,6 +114,13 @@ export const selectActiveItemAnswer = createSelector<AppState, ItemId, AnswerSta
     (itemId: ItemId, answers: AnswerStatuses) => answers && answers.get(itemId)
 );
 
+export const selectAnsweredCount = createSelector<AppState, AnswerStatuses, number>(
+    selectQuizAnswers,
+    (answers: AnswerStatuses) => !answers ? 0 : [...answers.keys()].filter((itemId: ItemId) =>
+        answers.get(itemId).submitted
+    ).length
+);
+
 export const selectActiveItemAnswered = createSelector<AppState, ItemAnswerStatus, boolean>(
     selectActiveItemAnswer,
     (answer: ItemAnswerStatus) => answer && answer.submitted
@@ -127,16 +133,18 @@ export const selectQuizScore = createSelector<AppState, AnswerStatuses, number>(
 );
 
 export const selectQuizStateCalculated
-        = createSelector<AppState, number, boolean, boolean, number, number, QuizStateCalculated>(
+        = createSelector<AppState, number, boolean, boolean, number, number, number, QuizStateCalculated>(
     selectQuizTotalQuestions,
     selectQuizStarted,
     selectQuizFinished,
     selectQuizNextStep,
+    selectAnsweredCount,
     selectQuizScore,
-    (total: number, started: boolean, finished: boolean, nextStep: number, score: number): QuizStateCalculated => ({
+    (total: number, started: boolean, finished: boolean, nextStep: number, answeredCounter: number, score: number) => ({
         started,
         finished,
         nextStep,
+        answeredCounter,
         score,
         totalQuestions: total
     })

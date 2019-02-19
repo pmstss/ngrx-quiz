@@ -1,12 +1,15 @@
 <div class="container" *ngIf="quizState$ | async as quizState else loading" >
     <app-back-link routerLink="/">Back to quiz list</app-back-link>
+
+    <app-quiz-stepper></app-quiz-stepper>
+
     <div *ngIf="itemStatus$ | async as itemStatus else loading">
         <div [@animCard]="(itemLoading$ | async) ? 'void' : 'in'">
             <nb-card class="my-3" [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')">
                 <nb-card-header class="px-4 d-flex justify-content-between">
                     <span>
-                        Question {{quizState.step}} from {{quizState.totalQuestions}}
-                        (left: {{quizState.totalQuestions - quizState.answers.size}})
+                        Step {{quizState.step}} / {{quizState.totalQuestions}}
+                        (left: {{quizState.totalQuestions - quizState.answeredCounter}})
                     </span>
                     <span>Score: {{quizState.score}}</span>
                 </nb-card-header>
@@ -31,7 +34,7 @@
                 </nb-card-body>
 
                 <nb-card-footer class="px-4 d-flex justify-content-end">
-                    <a *ngIf="!itemStatus.answered && (quizState.totalQuestions - quizState.answers.size > 0)"
+                    <a *ngIf="!itemStatus.answered && (quizState.totalQuestions - quizState.answeredCounter > 1)"
                             class="btn btn-outline-secondary btn-lg"
                             routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
                         Skip
@@ -53,15 +56,6 @@
 
             <app-comments [numberOfComments]="itemStatus.numberOfComments"></app-comments>
         </div>
-
-        <!--div class="text-center">
-            <span *ngFor="let itemId of quizState.itemIds; let i = index">
-                <a *ngIf="quizState.step !== i + 1" routerLink="/quiz/{{quizState.shortName}}/{{i + 1}}">
-                    {{i + 1}}
-                </a>
-                <span *ngIf="quizState.step === i + 1">{{i + 1}}</span>
-            </span>
-        </div-->
     </div>
 </div>
 

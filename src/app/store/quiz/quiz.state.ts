@@ -32,6 +32,7 @@ export interface QuizStateCalculated {
     nextStep: number;
     started: boolean;
     finished: boolean;
+    answeredCounter: number;
     score: number;
     totalQuestions: number;
 }
