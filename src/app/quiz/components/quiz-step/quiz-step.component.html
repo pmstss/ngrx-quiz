@@ -1,7 +1,7 @@
 <div class="container" *ngIf="quizState$ | async as quizState else loading" >
     <app-back-link routerLink="/">Back to quiz list</app-back-link>
 
-    <!--app-quiz-stepper></app-quiz-stepper-->
+    <app-quiz-stepper></app-quiz-stepper>
 
     <div *ngIf="itemStatus$ | async as itemStatus else loading">
         <div [@animCard]="(itemLoading$ | async) ? 'void' : 'in'">
