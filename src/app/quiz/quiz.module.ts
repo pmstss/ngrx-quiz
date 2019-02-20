@@ -28,7 +28,7 @@ import { QuizGuard } from './guards/quiz.guard';
         CommentsModule
     ],
     providers: [QuizGuard, QuizFinishedGuard],
-    exports: [SharedModule]
+    exports: [SharedModule, QuizStepperComponent]
 })
 export class QuizModule {
     constructor() {

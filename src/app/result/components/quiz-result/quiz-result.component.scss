@@ -8,4 +8,10 @@
     /deep/ .sb-wrapper {
         background-color: transparent;
     }
+
+    app-quiz-stepper {
+        display: block;
+        max-width: 60%;
+        margin: 0 auto;
+    }
 }
