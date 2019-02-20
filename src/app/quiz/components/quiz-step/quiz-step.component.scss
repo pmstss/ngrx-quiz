@@ -31,4 +31,10 @@
     nb-card-body {
         overflow: hidden;
     }
+
+    app-quiz-stepper {
+        display: block;
+        max-width: 300px;
+        margin: 0 auto;
+    }
 }
