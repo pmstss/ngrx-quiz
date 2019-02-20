@@ -52,14 +52,14 @@
 
         &--wrong {
             .step-circle {
-                background-color: darken($color: nb-theme(color-danger), $amount: 10%);
+                background-color: darken($color: nb-theme(color-danger), $amount: 15%);
                 color: nb-theme(color-fg-heading);
             }
         }
 
         &--correct {
             .step-circle {
-                background-color: darken($color: nb-theme(color-success), $amount: 10%);
+                background-color: darken($color: nb-theme(color-success), $amount: 15%);
                 color: nb-theme(color-fg-heading);
             }
         }

@@ -3,8 +3,8 @@
   <ng-container *ngFor="let stepStatus of stepStatuses$ | async; let i = index; let last = last;">
     <span class="step" routerLink="/quiz/{{quizState.shortName}}/{{i + 1}}" title="Step {{i + 1}}"
         [ngClass]="{
-          'step--pre-active': quizState.step === i + 2,
-          'step--active': quizState.step === i + 1,
+          'step--pre-active': highlightActive && quizState.step === i + 2,
+          'step--active': highlightActive && quizState.step === i + 1,
           'step--correct': stepStatus.submitted && stepStatus.correct,
           'step--wrong': stepStatus.submitted && !stepStatus.correct,
           'step--new': !stepStatus.submitted

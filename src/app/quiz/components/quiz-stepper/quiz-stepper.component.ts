@@ -3,7 +3,7 @@
  * Copyright 2019 Viachaslau Tyshkavets
  * Licensed under the GPLv3 License. See LICENSE.txt in the project root for license information.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { QuizState, StepStatus, AppState, selectQuizState, selectQuizStepStatuses } from '../../../store';
@@ -14,6 +14,8 @@ import { QuizState, StepStatus, AppState, selectQuizState, selectQuizStepStatuse
     styleUrls: ['./quiz-stepper.component.scss']
 })
 export class QuizStepperComponent implements OnInit {
+    @Input() highlightActive = true;
+
     quizState$: Observable<QuizState>;
     stepStatuses$: Observable<StepStatus[]>;
 
