@@ -33,6 +33,7 @@ export interface QuizStateCalculated {
     started: boolean;
     finished: boolean;
     answeredCounter: number;
+    restCounter: number;
     score: number;
     totalQuestions: number;
 }

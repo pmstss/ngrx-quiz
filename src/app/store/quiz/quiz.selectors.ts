@@ -133,6 +133,12 @@ export const selectAnsweredCount = createSelector<AppState, AnswerStatuses, numb
     ).length
 );
 
+export const selectRestCount = createSelector<AppState, number, number, number>(
+    selectQuizTotalQuestions,
+    selectAnsweredCount,
+    (total: number, answered: number) => total - answered
+);
+
 export const selectActiveItemAnswered = createSelector<AppState, ItemAnswerStatus, boolean>(
     selectActiveItemAnswer,
     (answer: ItemAnswerStatus) => answer && answer.submitted
@@ -158,6 +164,7 @@ export const selectQuizStateCalculated
         nextStep,
         answeredCounter,
         score,
+        restCounter: total - answeredCounter,
         totalQuestions: total
     })
 );

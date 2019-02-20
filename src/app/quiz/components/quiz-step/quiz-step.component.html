@@ -8,8 +8,7 @@
             <nb-card class="my-3" [status]="itemStatus.correct ? 'success' : (itemStatus.wrong ? 'danger': '')">
                 <nb-card-header class="px-4 d-flex justify-content-between">
                     <span>
-                        Step {{quizState.step}} / {{quizState.totalQuestions}}
-                        (left: {{quizState.totalQuestions - quizState.answeredCounter}})
+                        Step {{quizState.step}} / {{quizState.totalQuestions}} (left: {{quizState.restCounter}})
                     </span>
                     <span>Score: {{quizState.score}}</span>
                 </nb-card-header>
@@ -34,7 +33,7 @@
                 </nb-card-body>
 
                 <nb-card-footer class="px-4 d-flex justify-content-end">
-                    <a *ngIf="!itemStatus.answered && (quizState.totalQuestions - quizState.answeredCounter > 1)"
+                    <a *ngIf="!itemStatus.answered && quizState.restCounter > 1"
                             class="btn btn-outline-secondary btn-lg"
                             routerLink="/quiz/{{quizState.shortName}}/{{quizState.nextStep}}">
                         Skip
